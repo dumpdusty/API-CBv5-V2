@@ -106,12 +106,32 @@
     13.2.   Create a new spec
     13.3.   Import expect, supertest
     13.4.   Create a User Creation request:
+            it('Create a user with valid credentials', async () => {
+                res = await supertest(process.env.BASE_URL).post('user').send({
+                  firstName: 'Prakesh',
+                  lastName: 'Murundi',
+                  email: 'pramur@india.com',
+                  password: process.env.PASSWORD,
+                })
+    13.5.   Commit, push & PR
+    13.6.   Update main branch
+
+14. Add randomizer to project:
+    14.1.   Install the randomizer (https://chancejs.com/):
+            -   npm install chance
+    14.2.   Import randomizer
+            -   const chance = require('chance').Chance()
+    14.3.   Replace request body properties with random data using chance
+    14.5.   Commit, push & PR
+    14.6.   Update main branch
+    14.7.   HW:
+            -   add more test suits for user registration
 
 
-14. Create first helper:
-    14.1.   Create a new directory 'Helpers' in root folder
-    14.2.   Create auth.helper.js file
-    14.3.   Inside the file:
+16. Create first helper:
+    16.1.   Create a new directory 'Helpers' in root folder
+    16.2.   Create auth.helper.js file
+    16.3.   Inside the file:
             -   import supertest from 'supertest'
             -   create a function with relevant name and following syntax:
                 function login(email, password){
