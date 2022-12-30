@@ -168,6 +168,67 @@
 
  -----------------------------------------------------------------------------------------------------------------------
 
+15.  Create a CI/CD pipeline:
+        15.1.   Create a new branch
+        15.2.   Make the repo open                          --check this part
+                    -   goto repo Settings
+                    -   scroll down to 'Change repository visibility'
+                    - make it public
+        15.3.   Goto Actions Tab
+        15.4.   Search for 'Node.js' workflow and click to 'Config button'
+        15.5.   Change the name of .yaml file
+        15.6.   Change the name of the workflow
+        15.7.   Update .yaml file as:
+
+                name: API-CBv5-v2 CI
+
+                on:                                                     // when the pipeline will run
+                  push:
+                    branches: [ "main" ]                                // on the push branches
+                  pull_request:
+                    branches: [ "main" ]                                // before the pull request to main branch
+
+                jobs:
+                  test:                                                 // just a name of workflow / virtual machine (VM)
+
+                    runs-on: ubuntu-latest                              // define the OS of VM to use the tests runs
+
+                    strategy:
+                      matrix:                                           // define the node version to be installed to VM
+                        node-version: [18.x]
+
+                    steps:                                              // describe all steps of the workflow
+                    - uses: actions/checkout@v3                         // checkout current branch to created VM
+                    - name: Use Node.js ${{ matrix.node-version }}      // install declared version of Node.js and dependencies from package-lock.json
+                      uses: actions/setup-node@v3                       // declare what will be using for tests
+                      with:
+                        node-version: ${{ matrix.node-version }}        // declare which version of node will be used
+                    - name: Install dependencies                        // step name
+                      run: npm i                                        // command to be executed
+                    - name: Run API tests                               // step name
+                      env:                                              // declare the env variables
+                        BASE_URL: ${{ secrets.BASE_URL }}
+                        EMAIL: ${{ secrets.EMAIL }}
+                        PASSWORD: ${{ secrets.PASSWORD }}
+                      run: npm test                                 // command to be executed (or 'npm run test')
+
+        15.8.   Create the new branch and PR for workflow .yaml file:
+                    -   click on 'Start commit' button
+                    -   click on radiobutton 'Create a new branch' and rename it to 'github-actions'
+                    -   add commit name 'create ci/cd pipeline'
+                    -   click to 'Propose new file'
+                    -   the new pull request automatically opened
+                    -   before create and close PR we have to declare env variables
+        15.9.   Create a secret env variables:
+                    -   goto settings/secrets/actions
+                    -   click on 'New repository secret' / add name / add value  (repeat for all variables)
+        15.10.  Merge PR:
+                    -   back to PR and click on create PR
+                    -   merge PR
+        15.11.  Update main branch
+
+-----------------------------------------------------------------------------------------------------------------------
+
 16.  Create first helper:
         16.1.   Create a new directory 'Helpers' in root folder
         16.2.   Create auth.helper.js file
