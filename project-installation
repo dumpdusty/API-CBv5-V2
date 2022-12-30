@@ -170,15 +170,11 @@
 
 15.  Create a CI/CD pipeline:
         15.1.   Create a new branch
-        15.2.   Make the repo open                          --check this part
-                    -   goto repo Settings
-                    -   scroll down to 'Change repository visibility'
-                    - make it public
-        15.3.   Goto Actions Tab
-        15.4.   Search for 'Node.js' workflow and click to 'Config button'
-        15.5.   Change the name of .yaml file
-        15.6.   Change the name of the workflow
-        15.7.   Update .yaml file as:
+        15.2.   Goto Actions Tab
+        15.3.   Search for 'Node.js' workflow and click to 'Config button'
+        15.4.   Change the name of .yaml file
+        15.5.   Change the name of the workflow
+        15.6.   Update .yaml file as:
 
                 name: API-CBv5-v2 CI
 
@@ -212,20 +208,20 @@
                         PASSWORD: ${{ secrets.PASSWORD }}
                       run: npm test                                 // command to be executed (or 'npm run test')
 
-        15.8.   Create the new branch and PR for workflow .yaml file:
+        15.7.   Create the new branch and PR for workflow .yaml file:
                     -   click on 'Start commit' button
                     -   click on radiobutton 'Create a new branch' and rename it to 'github-actions'
                     -   add commit name 'create ci/cd pipeline'
                     -   click to 'Propose new file'
                     -   the new pull request automatically opened
                     -   before create and close PR we have to declare env variables
-        15.9.   Create a secret env variables:
+        15.8.   Create a secret env variables:
                     -   goto settings/secrets/actions
                     -   click on 'New repository secret' / add name / add value  (repeat for all variables)
-        15.10.  Merge PR:
+        15.9.  Merge PR:
                     -   back to PR and click on create PR
                     -   merge PR
-        15.11.  Update main branch
+        15.10.  Update main branch
 
 -----------------------------------------------------------------------------------------------------------------------
 
