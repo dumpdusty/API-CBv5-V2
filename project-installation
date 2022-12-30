@@ -1,153 +1,193 @@
-1. Create a new project in WS
-2. Run `npm init -y` in terminal
+1.  Create a new project in WS
+
+2.  Run `npm init -y` in terminal
+
     In case to connecting with GitHub:
-    3. Run `git init` in terminal
-        3.1. Run commands in terminal:
-        -   git add README.md
-        -   git branch -M main
-        3.2. Create new branch
-        3.3. Create `.gitignore` file and add there `.idea` and `node_modules`
-        3.4. make a commit
-        3.5. Push to origin
-4. Installing and configuring Babel:
-    4.1. Install necessary packages:
-        - run in terminal: `npm i @babel/core @babel/preset-env @babel/register`
-    4.2. Create `.babelrc` file and put following in it:
-         `  {"presets": ["@babel/preset-env"]}`
-5. Installing and config Prettier:
-    5.1. npm i prettier
-    5.2. check if Prettier plugin installed to WS
-    5.3. goto Settings/Languages and Frameworks/Prettier, check the path and choose the options
-    5.4. create .prettierrc.js file and put into:
-        module.exports = {
-            trailingComma: "es5",
-            tabWidth: 2,
-            semi: false,
-            singleQuote: true,
-            bracketSpacing: true,
-            arrowParens: "avoid",
-          }
+3.  Run `git init` in terminal
+        3.1.    Run commands in terminal:
+                    -   git add README.md
+                    -   git branch -M main
+        3.2.    Create new branch
+        3.3.    Create `.gitignore` file and add there `.idea` and `node_modules`
+        3.4.    Make a commit
+        3.5.    Push to origin
+
+ -----------------------------------------------------------------------------------------------------------------------
+
+4.  Installing and configuring Babel:
+        4.1.    Create a new branch
+        4.2.    Install necessary packages:
+                    - run in terminal: `npm i @babel/core @babel/preset-env @babel/register`
+        4.3.    Create `.babelrc` file and put following in it:
+                    `{"presets": ["@babel/preset-env"]}`
+
+5.  Installing and config Prettier:
+        5.1.    In terminal: npm i prettier
+        5.2.    Check if Prettier plugin installed to WS
+        5.3.    Goto Settings/Languages and Frameworks/Prettier, check the path and choose the options
+        5.4.    Create .prettierrc.js file and put into:
+                module.exports = {
+                    trailingComma: "es5",
+                    tabWidth: 2,
+                    semi: false,
+                    singleQuote: true,
+                    bracketSpacing: true,
+                    arrowParens: "avoid",
+                  }
+        5.5.    Commit, push & PR
+        5.6.    Update main branch
+
+ -----------------------------------------------------------------------------------------------------------------------
+
 6.  Install & config mocha test runner:
-    6.1. npm i mocha
-    6.2. create `.mocharc.js` file
-    6.3. paste following into .mocharc (comment unnecessary option!!!!):
-         module.exports = {
-             require: ['@babel/register'],
-             spec: 'path to tests directory',
-             exclude: 'path to files to be excluded from test run',
-             file: `path to global hook`,                               //will be described below
-         }
-    6.4. modify `test` script:
-        -   "test": "mocha --config .mocharc.js"
+        6.1.    Create new branch
+        6.2.    In terminal: npm i mocha
+        6.3.    Create `.mocharc.js` file
+        6.4.    Paste following into .mocharc (comment unnecessary option!!!!):
+                     module.exports = {
+                         require: ['@babel/register'],
+                         spec: 'path to tests directory',
+                         exclude: 'path to files to be excluded from test run',
+                         file: `path to global hook`,                               //will be described below
+                     }
+        6.5.    Modify `test` script:
+                -   "test": "mocha --config .mocharc.js"
+
 7.  Install supertest (HTTP client) & chai (assertion library) packages:
-    -   npm i supertest chai
-8. Creating first test example
-    8.1. Create `tests` directory
-    8.2. Add this directory to .mocharc
-    8.3. Create first spec file named example.spec.js inside of `tests` folder
-    8.4. Create simple test for common function (for example function sum()):
-        -   import { expect } from chai
-        -   create `describe` and `it` with relevant names
-        -   write assertion
-        -   run the test with CLI command / 'play' sign
-        -   change the assertion value to invalid output to check if test works properly
-        -   add some more tests for any other functions (as a HomeWork)
-9. Authentication tests:
-    9.1. Create a spec file: 'auth.spec.js'
-    9.2. Import necessary packages:
-        -   import supertest from 'supertest'
-        -   import { expect } from ' chai'
-    9.3. Create a test with valid credentials:
-        - request syntax:
-            describe('Authentication', () => {
-                let res                                                                   // create a variable to assign a response
-                it('Login with valid credentials', async () => {                          // using async function to catch the promise
-                    res = await supertest('https://clientbase-server.herokuapp.com/v5/')  // pass the base URL to request body
-                        .post('user/login')                                               // method and endpoint
-                        .set('HeaderName', HeaderValue)                                   // set the headers  (optional)
-                        .send({email: 'jacksparrow@pirate.com', password: 'Pirate666!'})  // pass the body in JSON object format
+                -   npm i supertest chai
+        7.1.    Commit, push & PR
+        7.2.    Update main branch
 
-                    expect(res.statusCode).to.eq(200)                                     // assertion for response statusCode
-                                                                                          // for assertion syntax see https://www.chaijs.com/api/bdd/
-                });
-    9.4. Exclude example.spec file from tests by adding following to .mocharrc:
-            - exclude: 'tests/example.spec.js'
-    9.5. Create a test with invalid credentials
-    9.6. Add more tests for both describes:
-        -   test for response message
-        -   test for token
-        -   test for any property inside of response
-10. Add environment variables:
-    10.1.   Install dotenv package (based on dotenv documentation - https://www.npmjs.com/package/dotenv)
-    10.2.   Create .env file with variables inside (DO NOT ADD IT TO GITHUB!!!)
-    10.3.   Create .env.example file with common credentials and push it to GitHub.
-    10.4.   Add following to the tests file:
-            -   import 'dotenv/config'
-    10.5.   Replace all open data to env variables
-    10.6.   Optionally - Install '.env files support' (tooltips and highlights for env syntax)
-11. Add local hooks:
-    11.1.   Create 'before' hook and move there auth API request
-            -   NB: variable res should be moved above 'before' hook
-    11.2.   Delete request from subsequent tests
-12. Add global hook:
-    12.1.   Create new directory (config/general/global-hooks/setup, etc...) in root folder
-    12.2.   Inside created folder add new .js file (config/general/global-hook/setup, etc...)
-    12.3.   Inside the created file:
-            -   import 'dotenv/config'
-            -   import supertest from 'supertest'
-            -   copy 'before' hook from auth.spec
-            -   declare new env variable named 'token':
-                process.env['TOKEN'] = path to response property (res.body.payload.token)
-            -   add option to .mocharc configuration file:
-                file: `path to global hook` ('config/setup.js')
+ -----------------------------------------------------------------------------------------------------------------------
 
-13. Creating tests for User Register:
-    13.1.   Create a new branch
-    13.2.   Create a new spec
-    13.3.   Import expect, supertest
-    13.4.   Create a User Creation request:
-            it('Create a user with valid credentials', async () => {
-                res = await supertest(process.env.BASE_URL).post('user').send({
-                  firstName: 'Prakesh',
-                  lastName: 'Murundi',
-                  email: 'pramur@india.com',
-                  password: process.env.PASSWORD,
-                })
-    13.5.   Commit, push & PR
-    13.6.   Update main branch
+8.  Creating first test example
+        8.1.    Create a new branch
+        8.2.    Create `tests` directory
+        8.3.    Add this directory to .mocharc
+        8.4.    Create first spec file named example.spec.js inside of `tests` folder
+        8.5.    Create simple test for common function (for example function sum()):
+                    -   import { expect } from chai
+                    -   create `describe` and `it` with relevant names
+                    -   write assertion
+                    -   run the test with CLI command / 'play' sign
+                    -   change the assertion value to invalid output to check if test works properly
+                    -   add some more tests for any other functions (as a HomeWork)
+        8.6.    Commit, push & PR
+        8.7.    Update main branch
+        8.8.    HW: create more tests (math, string, array)
 
-14. Add randomizer to project:
-    14.1.   Install the randomizer (https://chancejs.com/):
-            -   npm install chance
-    14.2.   Import randomizer
-            -   const chance = require('chance').Chance()
-    14.3.   Replace request body properties with random data using chance
-    14.5.   Commit, push & PR
-    14.6.   Update main branch
-    14.7.   HW:
-            -   add more test suits for user registration
+ -----------------------------------------------------------------------------------------------------------------------
 
+9.  Authentication tests:
+        9.1.    Create a new branch
+        9.2.    Create a spec file: 'auth.spec.js'
+        9.3.    Import necessary packages:
+                    -   import supertest from 'supertest'
+                    -   import { expect } from ' chai'
+        9.4.    Create a test with valid credentials:
+                    - request syntax:
+                        describe('Authentication', () => {
+                            let res                                                                   // create a variable to assign a response
+                            it('Login with valid credentials', async () => {                          // using async function to catch the promise
+                                res = await supertest('https://clientbase-server.herokuapp.com/v5/')  // pass the base URL to request body
+                                    .post('user/login')                                               // method and endpoint
+                                    .set('HeaderName', HeaderValue)                                   // set the headers  (optional)
+                                    .send({email: 'jacksparrow@pirate.com', password: 'Pirate666!'})  // pass the body in JSON object format
 
-16. Create first helper:
-    16.1.   Create a new directory 'Helpers' in root folder
-    16.2.   Create auth.helper.js file
-    16.3.   Inside the file:
-            -   import supertest from 'supertest'
-            -   create a function with relevant name and following syntax:
-                function login(email, password){
-                    return supertest(process.env.BASE_URL)
-                    .post('/v5/user/login')
-                    send({email: email, password: password})
-                    }
-            -   export created function:
-                export { login }
-            -   import helper to spec file:
-                import * as authHelper from '../helpers/auth.helper.js'
-                    /*
-                      Short brief to syntax of relative paths:
-                        ..  -   two dots moves up to a parent directory (which is a root directory of a project for this case)
-                        .   -   one dots represent the current directory (which is a tests directory for this case)
-                    */
-            -   replace requests in auth.spec.js to authHelper function
-            -   replace request in auth-global-hook to authHelper function
-            -   remove unnecessary imports
+                                expect(res.statusCode).to.eq(200)                                     // assertion for response statusCode
+                                                                                                      // for assertion syntax see https://www.chaijs.com/api/bdd/
+                            });
+        9.5.    Exclude example.spec file from tests by adding following to .mocharrc:
+                    - exclude: 'tests/example.spec.js'
+        9.6.    Create a test with invalid credentials
+        9.7.    Add more tests for both describes:
+                    -   test for response message
+                    -   test for token
+                    -   test for any property inside of response
+        9.8.    Commit, push & PR
+        9.9.    Update main branch
+
+ -----------------------------------------------------------------------------------------------------------------------
+
+10.  Add environment variables:
+        10.1.   Create a new branch
+        10.2.   Install dotenv package (based on dotenv documentation - https://www.npmjs.com/package/dotenv)
+        10.3.   Create .env file with variables inside (DO NOT ADD IT TO GITHUB!!!)
+        10.4.   Create .env.example file with common credentials and push it to GitHub.
+        10.5.   Add following to the tests file:
+                    -   import 'dotenv/config'
+        10.5.   Replace all open data to env variables
+        10.6.   Optionally - Install '.env files support' (tooltips and highlights for env syntax)
+        10.7.   Commit, push & PR
+        10.8.   Update main branch
+
+ -----------------------------------------------------------------------------------------------------------------------
+
+11.  Add local hooks:
+        11.1.   Create a new branch
+        11.2.   Create 'before' hook and move there auth API request
+                    -   NB: variable res should be moved above 'before' hook
+        11.3.   Delete request from subsequent tests
+12.  Add global hook:
+        12.1.   Create new directory (config/general/global-hooks/setup, etc...) in root folder
+        12.2.   Inside created folder add new .js file (config/general/global-hook/setup, etc...)
+        12.3.   Inside the created file:
+                    -   import 'dotenv/config'
+                    -   import supertest from 'supertest'
+                    -   copy 'before' hook from auth.spec
+                    -   declare new env variable named 'token':
+                        process.env['TOKEN'] = path to response property (res.body.payload.token)
+                    -   add option to .mocharc configuration file:
+                        file: `path to global hook` ('config/setup.js')
+        12.4.   Commit, push & PR
+        12.5.   Update main branch
+
+ -----------------------------------------------------------------------------------------------------------------------
+
+13.  Creating tests for User Register:
+        13.1.   Create a new branch
+        13.2.   Create a new spec
+        13.3.   Import expect, supertest
+        13.4.   Create a User Creation request:
+                it('Create a user with valid credentials', async () => {
+                    res = await supertest(process.env.BASE_URL).post('user').send({
+                      firstName: 'Mubariz',
+                      lastName: 'Murundi',
+                      email: 'murmur@pirate.com',
+                      password: process.env.PASSWORD,
+                    })
+14.  Add randomizer to project:
+        14.1.   Install the randomizer (https://chancejs.com/):
+                -   npm install chance
+        14.2.   Import randomizer
+                -   const chance = require('chance').Chance()
+        14.3.   Replace request body properties with random data using chance
+        14.5.   Commit, push & PR
+        14.6.   Update main branch
+        14.7.   HW: add more test suits for user registration
+
+ -----------------------------------------------------------------------------------------------------------------------
+
+16.  Create first helper:
+        16.1.   Create a new directory 'Helpers' in root folder
+        16.2.   Create auth.helper.js file
+        16.3.   Inside the file:
+                -   import supertest from 'supertest'
+                -   create a function with relevant name and following syntax:
+                    function login(email, password){
+                        return supertest(process.env.BASE_URL)
+                        .post('/v5/user/login')
+                        send({email: email, password: password})
+                        }
+                -   export created function:
+                    export { login }
+                -   import helper to spec file:
+                    import * as authHelper from '../helpers/auth.helper.js'
+                        /*
+                          Short brief to syntax of relative paths:
+                            ..  -   two dots moves up to a parent directory (which is a root directory of a project for this case)
+                            .   -   one dots represent the current directory (which is a tests directory for this case)
+                        */
+                -   replace requests in auth.spec.js to authHelper function
+                -   replace request in auth-global-hook to authHelper function
+                -   remove unnecessary imports
