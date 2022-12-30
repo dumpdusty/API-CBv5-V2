@@ -4,7 +4,7 @@ const chance = require('chance').Chance()
 
 describe('User registration', () => {
   let res
-  it.only('Create a user with valid credentials', async () => {
+  it('Create a user with valid credentials', async () => {
     res = await supertest(process.env.BASE_URL).post('user').send({
       firstName: chance.first(),
       lastName: chance.last(),
