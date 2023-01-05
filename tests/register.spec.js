@@ -45,7 +45,7 @@ describe('User registration positive', () => {
         .send({
           firstName: chance.first(),
           lastName: chance.last(),
-          email: chance.email({ domain: 'pirate.com' }),
+          email: chance.email(),
           password: process.env.PASSWORD,
         })
       expect(res.statusCode).to.eq(201)
