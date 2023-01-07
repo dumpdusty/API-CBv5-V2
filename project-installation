@@ -145,20 +145,21 @@
  -----------------------------------------------------------------------------------------------------------------------
 
  13.  Create first helper:
-         13.1.   Create a new directory 'Helpers' in root folder
-         13.2.   Create auth.helper.js file
-         13.3.   Inside the file:
+         13.1.   Create a new branch
+         13.2.   Create a new directory 'Helpers' in root folder
+         13.3.   Create auth.helper.js file
+         13.4.   Inside the file:
                  -   import supertest from 'supertest'
                  -   create a function with relevant name and following syntax:
                      function login(email, password){                                // function name and params
                          return supertest(process.env.BASE_URL)                      // function return
-                         .post('/v5/user/login')
-                         send({email: email, password: password})
+                         .post('user/login')
+                         .send({email: email, password: password})
                          }
                  -   export created function:
                      export { login }                                                // function should be exported
                  -   import helper to spec file:
-                     import * as authHelper from '../helpers/auth.helper.js'         // import created function to spec file
+                     import * as authHelper from '../helpers/auth-helper.js'         // import created function to spec file
                          /*
                            Short brief to syntax of relative paths:
                              ..  -   two dots moves up to a parent directory (which is a root directory of a project for this case)
@@ -167,9 +168,8 @@
                  -   replace requests in auth.spec.js to authHelper function
                  -   replace request in auth-global-hook to authHelper function
                  -   remove unnecessary imports
-         13.4.   Commit, push & PR
-         13.5.   Update main branch
-         13.6.   HW: Create a helper for Register page                               // optional, TBA
+         13.5.   Commit, push & PR
+         13.6.   Update main branch
 
  -----------------------------------------------------------------------------------------------------------------------
 
@@ -179,7 +179,7 @@
         14.3.   Search for 'Node.js' workflow and click to 'Config button'
         14.4.   Change the name of .yaml file
         14.5.   Change the name of the workflow
-        14.6.   Update .yaml file as:
+        14.6.   Update .yml file as:
 
                 name: API-CBv5-v2 CI
 
@@ -237,9 +237,9 @@
         13.4.   Create a User Creation request:
                 it('Create a user with valid credentials', async () => {
                     res = await supertest(process.env.BASE_URL).post('user').send({
-                      firstName: 'Mubariz',
-                      lastName: 'Murundi',
-                      email: 'murmur@pirate.com',
+                      firstName: 'Jake',
+                      lastName: 'Sully',
+                      email: 'jakesully@pirate.com',
                       password: process.env.PASSWORD,
                     })
         14.5.   Add randomizer to project:
@@ -252,4 +252,34 @@
         15.10.  Update main branch
         15.11.  HW: add more test suits for user registration
 
- -----------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+
+16.  Creating Register helper:
+        16.1.   Create new branch
+        16.2.   Create reg-helper.js file inside the helpers directory
+        16.3.   Inside the created file:
+                -   import supertest from 'supertest'
+                -   create a function with relevant name and following syntax:
+                    function register(firsName, lastName, email, password){        // function name and params
+                       return supertest(process.env.BASE_URL)                      // function return
+                              .post('user')
+                              .send({firstName: firstName, lastName: lastName, email: email, password: password})
+                              }
+                -   export created function:
+                    export { register }                                            // function should be exported
+        16.4.   import helper to spec file:
+                -   import * as regHelper from '../helpers/reg-helper.js'          // import created function to spec file
+        16.5.   Replace requests in register.spec.js to regHelper function
+        16.6.   Remove unnecessary imports
+        16.4.   Create a before hook and move register request to it
+        16.5.   Repeat steps 16.5. and 16.6. for Register negative tests
+        16.6.   Commit, push & PR
+        16.7.   Update main branch
+
+------------------------------------------------------------------------------------------------------------------------
+
+17.  Creating test for space trimming
+
+------------------------------------------------------------------------------------------------------------------------
+
+18.  Creating Clients tests

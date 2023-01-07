@@ -1,115 +1,53 @@
-import supertest from 'supertest'
 import { expect } from 'chai'
+import * as regHelper from '../helpers/reg-helper'
 
 const chance = require('chance').Chance()
 
 describe('User registration positive', () => {
-  describe('create a user with valid credentials', () => {
     let res
-    it('check response status code', async () => {
-      res = await supertest(process.env.BASE_URL)
-        .post('user')
-        .send({
-          companyName: chance.company(),
-          firstName: chance.first(),
-          lastName: chance.last(),
-          email: chance.email({ domain: 'pirate.com' }),
-          password: process.env.PASSWORD,
-          version: 'v5',
-        })
+    before(async ()=>{
+        res = await regHelper.register(chance.first(), chance.last(), chance.email(), process.env.PASSWORD)
+    })
+
+    it('check response status code', () => {
       expect(res.statusCode).to.eq(201)
     })
 
-    it('check response message', async () => {
-      res = await supertest(process.env.BASE_URL)
-        .post('user')
-        .send({
-          companyName: chance.company(),
-          firstName: chance.first(),
-          lastName: chance.last(),
-          email: chance.email({ domain: 'pirate.com' }),
-          password: process.env.PASSWORD,
-          version: 'v5',
-        })
-      expect(res.body.message).to.eq(
-        'User created successfully. Please check your email and verify it'
+    it('check response message',  () => {
+      expect(res.body.message).to.eq('User created successfully. Please check your email and verify it'
       )
     })
-  })
-
-  describe('create a user with required fields only', () => {
-    let res
-    it('check response status code', async () => {
-      res = await supertest(process.env.BASE_URL)
-        .post('user')
-        .send({
-          firstName: chance.first(),
-          lastName: chance.last(),
-          email: chance.email(),
-          password: process.env.PASSWORD,
-        })
-      expect(res.statusCode).to.eq(201)
-    })
-
-    it('check response message', async () => {
-      res = await supertest(process.env.BASE_URL)
-        .post('user')
-        .send({
-          firstName: chance.first(),
-          lastName: chance.last(),
-          email: chance.email({ domain: 'pirate.com' }),
-          password: process.env.PASSWORD,
-        })
-      expect(res.body.message).to.eq(
-        'User created successfully. Please check your email and verify it'
-      )
-    })
-  })
 })
 
 describe('User registration negative', () => {
   describe('create a user without password', () => {
     let res
-    it('check response status code', async () => {
-      res = await supertest(process.env.BASE_URL).post('user').send({
-        firstName: chance.first(),
-        lastName: chance.last(),
-        email: chance.email(),
-        password: '',
-      })
+
+    before(async()=>{
+      res = await regHelper.register(chance.first(), chance.last(), chance.email(), '')
+    })
+
+    it('check response status code',  () => {
       expect(res.statusCode).to.eq(400)
     })
 
-    it('check response message', async () => {
-      res = await supertest(process.env.BASE_URL).post('user').send({
-        firstName: chance.first(),
-        lastName: chance.last(),
-        email: chance.email(),
-        password: '',
-      })
+    it('check response message',  () => {
       expect(res.body.message).to.eq('Wrong password format')
     })
   })
 
   describe('create a user with existing email', () => {
     let res
-    it('check response status code', async () => {
-      res = await supertest(process.env.BASE_URL).post('user').send({
-        firstName: chance.first(),
-        lastName: chance.last(),
-        email: process.env.EMAIL,
-        password: process.env.PASSWORD,
-      })
+
+    before(async()=>{
+      res = await regHelper.register(chance.first(), chance.last(), process.env.EMAIL, process.env.PASSWORD)
+    })
+
+    it('check response status code', () => {
       expect(res.statusCode).to.eq(409)
     })
 
-    it('check response message', async () => {
-      res = await supertest(process.env.BASE_URL).post('user').send({
-        firstName: chance.first(),
-        lastName: chance.last(),
-        email: process.env.EMAIL,
-        password: process.env.PASSWORD,
-      })
+    it('check response message',  () => {
       expect(res.body.message).to.eq('User with this e-mail exists')
     })
   })
