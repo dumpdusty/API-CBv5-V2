@@ -144,37 +144,42 @@
 
  -----------------------------------------------------------------------------------------------------------------------
 
-13.  Creating tests for User Register:
-        13.1.   Create a new branch
-        13.2.   Create a new spec
-        13.3.   Import expect, supertest
-        13.4.   Create a User Creation request:
-                it('Create a user with valid credentials', async () => {
-                    res = await supertest(process.env.BASE_URL).post('user').send({
-                      firstName: 'Mubariz',
-                      lastName: 'Murundi',
-                      email: 'murmur@pirate.com',
-                      password: process.env.PASSWORD,
-                    })
-14.  Add randomizer to project:
-        14.1.   Install the randomizer (https://chancejs.com/):
-                -   npm install chance
-        14.2.   Import randomizer
-                -   const chance = require('chance').Chance()
-        14.3.   Replace request body properties with random data using chance
-        14.5.   Commit, push & PR
-        14.6.   Update main branch
-        14.7.   HW: add more test suits for user registration
+ 13.  Create first helper:
+         13.1.   Create a new directory 'Helpers' in root folder
+         13.2.   Create auth.helper.js file
+         13.3.   Inside the file:
+                 -   import supertest from 'supertest'
+                 -   create a function with relevant name and following syntax:
+                     function login(email, password){                                // function name and params
+                         return supertest(process.env.BASE_URL)                      // function return
+                         .post('/v5/user/login')
+                         send({email: email, password: password})
+                         }
+                 -   export created function:
+                     export { login }                                                // function should be exported
+                 -   import helper to spec file:
+                     import * as authHelper from '../helpers/auth.helper.js'         // import created function to spec file
+                         /*
+                           Short brief to syntax of relative paths:
+                             ..  -   two dots moves up to a parent directory (which is a root directory of a project for this case)
+                             .   -   one dots represent the current directory (which is a tests directory for this case)
+                         */
+                 -   replace requests in auth.spec.js to authHelper function
+                 -   replace request in auth-global-hook to authHelper function
+                 -   remove unnecessary imports
+         13.4.   Commit, push & PR
+         13.5.   Update main branch
+         13.6.   HW: Create a helper for Register page                               // optional, TBA
 
  -----------------------------------------------------------------------------------------------------------------------
 
-15.  Create a CI/CD pipeline:
-        15.1.   Create a new branch
-        15.2.   Goto Actions Tab
-        15.3.   Search for 'Node.js' workflow and click to 'Config button'
-        15.4.   Change the name of .yaml file
-        15.5.   Change the name of the workflow
-        15.6.   Update .yaml file as:
+14.  Create a CI/CD pipeline:
+        14.1.   Create a new branch
+        14.2.   Goto Actions Tab
+        14.3.   Search for 'Node.js' workflow and click to 'Config button'
+        14.4.   Change the name of .yaml file
+        14.5.   Change the name of the workflow
+        14.6.   Update .yaml file as:
 
                 name: API-CBv5-v2 CI
 
@@ -208,46 +213,43 @@
                         PASSWORD: ${{ secrets.PASSWORD }}
                       run: npm test                                 // command to be executed (or 'npm run test')
 
-        15.7.   Create the new branch and PR for workflow .yaml file:
+        14.7.   Create the new branch and PR for workflow .yaml file:
                     -   click on 'Start commit' button
                     -   click on radiobutton 'Create a new branch' and rename it to 'github-actions'
                     -   add commit name 'create ci/cd pipeline'
                     -   click to 'Propose new file'
                     -   the new pull request automatically opened
                     -   before create and close PR we have to declare env variables
-        15.8.   Create a secret env variables:
+        14.8.   Create a secret env variables:
                     -   goto settings/secrets/actions
                     -   click on 'New repository secret' / add name / add value  (repeat for all variables)
-        15.9.  Merge PR:
+        14.9.  Merge PR:
                     -   back to PR and click on create PR
                     -   merge PR
-        15.10.  Update main branch
+        14.10.  Update main branch
 
 -----------------------------------------------------------------------------------------------------------------------
 
-16.  Create first helper:
-        16.1.   Create a new directory 'Helpers' in root folder
-        16.2.   Create auth.helper.js file
-        16.3.   Inside the file:
-                -   import supertest from 'supertest'
-                -   create a function with relevant name and following syntax:
-                    function login(email, password){                                // function name and params
-                        return supertest(process.env.BASE_URL)                      // function return
-                        .post('/v5/user/login')
-                        send({email: email, password: password})
-                        }
-                -   export created function:
-                    export { login }                                                // function should be exported
-                -   import helper to spec file:
-                    import * as authHelper from '../helpers/auth.helper.js'         // import created function to spec file
-                        /*
-                          Short brief to syntax of relative paths:
-                            ..  -   two dots moves up to a parent directory (which is a root directory of a project for this case)
-                            .   -   one dots represent the current directory (which is a tests directory for this case)
-                        */
-                -   replace requests in auth.spec.js to authHelper function
-                -   replace request in auth-global-hook to authHelper function
-                -   remove unnecessary imports
-        16.4.   Commit, push & PR
-        16.5.   Update main branch
-        16.6.   HW: Create a helper for Register page                               // optional, TBA
+15.  Creating tests for User Register:
+        13.1.   Create a new branch
+        13.2.   Create a new spec
+        13.3.   Import expect, supertest
+        13.4.   Create a User Creation request:
+                it('Create a user with valid credentials', async () => {
+                    res = await supertest(process.env.BASE_URL).post('user').send({
+                      firstName: 'Mubariz',
+                      lastName: 'Murundi',
+                      email: 'murmur@pirate.com',
+                      password: process.env.PASSWORD,
+                    })
+        14.5.   Add randomizer to project:
+        15.6.   Install the randomizer (https://chancejs.com/):
+                -   npm install chance
+        15.7.   Import randomizer
+                -   const chance = require('chance').Chance()
+        15.8.   Replace request body properties with random data using chance
+        15.9.   Commit, push & PR
+        15.10.  Update main branch
+        15.11.  HW: add more test suits for user registration
+
+ -----------------------------------------------------------------------------------------------------------------------
