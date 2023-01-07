@@ -8,15 +8,15 @@ describe('Authentication Positive', () => {
             res = await login(process.env.EMAIL, process.env.PASSWORD)
         })
 
-        it('check response status code', async () => {
+        it('check response status code', () => {
             expect(res.statusCode).to.eq(200)
         })
 
-        it('check response message', async () => {
+        it('check response message',  () => {
             expect(res.body.message).to.eq('Auth success')
         })
 
-        it('check the response has token', async () => {
+        it('check the response has token',  () => {
             expect(res.body.payload.token).to.not.be.undefined
         })
     })
@@ -27,11 +27,11 @@ describe('Authentication Negative', () => {
         before(async () => {
             res = await login('invalid@pirate.com', process.env.PASSWORD)
         })
-        it('check response status code', async () => {
+        it('check response status code',  () => {
             expect(res.statusCode).to.eq(400)
         })
 
-        it('check response message', async () => {
+        it('check response message',  () => {
             expect(res.body.message).to.eq('Auth failed')
         })
     })
@@ -41,11 +41,11 @@ describe('Authentication Negative', () => {
         before(async () => {
             res = await login(process.env.EMAIL, 'invalid')
         })
-        it('check response status code', async () => {
+        it('check response status code',  () => {
             expect(res.statusCode).to.eq(400)
         })
 
-        it('check response message', async () => {
+        it('check response message',  () => {
             expect(res.body.message).to.eq('Auth failed')
         })
     })
@@ -55,11 +55,11 @@ describe('Authentication Negative', () => {
         before(async () => {
             res = await login('', '')
         })
-        it('check response status code', async () => {
+        it('check response status code',  () => {
             expect(res.statusCode).to.eq(400)
         })
 
-        it('check response message', async () => {
+        it('check response message',  () => {
             expect(res.body.message).to.eq('Auth failed')
         })
     })

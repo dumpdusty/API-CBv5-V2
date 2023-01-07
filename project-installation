@@ -312,3 +312,33 @@
 ------------------------------------------------------------------------------------------------------------------------
 
 18.  Creating Clients tests
+     18.1.  Create new branch clients-1
+     18.2.  Create client.spec.js file
+     18.3.  Make necessary imports                          // note that request command could be named as you wish
+     18.4.  Create test for new client creation:
+            -   describe('Clients tests', () => {
+                    let res
+                    it('Create a client', async() => {
+                        res = await request(process.env.BASE_URL)
+                            .post('client')
+                            .set('Authorization', process.env.TOKEN)
+                            .send({
+                                name: chance.name(),
+                                phone: chance.phone(),
+                                email: chance.email()
+                            })
+                        expect(res.statusCode).to.eq(200)
+                        expect(res.body.message).to.eq('Client created')
+                        expect(res.body.payload).not.to.be.empty
+                        expect(res.body.payload).to.be.a('string')
+                    });
+                });
+     18.5.  Create before hook and split assertions to separate tests
+     18.6.  Create a client-helper and add there 'create' function
+     18.7.  Change clients.spec file and remove unnecessary imports
+     18.8.  Commit, push & PR
+     18.9.  Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
+
+
