@@ -2,15 +2,16 @@
 
 2.  Run `npm init -y` in terminal
 
-    In case to connecting with GitHub:
-3.  Run `git init` in terminal
-        3.1.    Run commands in terminal:
-                    -   git add README.md
+3.  Connecting to remote repo:
+        3.1.    Run `git init` in terminal
+        3.2.    Run commands in terminal:
+                    -   git add README.md               //this could be done during remote repo creation
                     -   git branch -M main
-        3.2.    Create new branch
-        3.3.    Create `.gitignore` file and add there `.idea` and `node_modules`
-        3.4.    Make a commit
-        3.5.    Push to origin
+        3.3.    Create new branch named 'git-config'
+        3.4.    Create `.gitignore` file and add there `.idea` and `node_modules`
+        3.5.    Make a commit
+        3.6.    Push to origin
+        3.7.    Switch to main and delete local branch
 
  -----------------------------------------------------------------------------------------------------------------------
 
@@ -23,8 +24,8 @@
 
 5.  Installing and config Prettier:
         5.1.    In terminal: npm i prettier
-        5.2.    Check if Prettier plugin installed to WS
-        5.3.    Goto Settings/Languages and Frameworks/Prettier, check the path and choose the options
+        5.2.    Check if Prettier plugin installed to WS (goto Settings/Plugins/search for Prettier)
+        5.3.    Goto Settings/Languages and Frameworks/JavaScript/Prettier, check the path and choose the options
         5.4.    Create .prettierrc.js file and put into:
                 module.exports = {
                     trailingComma: "es5",
@@ -35,7 +36,7 @@
                     arrowParens: "avoid",
                   }
         5.5.    Commit, push & PR
-        5.6.    Update main branch
+        5.6.    Update main branch / delete created (optional)
 
  -----------------------------------------------------------------------------------------------------------------------
 
@@ -48,7 +49,7 @@
                          require: ['@babel/register'],
                          spec: 'path to tests directory',
                          exclude: 'path to files to be excluded from test run',
-                         file: `path to global hook`,                               //will be described below
+                         file: `path to global hook`,                               // should be commented !!!!!!
                      }
         6.5.    Modify `test` script:
                 -   "test": "mocha --config .mocharc.js"
@@ -56,14 +57,15 @@
 7.  Install supertest (HTTP client) & chai (assertion library) packages:
                 -   npm i supertest chai
         7.1.    Commit, push & PR
-        7.2.    Update main branch
+        7.2.    Update main branch / delete created (optional)
 
  -----------------------------------------------------------------------------------------------------------------------
 
 8.  Creating first test example
         8.1.    Create a new branch
         8.2.    Create `tests` directory
-        8.3.    Add this directory to .mocharc
+        8.3.    Add this directory to .mocharc:
+                - spec: 'tests/**/*.js'
         8.4.    Create first spec file named example.spec.js inside of `tests` folder
         8.5.    Create simple test for common function (for example function sum()):
                     -   import { expect } from chai
@@ -71,9 +73,9 @@
                     -   write assertion
                     -   run the test with CLI command / 'play' sign
                     -   change the assertion value to invalid output to check if test works properly
-                    -   add some more tests for any other functions (as a HomeWork)
+                    -   add some more tests for any other functions (optional)
         8.6.    Commit, push & PR
-        8.7.    Update main branch
+        8.7.    Update main branch / delete created (optional)
         8.8.    HW: create more tests (math, string, array)
 
  -----------------------------------------------------------------------------------------------------------------------
@@ -105,7 +107,7 @@
                     -   test for token
                     -   test for any property inside of response
         9.8.    Commit, push & PR
-        9.9.    Update main branch
+        9.9.    Update main branch / delete created (optional)
 
  -----------------------------------------------------------------------------------------------------------------------
 
@@ -140,14 +142,14 @@
                     -   add option to .mocharc configuration file:
                         file: `path to global hook` ('config/setup.js')
         12.4.   Commit, push & PR
-        12.5.   Update main branch
+        12.5.   Update main branch / delete created (optional)
 
  -----------------------------------------------------------------------------------------------------------------------
 
  13.  Create first helper:
          13.1.   Create a new branch
          13.2.   Create a new directory 'Helpers' in root folder
-         13.3.   Create auth.helper.js file
+         13.3.   Create general-helper.js file
          13.4.   Inside the file:
                  -   import supertest from 'supertest'
                  -   create a function with relevant name and following syntax:
@@ -159,17 +161,17 @@
                  -   export created function:
                      export { login }                                                // function should be exported
                  -   import helper to spec file:
-                     import * as authHelper from '../helpers/auth-helper.js'         // import created function to spec file
+                     import { login } from '../helpers/general-helper.js'            // import created function to spec file
                          /*
                            Short brief to syntax of relative paths:
-                             ..  -   two dots moves up to a parent directory (which is a root directory of a project for this case)
-                             .   -   one dots represent the current directory (which is a tests directory for this case)
+                             ..  -   two dots moves up to a parent directory (which is a root directory of a project in this case)
+                             .   -   one dots represent the current directory (which is a tests directory in this case)
                          */
-                 -   replace requests in auth.spec.js to authHelper function
-                 -   replace request in auth-global-hook to authHelper function
+                 -   replace requests in auth.spec.js to login function
+                 -   replace request in auth-global-hook to login function
                  -   remove unnecessary imports
          13.5.   Commit, push & PR
-         13.6.   Update main branch
+         13.6.   Update main branch / delete created (optional)
 
  -----------------------------------------------------------------------------------------------------------------------
 
@@ -226,7 +228,7 @@
         14.9.  Merge PR:
                     -   back to PR and click on create PR
                     -   merge PR
-        14.10.  Update main branch
+        14.10.  Update main branch / delete created (optional)
 
 -----------------------------------------------------------------------------------------------------------------------
 
@@ -249,15 +251,14 @@
                 -   const chance = require('chance').Chance()
         15.8.   Replace request body properties with random data using chance
         15.9.   Commit, push & PR
-        15.10.  Update main branch
+        15.10.  Update main branch / delete created (optional)
         15.11.  HW: add more test suits for user registration
 
 ------------------------------------------------------------------------------------------------------------------------
 
 16.  Creating Register helper:
         16.1.   Create new branch
-        16.2.   Create reg-helper.js file inside the helpers directory
-        16.3.   Inside the created file:
+        16.2.   Inside the general-helper.js file:
                 -   import supertest from 'supertest'
                 -   create a function with relevant name and following syntax:
                     function register(firsName, lastName, email, password){        // function name and params
@@ -265,16 +266,16 @@
                               .post('user')
                               .send({firstName: firstName, lastName: lastName, email: email, password: password})
                               }
-                -   export created function:
-                    export { register }                                            // function should be exported
+                -   export created function by adding to export:
+                    export { login, register }                                            // function should be exported
         16.4.   import helper to spec file:
-                -   import * as regHelper from '../helpers/reg-helper.js'          // import created function to spec file
-        16.5.   Replace requests in register.spec.js to regHelper function
+                -   import { register } from '../helpers/general-helper.js'          // import created function to spec file
+        16.5.   Replace requests in register.spec.js to register function
         16.6.   Remove unnecessary imports
         16.4.   Create a before hook and move register request to it
         16.5.   Repeat steps 16.5. and 16.6. for Register negative tests
         16.6.   Commit, push & PR
-        16.7.   Update main branch
+        16.7.   Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 

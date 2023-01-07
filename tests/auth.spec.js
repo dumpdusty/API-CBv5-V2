@@ -1,11 +1,11 @@
 import {expect} from 'chai'
-import * as authHelper from '../helpers/auth-helper.js'
+import { login } from '../helpers/general-helper.js'
 
 describe('Authentication Positive', () => {
     describe('login with valid credentials', () => {
         let res
         before(async () => {
-            res = await authHelper.login(process.env.EMAIL, process.env.PASSWORD)
+            res = await login(process.env.EMAIL, process.env.PASSWORD)
         })
 
         it('check response status code', async () => {
@@ -25,7 +25,7 @@ describe('Authentication Negative', () => {
     describe('login with invalid email', () => {
         let res
         before(async () => {
-            res = await authHelper.login('invalid@pirate.com', process.env.PASSWORD)
+            res = await login('invalid@pirate.com', process.env.PASSWORD)
         })
         it('check response status code', async () => {
             expect(res.statusCode).to.eq(400)
@@ -39,7 +39,7 @@ describe('Authentication Negative', () => {
     describe('login with invalid password', () => {
         let res
         before(async () => {
-            res = await authHelper.login(process.env.EMAIL, 'invalid')
+            res = await login(process.env.EMAIL, 'invalid')
         })
         it('check response status code', async () => {
             expect(res.statusCode).to.eq(400)
@@ -53,7 +53,7 @@ describe('Authentication Negative', () => {
     describe('login with empty fields', () => {
         let res
         before(async () => {
-            res = await authHelper.login('', '')
+            res = await login('', '')
         })
         it('check response status code', async () => {
             expect(res.statusCode).to.eq(400)
