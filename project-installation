@@ -231,15 +231,15 @@
         16.3.   Inside the file:
                 -   import supertest from 'supertest'
                 -   create a function with relevant name and following syntax:
-                    function login(email, password){
-                        return supertest(process.env.BASE_URL)
+                    function login(email, password){                                // function name and params
+                        return supertest(process.env.BASE_URL)                      // function return
                         .post('/v5/user/login')
                         send({email: email, password: password})
                         }
                 -   export created function:
-                    export { login }
+                    export { login }                                                // function should be exported
                 -   import helper to spec file:
-                    import * as authHelper from '../helpers/auth.helper.js'
+                    import * as authHelper from '../helpers/auth.helper.js'         // import created function to spec file
                         /*
                           Short brief to syntax of relative paths:
                             ..  -   two dots moves up to a parent directory (which is a root directory of a project for this case)
@@ -248,3 +248,6 @@
                 -   replace requests in auth.spec.js to authHelper function
                 -   replace request in auth-global-hook to authHelper function
                 -   remove unnecessary imports
+        16.4.   Commit, push & PR
+        16.5.   Update main branch
+        16.6.   HW: Create a helper for Register page                               // optional, TBA
