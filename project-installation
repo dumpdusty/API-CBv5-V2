@@ -279,7 +279,35 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-17.  Creating test for space trimming
+17.  Creating test for space trimming:
+        17.1.   Create a new branch
+        17.2.   Create a new test in register.spec.js:
+                -   create a describe
+                -   create an it
+                -   define which requests should be sent
+                -   create a variables (testEmail, res)
+                -   create before hook with registration request
+                -   add auth request and assertion to it              // mention import 'login' added to file
+                -   move auth request to before hook
+                -   split assertions to separate its:
+
+                         describe.only('Space trimming test', () => {
+                              let testEmail = ' james' + Date.now() + '@pirate.com   '
+                              let res
+
+                              before(async()=>{
+                                  await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
+                                  res = await login((testEmail.trim()), process.env.PASSWORD)
+                              })
+                              it('check if spaces trimmed during registration by logging in ', async() => {
+                                  expect(res.statusCode).to.eq(200)
+                              });
+                              it('check if spaces trimmed during registration by logging in ', async() => {
+                                  expect(res.body.message).to.eq('Auth success')
+                              });
+                          });
+        17.3.   Commit, push & PR
+        17.4.   Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 

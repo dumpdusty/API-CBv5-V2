@@ -1,6 +1,5 @@
 import { expect } from 'chai'
-import { register } from '../helpers/general-helper'
-
+import {login, register} from '../helpers/general-helper'
 const chance = require('chance').Chance()
 
 describe('User registration positive', () => {
@@ -52,3 +51,20 @@ describe('User registration negative', () => {
     })
   })
 })
+
+describe('Space trimming test', () => {
+    let testEmail = ' james' + Date.now() + '@pirate.com   '
+    let res
+    let result
+
+    before(async()=>{
+        result = await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
+        res = await login((testEmail.trim()), process.env.PASSWORD)
+    })
+    it('check response status', async() => {
+        expect(res.statusCode).to.eq(200)
+    });
+    it('check response message', async() => {
+        expect(res.body.message).to.eq('Auth success')
+    });
+});
