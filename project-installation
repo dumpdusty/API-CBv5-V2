@@ -267,12 +267,14 @@
                               }
                 -   export created function:
                     export { register }                                            // function should be exported
-                -   import helper to spec file:
-                    import * as regHelper from '../helpers/reg-helper.js'          // import created function to spec file
-                -   replace requests in register.spec.js to regHelper function
-                -   remove unnecessary imports
-        16.4.   Commit, push & PR
-        16.5.   Update main branch
+        16.4.   import helper to spec file:
+                -   import * as regHelper from '../helpers/reg-helper.js'          // import created function to spec file
+        16.5.   Replace requests in register.spec.js to regHelper function
+        16.6.   Remove unnecessary imports
+        16.4.   Create a before hook and move register request to it
+        16.5.   Repeat steps 16.5. and 16.6. for Register negative tests
+        16.6.   Commit, push & PR
+        16.7.   Update main branch
 
 ------------------------------------------------------------------------------------------------------------------------
 
