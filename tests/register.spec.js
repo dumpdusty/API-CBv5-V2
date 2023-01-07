@@ -1,12 +1,12 @@
 import { expect } from 'chai'
-import * as regHelper from '../helpers/reg-helper'
+import { register } from '../helpers/general-helper'
 
 const chance = require('chance').Chance()
 
 describe('User registration positive', () => {
     let res
     before(async ()=>{
-        res = await regHelper.register(chance.first(), chance.last(), chance.email(), process.env.PASSWORD)
+        res = await register(chance.first(), chance.last(), chance.email(), process.env.PASSWORD)
     })
 
     it('check response status code', () => {
@@ -24,7 +24,7 @@ describe('User registration negative', () => {
     let res
 
     before(async()=>{
-      res = await regHelper.register(chance.first(), chance.last(), chance.email(), '')
+      res = await register(chance.first(), chance.last(), chance.email(), '')
     })
 
     it('check response status code',  () => {
@@ -40,7 +40,7 @@ describe('User registration negative', () => {
     let res
 
     before(async()=>{
-      res = await regHelper.register(chance.first(), chance.last(), process.env.EMAIL, process.env.PASSWORD)
+      res = await register(chance.first(), chance.last(), process.env.EMAIL, process.env.PASSWORD)
     })
 
     it('check response status code', () => {
