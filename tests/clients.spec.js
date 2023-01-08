@@ -59,7 +59,7 @@ describe('Get client by ID', () => {
   });
 });
 
-describe('Get client by name', () => {
+describe.only('Get client by name', () => {
   let clientId
   let clientName
   let res
@@ -77,5 +77,9 @@ describe('Get client by name', () => {
   it('check the client name', () => {
     expect((res.body.payload.items[0]).name).to.eq(clientName)
   });
+  it('check the client id', () => {
+    expect((res.body.payload.items[0])._id).to.eq(clientId)
+  });
+
 });
 
