@@ -59,7 +59,23 @@ describe('Get client by ID', () => {
   });
 });
 
-describe('', () => {
-  
+describe('Get client by name', () => {
+  let clientId
+  let clientName
+  let res
+  before(async()=>{
+    clientId = (await clientHelper.create()).body.payload
+    clientName = (await clientHelper.getSingle(clientId)).body.payload.name
+    res = await clientHelper.getByName(clientName)
+  })
+  it('check the response status', () => {
+    expect(res.statusCode).to.eq(200)
+  });
+  it('check the response message', () => {
+    expect(res.body.message).to.eq('ClientSearch ok')
+  });
+  it('check the client name', () => {
+    expect((res.body.payload.items[0]).name).to.eq(clientName)
+  });
 });
 

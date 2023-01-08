@@ -379,8 +379,16 @@
             -   create a function inside client-helper.js
      19.3.  Create 'Get client by name':
             -   create a test for getting client by name:
-
-
+                 before(async()=>{
+                    clientId = (await clientHelper.create()).body.payload
+                    clientName = (await clientHelper.getSingle(clientId)).body.payload.name
+                    res = await request(process.env.BASE_URL)
+                        .post('client/search')
+                        .set('Authorization', process.env.TOKEN)
+                        .send({name: clientName})
+                  })
+            -   create before hook
+            -   create a function inside client-helper.js
      19.4.  Commit, push & PR
      19.5.  Update main branch / delete created (optional)
 

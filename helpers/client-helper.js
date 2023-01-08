@@ -23,4 +23,11 @@ function getSingle(clientId){
         .set('Authorization', process.env.TOKEN)
 }
 
-export { create, getAll, getSingle }
+function getByName(clientName){
+    return request(process.env.BASE_URL)
+        .post('client/search')
+        .set('Authorization', process.env.TOKEN)
+        .send({name: clientName})
+}
+
+export { create, getAll, getSingle, getByName }
