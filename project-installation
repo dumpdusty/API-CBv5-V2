@@ -498,4 +498,25 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
+23.  Setup the reporter:
+     23.1.  Instal the mochawesome repoter:
+                -   npm install mochawesome
+     23.2.  Add the option to .mocharc file or to the script:
+                -   reporter: 'mochawesome'                                     // in .mocharc.js
+                -   --reporter mochawesome                                      // in script
+     23.3.  Change the configuration if needed:
+                -   using 'reporter-options' flag in mocha config or script
+                -   reportDir=MyReports                                         // changing the reports directory
+                -   reportFilename=updatedReport                                // changing the file name
+                    some options for report name: [status]_[datetime]:      // add status and timestamp to file name
+                    reportFilename=[status]_[datetime]_ReportName
+                -   json=false                                                  // turn off creating json report
+                -   quiet=true                                                  // turn off mochawesome console messages
+     23.4.  Explain design of report
+     23.5.  Commit, push & PR
+     23.6.  Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
+
+
 
