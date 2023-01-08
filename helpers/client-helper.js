@@ -30,4 +30,11 @@ function getByName(clientName){
         .send({name: clientName})
 }
 
-export { create, getAll, getSingle, getByName }
+function update(clientId){
+    return request(process.env.BASE_URL)
+        .patch('client/' + clientId)
+        .set('Authorization', process.env.TOKEN)
+        .send({name: 'updatedClient', phone: 'updatedPhone'})
+}
+
+export { create, getAll, getSingle, getByName, update }
