@@ -1,8 +1,7 @@
 import {expect} from 'chai'
 import * as clientHelper from '../helpers/client-helper'
-import request from 'supertest'
 
-describe.only('Clients tests', () => {
+describe('Clients tests', () => {
   describe('Create a client', () => {
     let res
 
@@ -159,4 +158,12 @@ describe.only('Clients tests', () => {
       expect(res.body.message).to.eq('No client for provided id')
     })
   })
+})
+
+after('delete all clients',async()=>{
+  let clientsList
+  clientsList = (await clientHelper.getAll()).body.payload.items
+  for(let i=0; i<clientsList.length; i++){
+    await clientHelper.deleteClient(clientsList[i]._id)
+  }
 })
