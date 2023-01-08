@@ -59,7 +59,7 @@ describe('Get client by ID', () => {
   });
 });
 
-describe.only('Get client by name', () => {
+describe('Get client by name', () => {
   let clientId
   let clientName
   let res
