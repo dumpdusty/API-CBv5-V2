@@ -438,7 +438,7 @@
                         })
                       })
      20.6.  Add 'timeout' param to .mocharc.js to increase the timeout time:       // in case of timeout errors
-                -   timeout: '5000'                                                // by default it is 2000 mc / 2 sec
+                -   timeout: '20000'                                                // by default it is 2000 mc / 2 sec
      20.6.  Commit, push & PR
      20.7.  Update main branch / delete created (optional)
 
@@ -485,4 +485,17 @@
      21.7.  Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
+
+22. Create after hook for clients:
+    22.1.   Define the steps:
+            -   get clientList
+            -   check the clientList length                     // optional
+            -   create a loop with deleteClient function inside
+            -   get clientsList                                 // optional
+            -   check the clientsList length                    // optional
+    22.2.   Commit, push & PR
+    22.3.   Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
+
 
