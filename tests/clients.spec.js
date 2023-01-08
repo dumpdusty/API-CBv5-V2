@@ -1,7 +1,8 @@
-import { expect } from 'chai'
+import {expect} from 'chai'
 import * as clientHelper from '../helpers/client-helper'
+import request from 'supertest'
 
-describe.only('Clients tests', () => {
+describe('Clients tests', () => {
   describe('Create a client', () => {
     let res
 
@@ -9,7 +10,7 @@ describe.only('Clients tests', () => {
       res = await clientHelper.create()
     })
 
-    it('check the response status', async () => {
+    it('check the response status',  () => {
       expect(res.statusCode).to.eq(200)
     })
     it('check the response message', () => {
@@ -54,13 +55,13 @@ describe.only('Clients tests', () => {
       res = await clientHelper.getSingle(clientId)
     })
 
-    it('check the response status', async () => {
+    it('check the response status',  () => {
       expect(res.statusCode).to.eq(200)
     })
-    it('check the response message', async () => {
+    it('check the response message',  () => {
       expect(res.body.message).to.eq('Get Client by id ok')
     })
-    it('check the response message', async () => {
+    it('check the response message',  () => {
       expect(res.body.payload._id).to.eq(`${clientId}`)
     })
   })
@@ -99,15 +100,15 @@ describe.only('Clients tests', () => {
       res = await clientHelper.update(clientId)
     })
 
-    it('update client', async () => {
+    it('check the response status',  () => {
       expect(res.statusCode).to.eq(200)
     })
-    it('update client', async () => {
+    it('check the response message',  () => {
       expect(res.statusCode).to.eq(200)
     })
   })
 
-  describe('check if the name actually updated', () => {
+  describe('Check if the name actually updated', () => {
     let clientId
     let nameBefore
     let nameAfter
@@ -121,6 +122,41 @@ describe.only('Clients tests', () => {
 
     it('check if updated name does not equal original name', () => {
       expect(nameAfter).to.not.eq(nameBefore)
+    })
+  })
+
+  describe('Delete the client', () => {
+    let res
+    let clientId
+
+    before(async () => {
+      clientId = (await clientHelper.create()).body.payload
+      res = await clientHelper.deleteClient(clientId)
+    })
+
+    it('check the response status', () => {
+      expect(res.statusCode).to.eq(200)
+    })
+    it('check the response message',  () => {
+      expect(res.body.message).to.eq('Client deleted')
+    })
+  })
+
+  describe('Check if client actually deleted', () => {
+    let res
+    let clientId
+
+    before(async () => {
+      clientId = (await clientHelper.create()).body.payload
+      await clientHelper.deleteClient(clientId)
+      res = await clientHelper.getSingle(clientId)
+    })
+
+    it('check the response status',  () => {
+      expect(res.statusCode).to.eq(404)
+    })
+    it('check the response message',  () => {
+      expect(res.body.message).to.eq('No client for provided id')
     })
   })
 })

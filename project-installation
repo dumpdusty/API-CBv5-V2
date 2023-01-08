@@ -414,11 +414,11 @@
      20.4.  Create a function inside client-helper.js
      20.5.  Check if the name actually changed:             // in case of API return correct message and status
                 -   create a client                         // but actually does not update the name
-                -   get the clientId
-                -   send the clientById request
+                -   get clientId
+                -   send getClientById request
                 -   get nameBefore
                 -   update client
-                -   send the clientById request
+                -   send getClientById request
                 -   get nameAfter
                 -   compare the nameBefore and nameAfter:
                     describe('check if the name actually updated', () => {
@@ -443,5 +443,46 @@
      20.7.  Update main branch / delete created (optional)
 
 21.  Create delete client test:
-     21.1.    Open new branch
+     21.1.  Open new branch
      21.2.  Create a describe:
+            describe.only('Delete the client', () => {
+                let res
+                let clientId
+                it('check the response status', async() => {
+                  clientId = (await clientHelper.create()).body.payload
+                  res = await request(process.env.BASE_URL)
+                      .delete('client/' + clientId)
+                      .set('Authorization', process.env.TOKEN)
+                  expect(res.statusCode).to.eq(200)
+                  expect(res.body.message).to.eq('Client deleted')
+                });
+              });
+     21.3.  Create before hook
+     21.4.  Create a function inside client-helper.js
+     21.5.  Check if the deleted client does not exist in the database:
+            -   create a client
+            -   get clientId
+            -   delete client
+            -   send getClientById request:
+                describe('Check if client actually deleted', () => {
+                    let res
+                    let clientId
+
+                    before(async () => {
+                      clientId = (await clientHelper.create()).body.payload
+                      await clientHelper.deleteClient(clientId)
+                      res = await clientHelper.getSingle(clientId)
+                    })
+
+                    it('check the response status',  () => {
+                      expect(res.statusCode).to.eq(404)
+                    })
+                    it('check the response message',  () => {
+                      expect(res.body.message).to.eq('No client for provided id')
+                    })
+                  })
+     21.6.  Commit, push & PR
+     21.7.  Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
+
