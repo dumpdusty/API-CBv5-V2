@@ -2,12 +2,12 @@ import {expect} from 'chai'
 import * as clientHelper from '../helpers/client-helper'
 import request from 'supertest'
 
-describe('Clients tests', () => {
+describe.only('Clients tests', () => {
   describe('Create a client', () => {
     let res
 
     before(async () => {
-      res = await clientHelper.create()
+      res = await clientHelper.createClient()
     })
 
     it('check the response status',  () => {
@@ -28,7 +28,7 @@ describe('Clients tests', () => {
     let res
 
     before(async () => {
-      await clientHelper.create()
+      await clientHelper.createClient()
       res = await clientHelper.getAll()
     })
 
@@ -51,7 +51,7 @@ describe('Clients tests', () => {
     let clientId
 
     before(async () => {
-      clientId = (await clientHelper.create()).body.payload
+      clientId = (await clientHelper.createClient()).body.payload
       res = await clientHelper.getSingle(clientId)
     })
 
@@ -72,7 +72,7 @@ describe('Clients tests', () => {
     let res
 
     before(async () => {
-      clientId = (await clientHelper.create()).body.payload
+      clientId = (await clientHelper.createClient()).body.payload
       clientName = (await clientHelper.getSingle(clientId)).body.payload.name
       res = await clientHelper.getByName(clientName)
     })
@@ -96,8 +96,8 @@ describe('Clients tests', () => {
     let clientId
 
     before(async () => {
-      clientId = (await clientHelper.create()).body.payload
-      res = await clientHelper.update(clientId)
+      clientId = (await clientHelper.createClient()).body.payload
+      res = await clientHelper.updateClient(clientId)
     })
 
     it('check the response status',  () => {
@@ -114,9 +114,9 @@ describe('Clients tests', () => {
     let nameAfter
 
     before(async () => {
-      clientId = (await clientHelper.create()).body.payload
+      clientId = (await clientHelper.createClient()).body.payload
       nameBefore = (await clientHelper.getSingle(clientId)).body.payload.name
-      await clientHelper.update(clientId)
+      await clientHelper.updateClient(clientId)
       nameAfter = (await clientHelper.getSingle(clientId)).body.payload.name
     })
 
@@ -130,7 +130,7 @@ describe('Clients tests', () => {
     let clientId
 
     before(async () => {
-      clientId = (await clientHelper.create()).body.payload
+      clientId = (await clientHelper.createClient()).body.payload
       res = await clientHelper.deleteClient(clientId)
     })
 
@@ -147,7 +147,7 @@ describe('Clients tests', () => {
     let clientId
 
     before(async () => {
-      clientId = (await clientHelper.create()).body.payload
+      clientId = (await clientHelper.createClient()).body.payload
       await clientHelper.deleteClient(clientId)
       res = await clientHelper.getSingle(clientId)
     })

@@ -358,7 +358,7 @@
                 });
            -    create before hook
            -    create a function inside client-helper.js
-           -    to make this test autonomous add clientHelper.create() to before hook
+           -    to make this test autonomous add clientHelper.createClient() to before hook
            -    add for loop to last assertion for checking all clients                 // as an example of using loops in tests
      19.2.  Create 'Get client by ID':
             -   create a test for getting client by ID:
@@ -427,9 +427,9 @@
                         let nameAfter
 
                         before(async () => {
-                          clientId = (await clientHelper.create()).body.payload
+                          clientId = (await clientHelper.createClient()).body.payload
                           nameBefore = (await clientHelper.getSingle(clientId)).body.payload.name
-                          await clientHelper.update(clientId)
+                          await clientHelper.updateClient(clientId)
                           nameAfter = (await clientHelper.getSingle(clientId)).body.payload.name
                         })
 
@@ -449,7 +449,7 @@
                 let res
                 let clientId
                 it('check the response status', async() => {
-                  clientId = (await clientHelper.create()).body.payload
+                  clientId = (await clientHelper.createClient()).body.payload
                   res = await request(process.env.BASE_URL)
                       .delete('client/' + clientId)
                       .set('Authorization', process.env.TOKEN)
@@ -469,7 +469,7 @@
                     let clientId
 
                     before(async () => {
-                      clientId = (await clientHelper.create()).body.payload
+                      clientId = (await clientHelper.createClient()).body.payload
                       await clientHelper.deleteClient(clientId)
                       res = await clientHelper.getSingle(clientId)
                     })

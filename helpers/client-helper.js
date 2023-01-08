@@ -1,7 +1,7 @@
 import request from 'supertest'
 const chance = require('chance').Chance()
 
-function create(){
+function createClient(){
     return request(process.env.BASE_URL)
         .post('client')
         .set('Authorization', process.env.TOKEN)
@@ -30,7 +30,7 @@ function getByName(clientName){
         .send({name: clientName})
 }
 
-function update(clientId){
+function updateClient(clientId){
     return request(process.env.BASE_URL)
         .patch('client/' + clientId)
         .set('Authorization', process.env.TOKEN)
@@ -42,4 +42,4 @@ function deleteClient(clientId){
         .set('Authorization', process.env.TOKEN)
 }
 
-export { create, getAll, getSingle, getByName, update, deleteClient }
+export { createClient, getAll, getSingle, getByName, updateClient, deleteClient }
