@@ -341,4 +341,59 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
+19.  Create more clients tests:
+     19.1. Create 'Get all clients':
+           -    Create a test for getting all clients inside of clients spec:
+                describe('Get all clients', () => {
+                  let res
+                  it('check the response status', async() => {
+                    res = await request(process.env.BASE_URL)
+                        .post('client/search')
+                        .set('Authorization', process.env.TOKEN)
+                    console.log(res.body.payload.items)
+                    expect(res.statusCode).to.eq(200)
+                    expect(res.body.payload.items).to.be.a('array')
+                    expect(res.body.payload.items[0]).has.property('_id')
+                  });
+                });
+           -    create before hook
+           -    create a function inside client-helper.js
+           -    to make this test autonomous add clientHelper.create() to before hook
+           -    add for loop to last assertion for checking all clients                 // as an example of using loops in tests
+     19.2.  Create 'Get client by ID':
+            -   create a test for getting client by ID:
+                describe('Get client by ID', () => {
+                  let res
+                  let clientId
+                  before(async()=>{                                                     // in case DB does not contains any clients
+                    clientId = (await clientHelper.create()).body.payload               // get clientID from created client
+                  })
+                  it('check the response status',async() => {
+                    res = await request(process.env.BASE_URL)
+                        .get('client/' + clientId)
+                        .set('Authorization', process.env.TOKEN)
+                    expect(res.statusCode).to.eq(200)
+                  });
+                });
+            -   create before hook
+            -   create a function inside client-helper.js
+     19.3.  Create 'Get client by name':
+            -   create a test for getting client by name:
+                 before(async()=>{
+                    clientId = (await clientHelper.create()).body.payload
+                    clientName = (await clientHelper.getSingle(clientId)).body.payload.name
+                    res = await request(process.env.BASE_URL)
+                        .post('client/search')
+                        .set('Authorization', process.env.TOKEN)
+                        .send({name: clientName})
+                  })
+            -   create before hook
+            -   create a function inside client-helper.js
+     19.4.  Commit, push & PR
+     19.5.  Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+
 

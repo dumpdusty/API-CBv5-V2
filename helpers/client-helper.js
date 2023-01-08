@@ -11,5 +11,23 @@ function create(){
             email: chance.email()
         })
 }
+function getAll(){
+    return request(process.env.BASE_URL)
+        .post('client/search')
+        .set('Authorization', process.env.TOKEN)
+}
 
-export { create }
+function getSingle(clientId){
+    return request(process.env.BASE_URL)
+        .get('client/' + clientId)
+        .set('Authorization', process.env.TOKEN)
+}
+
+function getByName(clientName){
+    return request(process.env.BASE_URL)
+        .post('client/search')
+        .set('Authorization', process.env.TOKEN)
+        .send({name: clientName})
+}
+
+export { create, getAll, getSingle, getByName }
