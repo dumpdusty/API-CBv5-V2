@@ -394,6 +394,95 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
+20.  Create update client test:
+     20.1.  Open new branch
+     20.2.  Create a describe:
+            describe('Update client', () => {
+              let res
+              let clientId
+              it('update client', async() => {
+                clientId = (await clientHelper.create()).body.payload
+                res = await request(process.env.BASE_URL)
+                    .patch('client/' + clientId)
+                    .set('Authorization', process.env.TOKEN)
+                    .send({name: 'updatedClient', phone: 'updatedPhone'})
+                expect(res.statusCode).to.eq(200)
+                expect(res.body.message).to.eq('Client updated')
+              });
+            });
+     20.3.  Create before hook
+     20.4.  Create a function inside client-helper.js
+     20.5.  Check if the name actually changed:             // in case of API return correct message and status
+                -   create a client                         // but actually does not update the name
+                -   get clientId
+                -   send getClientById request
+                -   get nameBefore
+                -   update client
+                -   send getClientById request
+                -   get nameAfter
+                -   compare the nameBefore and nameAfter:
+                    describe('check if the name actually updated', () => {
+                        let clientId
+                        let nameBefore
+                        let nameAfter
 
+                        before(async () => {
+                          clientId = (await clientHelper.create()).body.payload
+                          nameBefore = (await clientHelper.getSingle(clientId)).body.payload.name
+                          await clientHelper.update(clientId)
+                          nameAfter = (await clientHelper.getSingle(clientId)).body.payload.name
+                        })
 
+                        it('check if updated name does not equal original name', () => {
+                          expect(nameAfter).to.not.eq(nameBefore)
+                        })
+                      })
+     20.6.  Add 'timeout' param to .mocharc.js to increase the timeout time:       // in case of timeout errors
+                -   timeout: '5000'                                                // by default it is 2000 mc / 2 sec
+     20.6.  Commit, push & PR
+     20.7.  Update main branch / delete created (optional)
+
+21.  Create delete client test:
+     21.1.  Open new branch
+     21.2.  Create a describe:
+            describe.only('Delete the client', () => {
+                let res
+                let clientId
+                it('check the response status', async() => {
+                  clientId = (await clientHelper.create()).body.payload
+                  res = await request(process.env.BASE_URL)
+                      .delete('client/' + clientId)
+                      .set('Authorization', process.env.TOKEN)
+                  expect(res.statusCode).to.eq(200)
+                  expect(res.body.message).to.eq('Client deleted')
+                });
+              });
+     21.3.  Create before hook
+     21.4.  Create a function inside client-helper.js
+     21.5.  Check if the deleted client does not exist in the database:
+            -   create a client
+            -   get clientId
+            -   delete client
+            -   send getClientById request:
+                describe('Check if client actually deleted', () => {
+                    let res
+                    let clientId
+
+                    before(async () => {
+                      clientId = (await clientHelper.create()).body.payload
+                      await clientHelper.deleteClient(clientId)
+                      res = await clientHelper.getSingle(clientId)
+                    })
+
+                    it('check the response status',  () => {
+                      expect(res.statusCode).to.eq(404)
+                    })
+                    it('check the response message',  () => {
+                      expect(res.body.message).to.eq('No client for provided id')
+                    })
+                  })
+     21.6.  Commit, push & PR
+     21.7.  Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
 
