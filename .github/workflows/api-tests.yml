@@ -28,4 +28,4 @@ jobs:
         BASE_URL: ${{ secrets.BASE_URL }}
         EMAIL: ${{ secrets.EMAIL }}
         PASSWORD: ${{ secrets.PASSWORD }}
-      run: npm test auth.spec.js
+      run: npm auth-test
