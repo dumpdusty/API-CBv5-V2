@@ -518,12 +518,19 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-24.  Exclude all tests from Ci/CD and leave only authentication tests:
-     24.1.  Comment spec option in .mocharc.js
-     24.2.  Update 'test' script to:
-            "test": "mocha --spec tests/*.js --config .mocharc.js",
-     24.3.  Add another script 'auth-test':
-            "auth-test": "mocha --spec tests/auth.spec.js --config .mocharc.js"
-     24.4.  Commit, push & PR
+24.  Minor updates on VI/CD pipeline:
+        24.1.   Make pipeline run on specified tests only:
+                    -   Comment spec option in .mocharc.js
+                    -   Update 'test' script to:
+                            "test": "mocha --spec tests/*.js --config .mocharc.js",
+                    -   Add another script 'auth-test':
+                            "auth-test": "mocha --spec tests/auth.spec.js --config .mocharc.js"
+                    -   Commit, push & PR
+                    -   Update main branch / delete created (optional)
+        24.2.   Add schedule to pipeline:
+                    -   on:
+                            schedule:                           // https://crontab.guru/
+                                - cron: '0 5 * * *'             // minute hour day month day of week
 
+------------------------------------------------------------------------------------------------------------------------
 
