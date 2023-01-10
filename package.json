@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --config .mocharc.js"
+    "test": "mocha --spec tests/*.js --config .mocharc.js",
+    "auth-test": "mocha --spec tests/auth.spec.js --config .mocharc.js"
   },
   "keywords": [],
   "author": "",

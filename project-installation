@@ -518,5 +518,12 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
+24.  Exclude all tests from Ci/CD and leave only authentication tests:
+     24.1.  Comment spec option in .mocharc.js
+     24.2.  Update 'test' script to:
+            "test": "mocha --spec tests/*.js --config .mocharc.js",
+     24.3.  Add another script 'auth-test':
+            "auth-test": "mocha --spec tests/auth.spec.js --config .mocharc.js"
+     24.4.  Commit, push & PR
 
 
