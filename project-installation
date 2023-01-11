@@ -518,7 +518,7 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-24.  Minor updates on VI/CD pipeline:
+24.  Minor updates on CI/CD pipeline:
         24.1.   Make pipeline run on specified tests only:
                     -   Comment spec option in .mocharc.js
                     -   Update 'test' script to:
@@ -534,3 +534,4 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
+25.  Create tests for Vendors:
