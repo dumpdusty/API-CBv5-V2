@@ -237,13 +237,19 @@
         13.2.   Create a new spec
         13.3.   Import expect, supertest
         13.4.   Create a User Creation request:
-                it('Create a user with valid credentials', async () => {
-                    res = await supertest(process.env.BASE_URL).post('user').send({
-                      firstName: 'Jake',
-                      lastName: 'Sully',
-                      email: 'jakesully@pirate.com',
-                      password: process.env.PASSWORD,
+                describe('Create a user with valid credentials', () => {
+                    let res
+                    it('check the response status code', async () => {
+                        res = await supertest(process.env.BASE_URL).post('user').send({
+                            firstName: 'Jake',
+                            lastName: 'Sully',
+                            email: 'jakesully12@pirate.com',
+                            password: process.env.PASSWORD,
+                        })
+                        expect(res.statusCode).to.eq(201)
+                        expect(res.body.message).contain('User created')
                     })
+                });
         14.5.   Add randomizer to project:
         15.6.   Install the randomizer (https://chancejs.com/):
                 -   npm install chance
