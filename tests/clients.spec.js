@@ -1,7 +1,7 @@
 import {expect} from 'chai'
 import * as clientHelper from '../helpers/client-helper'
 
-describe('Clients tests', () => {
+describe.only('Clients tests', () => {
   describe('Create a client', () => {
     let res
 
@@ -23,7 +23,7 @@ describe('Clients tests', () => {
     })
   })
 
-  describe.only('Get all clients', () => {
+  describe('Get all clients', () => {
     let res
 
     before(async () => {
@@ -160,10 +160,10 @@ describe('Clients tests', () => {
   })
 })
 
-// after('delete all clients',async()=>{
-//   let clientsList
-//   clientsList = (await clientHelper.getAll()).body.payload.items
-//   for(let i=0; i<clientsList.length; i++){
-//     await clientHelper.deleteClient(clientsList[i]._id)
-//   }
-// })
+after('delete all clients',async()=>{
+  let clientsList
+  clientsList = (await clientHelper.getAll()).body.payload.items
+  for(let i=0; i<clientsList.length; i++){
+    await clientHelper.deleteClient(clientsList[i]._id)
+  }
+})
