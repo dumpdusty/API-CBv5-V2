@@ -13,6 +13,9 @@
         3.6.    Push to origin
         3.7.    Switch to main and delete local branch
 
+4.  Create readme. Check markdown syntax. Check Readme templates
+        4.1.    https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes
+
  -----------------------------------------------------------------------------------------------------------------------
 
 4.  Installing and configuring Babel:
@@ -99,6 +102,7 @@
                                 expect(res.statusCode).to.eq(200)                                     // assertion for response statusCode
                                                                                                       // for assertion syntax see https://www.chaijs.com/api/bdd/
                             });
+                        })
         9.5.    Exclude example.spec file from tests by adding following to .mocharrc:
                     - exclude: 'tests/example.spec.js'
         9.6.    Create a test with invalid credentials
@@ -290,7 +294,7 @@
         17.2.   Create a new test in register.spec.js:
                 -   create a describe
                 -   create an it
-                -   define which requests should be sent
+                -   define which requests should be sent              // create user / login
                 -   create a variables (testEmail, res)
                 -   create before hook with registration request
                 -   add auth request and assertion to it              // mention import 'login' added to file
@@ -304,24 +308,56 @@
                               before(async()=>{
                                   await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
                                   res = await login((testEmail.trim()), process.env.PASSWORD)
+
+                                   console.log(testEmail)                                               // optional
+                                   console.log(testEmail.trim())                                        // optional
+                                   console.log(res.body.payload.user.email)                             // optional
                               })
-                              it('check if spaces trimmed during registration by logging in ', async() => {
+
+                              it('check if spaces trimmed during registration by logging in ', () => {
                                   expect(res.statusCode).to.eq(200)
                               });
+
                               it('check if spaces trimmed during registration by logging in ', async() => {
                                   expect(res.body.message).to.eq('Auth success')
                               });
+
+                               it('check the email in response is equal to trimmed email', () => {         // optional / just an example
+                                      expect(res.body.payload.user.email).to.eq(testEmail.trim())
+                                  });
                           });
+
         17.3.   Commit, push & PR
         17.4.   Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 
-18.  Creating Clients tests
-     18.1.  Create new branch clients-1
-     18.2.  Create client.spec.js file
-     18.3.  Make necessary imports                          // note that request command could be named as you wish
-     18.4.  Create test for new client creation:
+18.  Setup the reporter:
+     18.1.  Install the mochawesome repoter:
+                -   npm install mochawesome
+     18.2.  Add the option to .mocharc file or to the script:
+                    reporter: 'mochawesome'                                     // in .mocharc.js
+                    --reporter mochawesome                                      // in script
+     18.3.  Change the configuration if needed:
+                -   using 'reporter-options' flag in mocha config or script
+                -   reportDir=MyReports                                         // changing the reports directory
+                -   reportFilename=updatedReport                                // changing the file name
+                    some options for report name: [status]_[datetime]:          // add status and timestamp to file name
+                    reportFilename=[status]_[datetime]_ReportName
+                -   json=false                                                  // turn off creating json report
+                -   quiet=true                                                  // turn off mochawesome console messages
+     18.4.  Explain design of report
+     18.5.  Commit, push & PR
+     18.6.  Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+19.  Creating Clients tests
+     19.1.  Create new branch clients-1
+     19.2.  Create client.spec.js file
+     19.3.  Make necessary imports                          // note that request command could be named as you wish
+     19.4.  Create test for new client creation:
             -   describe('Clients tests', () => {
                     let res
                     it('Create a client', async() => {
@@ -339,16 +375,16 @@
                         expect(res.body.payload).to.be.a('string')
                     });
                 });
-     18.5.  Create before hook and split assertions to separate tests
-     18.6.  Create a client-helper and add there 'create' function
-     18.7.  Change clients.spec file and remove unnecessary imports
-     18.8.  Commit, push & PR
-     18.9.  Update main branch / delete created (optional)
+     19.5.  Create before hook and split assertions to separate tests
+     19.6.  Create a client-helper and add there 'create' function
+     19.7.  Change clients.spec file and remove unnecessary imports
+     19.8.  Commit, push & PR
+     19.9.  Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 
-19.  Create more clients tests:
-     19.1. Create 'Get all clients':
+20.  Create more clients tests:
+     20.1. Create 'Get all clients':
            -    Create a test for getting all clients inside of clients spec:
                 describe('Get all clients', () => {
                   let res
@@ -366,7 +402,7 @@
            -    create a function inside client-helper.js
            -    to make this test autonomous add clientHelper.createClient() to before hook
            -    add for loop to last assertion for checking all clients                 // as an example of using loops in tests
-     19.2.  Create 'Get client by ID':
+     20.2.  Create 'Get client by ID':
             -   create a test for getting client by ID:
                 describe('Get client by ID', () => {
                   let res
@@ -383,7 +419,7 @@
                 });
             -   create before hook
             -   create a function inside client-helper.js
-     19.3.  Create 'Get client by name':
+     20.3.  Create 'Get client by name':
             -   create a test for getting client by name:
                  before(async()=>{
                     clientId = (await clientHelper.create()).body.payload
@@ -395,14 +431,14 @@
                   })
             -   create before hook
             -   create a function inside client-helper.js
-     19.4.  Commit, push & PR
-     19.5.  Update main branch / delete created (optional)
+     20.4.  Commit, push & PR
+     20.5.  Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 
-20.  Create update client test:
-     20.1.  Open new branch
-     20.2.  Create a describe:
+21.  Create update client test:
+     21.1.  Open new branch
+     21.2.  Create a describe:
             describe('Update client', () => {
               let res
               let clientId
@@ -416,9 +452,9 @@
                 expect(res.body.message).to.eq('Client updated')
               });
             });
-     20.3.  Create before hook
-     20.4.  Create a function inside client-helper.js
-     20.5.  Check if the name actually changed:             // in case of API return correct message and status
+     21.3.  Create before hook
+     21.4.  Create a function inside client-helper.js
+     21.5.  Check if the name actually changed:             // in case of API return correct message and status
                 -   create a client                         // but actually does not update the name
                 -   get clientId
                 -   send getClientById request
@@ -443,14 +479,14 @@
                           expect(nameAfter).to.not.eq(nameBefore)
                         })
                       })
-     20.6.  Add 'timeout' param to .mocharc.js to increase the timeout time:       // in case of timeout errors
+     21.6.  Add 'timeout' param to .mocharc.js to increase the timeout time:       // in case of timeout errors
                 -   timeout: '20000'                                                // by default it is 2000 mc / 2 sec
-     20.6.  Commit, push & PR
-     20.7.  Update main branch / delete created (optional)
+     21.6.  Commit, push & PR
+     21.7.  Update main branch / delete created (optional)
 
-21.  Create delete client test:
-     21.1.  Open new branch
-     21.2.  Create a describe:
+22.  Create delete client test:
+     22.1.  Open new branch
+     22.2.  Create a describe:
             describe.only('Delete the client', () => {
                 let res
                 let clientId
@@ -463,9 +499,9 @@
                   expect(res.body.message).to.eq('Client deleted')
                 });
               });
-     21.3.  Create before hook
-     21.4.  Create a function inside client-helper.js
-     21.5.  Check if the deleted client does not exist in the database:
+     22.3.  Create before hook
+     22.4.  Create a function inside client-helper.js
+     22.5.  Check if the deleted client does not exist in the database:
             -   create a client
             -   get clientId
             -   delete client
@@ -487,46 +523,35 @@
                       expect(res.body.message).to.eq('No client for provided id')
                     })
                   })
-     21.6.  Commit, push & PR
-     21.7.  Update main branch / delete created (optional)
+     22.6.  Commit, push & PR
+     22.7.  Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 
-22. Create after hook for clients:
-    22.1.   Define the steps:
+23. Create after hook for clients:
+    23.1.   Define the steps:
             -   get clientList
-            -   check the clientList length                     // optional
-            -   create a loop with deleteClient function inside
-            -   get clientsList                                 // optional
-            -   check the clientsList length                    // optional
-    22.2.   Commit, push & PR
-    22.3.   Update main branch / delete created (optional)
-
-------------------------------------------------------------------------------------------------------------------------
-
-23.  Setup the reporter:
-     23.1.  Install the mochawesome repoter:
-                -   npm install mochawesome
-     23.2.  Add the option to .mocharc file or to the script:
-                    reporter: 'mochawesome'                                     // in .mocharc.js
-                    --reporter mochawesome                                      // in script
-     23.3.  Change the configuration if needed:
-                -   using 'reporter-options' flag in mocha config or script
-                -   reportDir=MyReports                                         // changing the reports directory
-                -   reportFilename=updatedReport                                // changing the file name
-                    some options for report name: [status]_[datetime]:          // add status and timestamp to file name
-                    reportFilename=[status]_[datetime]_ReportName
-                -   json=false                                                  // turn off creating json report
-                -   quiet=true                                                  // turn off mochawesome console messages
-     23.4.  Explain design of report
-     23.5.  Commit, push & PR
-     23.6.  Update main branch / delete created (optional)
+            -   create a loop with deleteClient function inside:
+                after('delete all clients', async () => {
+                  let clientsList
+                  clientsList = (await clientHelper.getAll()).body.payload.items
+                  console.log(clientsList)                                          // optional (to check format of clientsList)
+                  for (let i = 0; i < clientsList.length; i++) {
+                    await clientHelper.deleteClient(clientsList[i]._id)
+                  }
+                })
+            -   add to body of getAllClients helper:
+                {limit:30}
+            -   get clientsList                                                      // optional
+            -   check the clientsList length                                         // optional (to check the q-ty of clients)
+    23.2.   Commit, push & PR
+    23.3.   Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 
 24.  Minor updates on CI/CD pipeline:
         24.1.   Make pipeline run on specified tests only:
-                    -   Comment spec option in .mocharc.js
+                    -   Comment spec option in .mocharc.js                                       // this will be defined in scripts
                     -   Update 'test' script to:
                             "test": "mocha --spec tests/*.js --config .mocharc.js",
                     -   Add another script 'auth-test':

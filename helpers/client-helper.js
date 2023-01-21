@@ -15,7 +15,7 @@ function getAll(){
     return request(process.env.BASE_URL)
         .post('client/search')
         .set('Authorization', process.env.TOKEN)
-        .send({limit: 100})
+        .send({limit: 30})
 }
 
 function getSingle(clientId){

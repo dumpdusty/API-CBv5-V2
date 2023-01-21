@@ -52,7 +52,7 @@ describe('User registration negative', () => {
   })
 })
 
-describe('Space trimming test', () => {
+describe.only('Space trimming test', () => {
     let testEmail = ' james' + Date.now() + '@pirate.com   '
     let res
     let result
@@ -60,11 +60,18 @@ describe('Space trimming test', () => {
     before(async()=>{
         result = await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
         res = await login((testEmail.trim()), process.env.PASSWORD)
+
+        console.log(testEmail)
+        console.log(testEmail.trim())
+        console.log(res.body.payload.user.email)
     })
-    it('check response status', async() => {
+    it('check response status', () => {
         expect(res.statusCode).to.eq(200)
     });
-    it('check response message', async() => {
+    it('check response message', () => {
         expect(res.body.message).to.eq('Auth success')
+    });
+    it('check the email in response is equal to trimmed email', () => {
+        expect(res.body.payload.user.email).to.eq(testEmail.trim())
     });
 });

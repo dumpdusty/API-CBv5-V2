@@ -9,7 +9,7 @@ describe('Clients tests', () => {
       res = await clientHelper.createClient()
     })
 
-    it('check the response status',  () => {
+    it('check the response status', () => {
       expect(res.statusCode).to.eq(200)
     })
     it('check the response message', () => {
@@ -54,13 +54,13 @@ describe('Clients tests', () => {
       res = await clientHelper.getSingle(clientId)
     })
 
-    it('check the response status',  () => {
+    it('check the response status', () => {
       expect(res.statusCode).to.eq(200)
     })
-    it('check the response message',  () => {
+    it('check the response message', () => {
       expect(res.body.message).to.eq('Get Client by id ok')
     })
-    it('check the response message',  () => {
+    it('check the response message', () => {
       expect(res.body.payload._id).to.eq(`${clientId}`)
     })
   })
@@ -99,10 +99,10 @@ describe('Clients tests', () => {
       res = await clientHelper.updateClient(clientId)
     })
 
-    it('check the response status',  () => {
+    it('check the response status', () => {
       expect(res.statusCode).to.eq(200)
     })
-    it('check the response message',  () => {
+    it('check the response message', () => {
       expect(res.statusCode).to.eq(200)
     })
   })
@@ -136,7 +136,7 @@ describe('Clients tests', () => {
     it('check the response status', () => {
       expect(res.statusCode).to.eq(200)
     })
-    it('check the response message',  () => {
+    it('check the response message', () => {
       expect(res.body.message).to.eq('Client deleted')
     })
   })
@@ -151,19 +151,19 @@ describe('Clients tests', () => {
       res = await clientHelper.getSingle(clientId)
     })
 
-    it('check the response status',  () => {
+    it('check the response status', () => {
       expect(res.statusCode).to.eq(404)
     })
-    it('check the response message',  () => {
+    it('check the response message', () => {
       expect(res.body.message).to.eq('No client for provided id')
     })
   })
 })
 
-after('delete all clients',async()=>{
+after('delete all clients', async () => {
   let clientsList
   clientsList = (await clientHelper.getAll()).body.payload.items
-  for(let i=0; i<clientsList.length; i++){
+  for (let i = 0; i < clientsList.length; i++) {
     await clientHelper.deleteClient(clientsList[i]._id)
   }
 })
