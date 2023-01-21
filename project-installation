@@ -377,6 +377,19 @@
                 });
      19.5.  Create before hook and split assertions to separate tests
      19.6.  Create a client-helper and add there 'create' function
+            -   function createClient(){
+                    return request(process.env.BASE_URL)
+                        .post('client')
+                        .set('Authorization', process.env.TOKEN)
+                        .send({
+                            name: chance.name(),
+                            phone: chance.phone(),
+                            email: chance.email()
+                        })
+                }
+     19.7.  Import client-helper into client.spec.js:
+            -   import * as clientHelper from '../helpers/client-helper'
+            -   explain syntax
      19.7.  Change clients.spec file and remove unnecessary imports
      19.8.  Commit, push & PR
      19.9.  Update main branch / delete created (optional)
@@ -399,9 +412,17 @@
                   });
                 });
            -    create before hook
+           -    split assertions
            -    create a function inside client-helper.js
            -    to make this test autonomous add clientHelper.createClient() to before hook
-           -    add for loop to last assertion for checking all clients                 // as an example of using loops in tests
+           -    add for loop to last assertion for checking all clients:               // as an example of using loops in tests
+                    it('check the array elements has id', () => {
+                          let clientsList = res.body.payload.items
+                          for (let i = 0; i < clientsList.length; i++) {
+                            expect(clientsList[i]).has.property('_id')
+                          }
+                        })
+
      20.2.  Create 'Get client by ID':
             -   create a test for getting client by ID:
                 describe('Get client by ID', () => {
