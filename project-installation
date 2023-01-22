@@ -73,7 +73,14 @@
         8.5.    Create simple test for common function (for example function sum()):
                     -   import { expect } from chai
                     -   create `describe` and `it` with relevant names
-                    -   write assertion
+                    -   write assertion:
+
+                        describe('The first test', () => {
+                            it('Check if sum working properly', () => {
+                                expect(5+5).to.eq(10)
+                            });
+                        });
+
                     -   run the test with CLI command / 'play' sign
                     -   change the assertion value to invalid output to check if test works properly
                     -   add some more tests for any other functions (optional)
@@ -237,10 +244,10 @@
 -----------------------------------------------------------------------------------------------------------------------
 
 15.  Creating tests for User Register:
-        13.1.   Create a new branch
-        13.2.   Create a new spec
-        13.3.   Import expect, supertest
-        13.4.   Create a User Creation request:
+        15.1.   Create a new branch
+        15.2.   Create a new spec
+        15.3.   Import expect, supertest
+        15.4.   Create a User Creation request:
                 describe('Create a user with valid credentials', () => {
                     let res
                     it('check the response status code', async () => {
@@ -254,7 +261,7 @@
                         expect(res.body.message).contain('User created')
                     })
                 });
-        14.5.   Add randomizer to project:
+        15.5.   Add randomizer to project:
         15.6.   Install the randomizer (https://chancejs.com/):
                 -   npm install chance
         15.7.   Import randomizer
@@ -288,10 +295,59 @@
         16.7.   Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
+17.  Creating various tests for email confirmation:
+        17.1    Create 'email confirmation test':
+        17.2.   Create a new branch
+        17.3.   Create a new spec file named 'various.spec.js'
+        17.4.   Create a new test in various.spec.js:
+                -   create a describe
+                -   create an it
+                -   define which requests should be sent
+                -   create a variables (str, endPoint, res, check)
+                -   create before hook and put requests inside:
+                    -   register request                                // to create new user
+                    -   email search request                            // to find the email
+                -   create a function to take apart the endPoint
+                -   create a request to verify the email                // to confirm email
+                -   create a authentication request                     // to check the role of verified user
+                -   write the assertions:
+                    -   statusCode
+                    -   message
+                    -   role
 
-17.  Creating test for space trimming:
-        17.1.   Create a new branch
-        17.2.   Create a new test in register.spec.js:
+                describe('Email confirmation', () => {
+                    const testEmail = 'user_' + Date.now() + '@pirate.com'
+                    let str, endPoint, res, check
+                    before(async () => {
+                        await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
+                        str = await emailSearch(testEmail)
+
+                        endPoint = str.body.payload.items[0].message.split('\n')[4].split('https://clientbase.us')[1]
+
+                        res = await supertest(process.env.BASE_URL).get(endPoint).send()
+
+                        check = await login(testEmail, process.env.PASSWORD)
+                    })
+
+                    it('check the response status', () => {
+                        expect(res.statusCode).to.eq(200)
+                    })
+
+                    it('check the response message', () => {
+                        expect(res.body.message).to.include('confirmed')
+                    })
+
+                    it('check the role', () => {
+                        expect(check.body.payload.user.roles).to.include('verified')
+                    })
+                })
+
+        17.5.   Commit, push & PR
+        17.6.   Update main branch / delete created (optional)
+
+        17.6  Creating test for space trimming:
+        17.7.   Create a new branch
+        17.8.   Create a new test in register.spec.js:
                 -   create a describe
                 -   create an it
                 -   define which requests should be sent              // create user / login
@@ -327,13 +383,13 @@
                                   });
                           });
 
-        17.3.   Commit, push & PR
-        17.4.   Update main branch / delete created (optional)
+        17.9.   Commit, push & PR
+        17.10.  Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 
 18.  Setup the reporter:
-     18.1.  Install the mochawesome repoter:
+     18.1.  Install the mochawesome reporter:
                 -   npm install mochawesome
      18.2.  Add the option to .mocharc file or to the script:
                     reporter: 'mochawesome'                                     // in .mocharc.js

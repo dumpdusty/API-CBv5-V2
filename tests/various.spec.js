@@ -3,7 +3,7 @@ import supertest from "supertest";
 import {expect} from "chai";
 const chance = require('chance').Chance()
 
-describe('Email verification', () => {
+describe('Email confirmation', () => {
     const testEmail = 'user_' + Date.now() + '@pirate.com'
     let str, endPoint, res, check
     before(async () => {
