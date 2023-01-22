@@ -3,7 +3,7 @@ const chance = require('chance').Chance()
 
 function createClient(){
     return request(process.env.BASE_URL)
-        .post('client')
+        .post('/v5/client')
         .set('Authorization', process.env.TOKEN)
         .send({
             name: chance.name(),
@@ -13,33 +13,33 @@ function createClient(){
 }
 function getAll(){
     return request(process.env.BASE_URL)
-        .post('client/search')
+        .post('/v5/client/search')
         .set('Authorization', process.env.TOKEN)
         .send({limit: 30})
 }
 
 function getSingle(clientId){
     return request(process.env.BASE_URL)
-        .get('client/' + clientId)
+        .get('/v5/client/' + clientId)
         .set('Authorization', process.env.TOKEN)
 }
 
 function getByName(clientName){
     return request(process.env.BASE_URL)
-        .post('client/search')
+        .post('/v5/client/search')
         .set('Authorization', process.env.TOKEN)
         .send({name: clientName})
 }
 
 function updateClient(clientId){
     return request(process.env.BASE_URL)
-        .patch('client/' + clientId)
+        .patch('/v5/client/' + clientId)
         .set('Authorization', process.env.TOKEN)
         .send({name: 'updatedClient', phone: 'updatedPhone'})
 }
 function deleteClient(clientId){
     return request(process.env.BASE_URL)
-        .delete('client/' + clientId)
+        .delete('/v5/client/' + clientId)
         .set('Authorization', process.env.TOKEN)
 }
 
