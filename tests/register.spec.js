@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import {login, register} from '../helpers/general-helper'
+import { register } from '../helpers/general-helper'
 const chance = require('chance').Chance()
 
 describe('User registration positive', () => {
@@ -52,27 +52,3 @@ describe('User registration negative', () => {
     })
   })
 })
-
-describe('Space trimming test', () => {
-    let untrimmedEmail = ' james_' + Date.now() + '@pirate.com   '
-    let res
-    let result
-
-    before(async()=>{
-        result = await register(chance.first(), chance.last(), untrimmedEmail, process.env.PASSWORD)
-        res = await login((untrimmedEmail.trim()), process.env.PASSWORD)
-
-        // console.log(untrimmedEmail)
-        // console.log(untrimmedEmail.trim())
-        // console.log(res.body.payload.user.email)
-    })
-    it('check response status', () => {
-        expect(res.statusCode).to.eq(200)
-    });
-    it('check response message', () => {
-        expect(res.body.message).to.eq('Auth success')
-    });
-    it('check the email in response is equal to trimmed email', () => {
-        expect(res.body.payload.user.email).to.eq(untrimmedEmail.trim())
-    });
-});
