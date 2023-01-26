@@ -295,9 +295,9 @@
         16.7.   Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
-17.  Creating various tests for email confirmation:
-        17.1    Create 'email confirmation test':
-        17.2.   Create a new branch
+17.  Creating various tests:
+        17.1.   Create a new branch
+        17.2.   Create 'email confirmation test':
         17.3.   Create a new spec file named 'various.spec.js'
         17.4.   Create a new test in various.spec.js:
                 -   create a describe
