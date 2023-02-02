@@ -6,9 +6,8 @@ function createClient(){
         .post('/v5/client')
         .set('Authorization', process.env.TOKEN)
         .send({
-            name: chance.name(),
-            phone: chance.phone(),
-            email: chance.email()
+            name: 'Client_' + Date.now(),
+            phone: chance.phone()
         })
 }
 function getAll(){

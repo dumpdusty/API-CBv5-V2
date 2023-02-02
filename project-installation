@@ -149,7 +149,7 @@
                     -   import supertest from 'supertest'
                     -   copy 'before' hook from auth.spec
                     -   declare new env variable named 'token':
-                        process.env['TOKEN'] = path to response property (res.body.payload.token)
+                        process.env.TOKEN = path to response property (res.body.payload.token)
                     -   add option to .mocharc configuration file:
                         file: `path to global hook` ('config/setup.js')
         12.4.   Commit, push & PR
@@ -438,9 +438,8 @@
                         .post('client')
                         .set('Authorization', process.env.TOKEN)
                         .send({
-                            name: chance.name(),
-                            phone: chance.phone(),
-                            email: chance.email()
+                            name: 'Client_' + Date.now(),
+                            phone: chance.phone()
                         })
                 }
      19.7.  Import client-helper into client.spec.js:
@@ -642,4 +641,11 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-25.  Create tests for Vendors:
+25.  Create tests for Vendors:  Home Work
+26.  Create test for Orders:    Home Work
+27.  Create tests for Services: Home Work
+
+------------------------------------------------------------------------------------------------------------------------
+
+28.  Create a Postman - Newman pipeline:
+
