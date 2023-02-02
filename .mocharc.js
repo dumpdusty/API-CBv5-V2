@@ -5,5 +5,5 @@ module.exports = {
     file: `project-config/auth-global-hook.js`,
     timeout: '20000',
     reporter: 'mochawesome',
-    'reporter-options': 'reportDir=MyReports,reportFilename=updatedReport,json=false',
+    reporterOptions: ['reportDir=MyReports', 'reportFilename=updatedReport','json=false']
 }
