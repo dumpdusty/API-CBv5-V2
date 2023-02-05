@@ -654,7 +654,12 @@
      28.4.  Create a folder for postman collections
      28.5.  Export PM collection and PM environment to created folder
      28.6.  Add additional scripts:
-            -   "pmrun": "newman run postman/collection_name.json -e postman/evironment_name.json"
-            -   "pmreport": "newman run postman/collection_name.json -e postman/evironment_name.json -r htmlextra --reporter-htmlextra-export MyReports/pmReport.html"
-     28.7.  Runt scripts
+            -   "pm-run": "newman run postman/collection_name.json -e postman/evironment_name.json"
+            -   "pm-report": "newman run postman/collection_name.json -e postman/evironment_name.json -r htmlextra --reporter-htmlextra-export MyReports/pmReport.html"
+     28.7.  Run scripts
+     28.8.  Commit, push & PR
+     28.9.  Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
+
 
