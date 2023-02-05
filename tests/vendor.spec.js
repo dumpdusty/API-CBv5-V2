@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 import * as vendorHelper from '../helpers/vendor-helper'
 
-
 describe('Vendors Test', () => {
     describe('Create a vendor', () => {
         let res
