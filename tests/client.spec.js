@@ -103,7 +103,7 @@ describe('Clients tests', () => {
       expect(res.statusCode).to.eq(200)
     })
     it('check the response message', () => {
-      expect(res.statusCode).to.eq(200)
+      expect(res.body.message).to.eq('Client updated')
     })
   })
 
