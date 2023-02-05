@@ -648,4 +648,13 @@
 ------------------------------------------------------------------------------------------------------------------------
 
 28.  Create a Postman - Newman pipeline:
+     28.1.  Create a new branch
+     28.2.  Install newman              -   npm i newman
+     28.3.  Install htmlextra reporter   -   npm i newman-reporter-htmlextra
+     28.4.  Create a folder for postman collections
+     28.5.  Export PM collection and PM environment to created folder
+     28.6.  Add additional scripts:
+            -   "pmrun": "newman run postman/collection_name.json -e postman/evironment_name.json"
+            -   "pmreport": "newman run postman/collection_name.json -e postman/evironment_name.json -r htmlextra --reporter-htmlextra-export MyReports/pmReport.html"
+     28.7.  Runt scripts
 
