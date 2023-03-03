@@ -1,27 +1,98 @@
 // Automated tests for services
-import request from "supertest";
-import {expect} from "chai";
+import {expect} from 'chai'
 import * as vendorHelper from '../helpers/vendor-helper'
+import * as serviceHelper from '../helpers/service-helper'
 
 describe('Service Tests', () => {
-    describe.only('Create a service', () => {
+    describe('Create a service', () => {
         let res
         let vendorId
-        before(async ()=>{
+        before(async () => {
             vendorId = (await vendorHelper.createVendor()).body.payload
-            res = await request(process.env.BASE_URL)
-                .post('/v5/service')
-                .set('Authorization', process.env.TOKEN)
-                .send({name:`service_${Date.now()}`, vendor:`${vendorId}`, vendorPrice: 222, clientPrice: 444})
-
-            console.log(vendorId)
+            res = await serviceHelper.createService(vendorId)
         })
 
         it('check the status code', () => {
             expect(res.statusCode).to.eq(200)
-        });
+        })
         it('check status message', () => {
             expect(res.body.message).to.eq('Service created')
         })
-    });
-});
+        it('check the service has and id', () => {
+            expect(res.body.payload).not.to.be.empty
+        })
+    })
+
+    describe('Get all services', () => {
+        let res
+        before(async () => {
+            res = await serviceHelper.getAll()
+        })
+
+        it('check the status code', () => {
+            expect(res.statusCode).to.eq(200)
+        })
+
+        it('check the response message', () => {
+            expect(res.body.message).to.eq('Service Search ok')
+        })
+
+        it('check the response contains array', () => {
+            expect(res.body.payload.items).to.be.a('array')
+        })
+    })
+
+    describe('Get service by ID', () => {
+        let vendorId
+        let res
+        let serviceId
+        before(async () => {
+            vendorId = (await vendorHelper.createVendor()).body.payload
+            serviceId = (await serviceHelper.createService(vendorId)).body.payload
+            res = await serviceHelper.getSingleById(serviceId)
+        })
+
+        it('check the status code', () => {
+            expect(res.statusCode).to.eq(200)
+        })
+
+        it('check the response message', () => {
+            expect(res.body.message).to.eq('Get Service by id ok')
+        })
+
+        it('check the response contains serviceId', () => {
+            expect(res.body.payload._id).to.eq(serviceId)
+        })
+    })
+
+    describe.only('get Service by name', () => {
+        let vendorId
+        let res
+        let serviceId
+        let serviceName
+        before(async () => {
+            vendorId = (await vendorHelper.createVendor()).body.payload
+            serviceId = (await serviceHelper.createService(vendorId)).body.payload
+            serviceName = (await serviceHelper.getSingleById(serviceId)).body.payload
+                .name
+            res = await serviceHelper.getSingleByName(serviceName)
+        })
+
+        it('check the status code', () => {
+            expect(res.statusCode).to.eq(200)
+        })
+
+        it('check the response message', () => {
+            expect(res.body.message).to.eq(`Service Search ok`)
+        })
+
+        it('check the name is correct', () => {
+            expect(res.body.payload.items[0].name).to.eq(serviceName)
+        })
+
+        it('check the vendorId is correct', () => {
+            expect(res.body.payload.items[0].vendor._id).to.eq(vendorId)
+        })
+    })
+})
+
