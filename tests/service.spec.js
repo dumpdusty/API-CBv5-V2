@@ -65,7 +65,7 @@ describe('Service Tests', () => {
         })
     })
 
-    describe.only('get Service by name', () => {
+    describe('Get service by name', () => {
         let vendorId
         let res
         let serviceId
@@ -93,6 +93,61 @@ describe('Service Tests', () => {
         it('check the vendorId is correct', () => {
             expect(res.body.payload.items[0].vendor._id).to.eq(vendorId)
         })
+    })
+
+    describe('Update a service', () => {
+        let res, vendorId, serviceId, updService
+        before(async () => {
+            vendorId = (await vendorHelper.createVendor()).body.payload
+            serviceId = (await serviceHelper.createService(vendorId)).body.payload
+            res = await serviceHelper.updateService(serviceId, vendorId)
+            updService = await serviceHelper.getSingleById(serviceId)
+        })
+
+        it('check the status code', () => {
+            expect(res.statusCode).to.eq(200)
+        })
+
+        it('check the response message', () => {
+            expect(res.body.message).to.eq(`Service updated`)
+        })
+
+        it('check the client price and vendor price is updated', () => {
+            expect(updService.body.payload.clientPrice).to.eq(121)
+            expect(updService.body.payload.vendorPrice).to.eq(232)
+
+        })
+    })
+
+    describe('Delete a service', () => {
+        let res, vendorId, serviceId, updService
+
+        before(async ()=>{
+            vendorId = (await vendorHelper.createVendor()).body.payload
+            serviceId = (await serviceHelper.createService(vendorId)).body.payload
+            res = await serviceHelper.deleteService(serviceId)
+            updService = await serviceHelper.getSingleById(serviceId)
+        })
+
+        it('check the status code', () => {
+            expect(res.statusCode).to.eq(200)
+        })
+
+        it('check the response message', () => {
+            expect(res.body.message).to.eq(`Service deleted`)
+        })
+
+        it('check service was deleted', () => {
+            expect(updService.body.message).to.eq(`No service for provided id`)
+        });
+    });
+
+    after('delete all services', async()=> {
+        let serviceList
+        serviceList = (await serviceHelper.getAll()).body.payload.items
+        for (let i = 0; i < serviceList.length; i++) {
+            await serviceHelper.deleteService(serviceList[i]._id)
+        }
     })
 })
 
