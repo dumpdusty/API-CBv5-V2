@@ -50,9 +50,7 @@
         6.4.    Paste following into .mocharc (comment unnecessary option!!!!):
                      module.exports = {
                          require: ['@babel/register'],
-                         spec: 'path to tests directory',
-                         exclude: 'path to files to be excluded from test run',
-                         file: `path to global hook`,                               // should be commented !!!!!!
+                         timeout: '5000',
                      }
         6.5.    Modify `test` script:
                 -   "test": "mocha --config .mocharc.js"
