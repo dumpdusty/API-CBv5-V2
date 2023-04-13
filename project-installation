@@ -47,7 +47,7 @@
         6.1.    Create new branch
         6.2.    In terminal: npm i mocha
         6.3.    Create `.mocharc.js` file
-        6.4.    Paste following into .mocharc (comment unnecessary option!!!!):
+        6.4.    Paste following into .mocharc:
                      module.exports = {
                          require: ['@babel/register'],
                          timeout: '5000',
