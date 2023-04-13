@@ -20,7 +20,7 @@ describe('Authentication Positive', () => {
     })
 
     it('check the response has token', () => {
-      expect(res.body.payload.token).to.not.be.undefined
+      expect(res.body.payload.token).not.to.be.undefined
     })
   })
 })

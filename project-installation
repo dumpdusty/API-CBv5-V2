@@ -99,8 +99,8 @@
                         describe('Authentication', () => {
                             let res                                                                   // create a variable to assign a response
                             it('Login with valid credentials', async () => {                          // using async function to catch the promise
-                                res = await supertest('https://clientbase-server.herokuapp.com/v5/')  // pass the base URL to request body
-                                    .post('user/login')                                               // method and endpoint
+                                res = await supertest('https://clientbase-server.herokuapp.com')  // pass the base URL to request body
+                                    .post('/v5/user/login')                                               // method and endpoint
                                     .set('HeaderName', HeaderValue)                                   // set the headers  (optional)
                                     .send({email: 'jacksparrow@pirate.com', password: 'Pirate666!'})  // pass the body in JSON object format
 
@@ -109,7 +109,7 @@
                             });
                         })
         9.5.    Exclude example.spec file from tests by adding following to .mocharrc:
-                    - exclude: 'tests/example.spec.js'
+                    - exclude: 'tests/example.spec.js'                                                // 'ignore' also could be used
         9.6.    Create a test with invalid credentials
         9.7.    Add more tests for both describes:
                     -   test for response message
