@@ -265,6 +265,8 @@
         15.7.   Import randomizer
                 -   const chance = require('chance').Chance()
         15.8.   Replace request body properties with random data using chance
+        15.9.   for email use:
+                    const newEmail = 'user' + Date.now() + '@test.com'
         15.9.   Commit, push & PR
         15.10.  Update main branch / delete created (optional)
         15.11.  HW: add more test suits for user registration
