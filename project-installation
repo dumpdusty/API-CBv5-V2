@@ -169,6 +169,8 @@
                          }
                  -   export created function:
                      export { login }                                                // function should be exported
+                 -   function could be exported with following syntax as well:
+                            export default function name(param1, param2){}
                  -   import helper to spec file:
                      import { login } from '../helpers/general-helper.js'            // import created function to spec file
                          /*

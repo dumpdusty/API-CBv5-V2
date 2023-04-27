@@ -41,15 +41,15 @@ describe.only('Registration', () => {
         describe('create a user without email', () => {
             let res
             before(async () => {
-                res = await register(chance.first(), chance.last(), process.env.PASSWORD)
+                res = await register(chance.first(), chance.last(), '', process.env.PASSWORD)
             })
 
             it('check response status code', () => {
-                expect(res.statusCode).to.eq(400)
+                expect(res.statusCode).to.eq(404)
             })
 
             it('check response message', () => {
-                expect(res.body.message).to.eq('Wrong password format')
+                expect(res.body.message).to.eq('User was not created')
             })
         })
 
@@ -57,15 +57,15 @@ describe.only('Registration', () => {
             let res
             const newEmail = 'user_' + Date.now() + '@pirate.com'
             before(async () => {
-                res = await register(chance.last(), newEmail, process.env.PASSWORD)
+                res = await register('', chance.last(), newEmail, process.env.PASSWORD)
             })
 
             it('check response status code', () => {
-                expect(res.statusCode).to.eq(400)
+                expect(res.statusCode).to.eq(404)
             })
 
             it('check response message', () => {
-                expect(res.body.message).to.eq('Wrong password format')
+                expect(res.body.message).to.eq('User was not created')
             })
         })
 
@@ -73,19 +73,17 @@ describe.only('Registration', () => {
             let res
             const newEmail = 'user_' + Date.now() + '@pirate.com'
             before(async () => {
-                res = await register(chance.first(), newEmail, process.env.PASSWORD)
+                res = await register(chance.first(), '', newEmail, process.env.PASSWORD)
             })
 
             it('check response status code', () => {
-                expect(res.statusCode).to.eq(400)
+                expect(res.statusCode).to.eq(404)
             })
 
             it('check response message', () => {
-                expect(res.body.message).to.eq('Wrong password format')
+                expect(res.body.message).to.eq('User was not created')
             })
         })
-
-
 
         describe('create a user with existing email', () => {
             let res
