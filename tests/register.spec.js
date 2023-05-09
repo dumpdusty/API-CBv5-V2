@@ -3,7 +3,7 @@ import {register} from '../helpers/general-helper'
 
 const chance = require('chance').Chance()
 
-describe.only('Registration', () => {
+describe('Registration', () => {
     describe('User registration positive', () => {
         const newEmail = 'user_' + Date.now() + '@pirate.com'
         let res
