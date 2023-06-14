@@ -15,6 +15,7 @@ function getAll(){
     return request(process.env.BASE_URL)
         .post('/v5/vendor/search')
         .set('Authorization', process.env.TOKEN)
+        .send({limit: 30})
 }
 
 

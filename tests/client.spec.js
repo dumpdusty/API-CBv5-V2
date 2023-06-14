@@ -164,9 +164,6 @@ after('delete all clients', async () => {
     let clientsList
     clientsList = (await clientHelper.getAll()).body.payload.items
     for (let i = 0; i < clientsList.length; i++) {
-        if (!clientsList[i].order) {
             await clientHelper.deleteClient(clientsList[i]._id)
-        }
-
     }
 })

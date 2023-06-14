@@ -20,7 +20,7 @@ function getAll() {
     return request(process.env.BASE_URL)
         .post('/v5/service/search')
         .set('Authorization', process.env.TOKEN)
-        .send({limit:50})
+        .send({limit:30})
 }
 
 function getSingleById(serviceId) {
