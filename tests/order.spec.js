@@ -45,6 +45,23 @@ describe('Orders', () => {
         })
     });
 
+    describe('Get order by id', () => {
+        let res, orderId
+        before(async () => {
+            orderId = (await orderHelper.createTestOrder()).body.payload
+            res = await orderHelper.getOrderById(orderId)
+        });
+        it('', () => {
+
+        });
+        it('check response status', () => {
+            expect(res.statusCode).to.eq(200)
+        });
+        it('check the response message', () => {
+            expect(res.body.message).to.eq('Get Order by id ok')
+        });
+    });
+
     describe('Delete order', () => {
         let res, serviceId, clientId
         before(async() =>{
@@ -63,7 +80,7 @@ describe('Orders', () => {
         });
     });
 
-    after('delete all orders', async()=>{
+    after('Delete all orders', async()=>{
         let ordersList
         ordersList = (await orderHelper.getAll()).body.payload.items
         for(let i=0; i<ordersList.length; i++){
