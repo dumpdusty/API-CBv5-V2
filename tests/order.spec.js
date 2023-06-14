@@ -45,7 +45,7 @@ describe('Orders', () => {
         })
     });
 
-    describe.only('Get order by id', () => {
+    describe('Get order by id', () => {
         let res, orderId
         before(async () => {
             orderId = (await orderHelper.createTestOrder()).body.payload
@@ -80,11 +80,11 @@ describe('Orders', () => {
         });
     });
 
-    // after('Delete all orders', async()=>{
-    //     let ordersList
-    //     ordersList = (await orderHelper.getAll()).body.payload.items
-    //     for(let i=0; i<ordersList.length; i++){
-    //         await orderHelper.deleteOrder(ordersList[i]._id)
-    //     }
-    // })
+    after('Delete all orders', async()=>{
+        let ordersList
+        ordersList = (await orderHelper.getAll()).body.payload.items
+        for(let i=0; i<ordersList.length; i++){
+            await orderHelper.deleteOrder(ordersList[i]._id)
+        }
+    })
 });
