@@ -629,7 +629,7 @@
 
 24.  Minor updates on CI/CD pipeline:
         24.1.   Make pipeline run on specified tests only:
-                    -   Comment spec option in .mocharc.js                                       // this will be defined in scripts
+                    -   Comment spec option in .mocharc.js                           // this will be defined in scripts
                     -   Update 'test' script to:
                             "test": "mocha --spec tests/*.js --config .mocharc.js",
                     -   Add another script 'auth-test':
@@ -660,3 +660,10 @@
             -   "pmreport": "newman run postman/collection_name.json -e postman/evironment_name.json -r htmlextra --reporter-htmlextra-export MyReports/pmReport.html"
      28.7.  Runt scripts
 
+29.  Update after hooks in clients, vendors, services specs
+    29.1.   Add if/else statement to check if the client has an order / vendor has a service ???
+
+
+30.  Update before hooks in each entity spec:
+    30.1.   transfer responses to the helpers
+    30.2.   remove parameters from spec requests
