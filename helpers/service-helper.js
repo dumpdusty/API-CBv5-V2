@@ -9,7 +9,7 @@ async function createService() {
         .post('/v5/service')
         .set('Authorization', process.env.TOKEN)
         .send({
-            name: 'BUBUBU', //`service_${Date.now()}`,
+            name: `service_${Date.now()}`,
             vendor: vendorId,
             vendorPrice: chance.integer({min: 100, max: 999}),
             clientPrice: chance.integer({min: 100, max: 999})

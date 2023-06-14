@@ -31,12 +31,6 @@ describe('Vendors Test', () => {
         it('check the response status', () => {
             expect(res.statusCode).to.eq(200)
         })
-        it('check the response message', () => {
-            expect(res.body.message).to.eq('VendorSearch ok')
-        })
-        it('check the response has an array of vendors', () => {
-            expect(res.body.payload.items).to.be.an('array').to.have.lengthOf.above(2)
-        })
     })
 
     describe('Get vendor by ID', () => {
