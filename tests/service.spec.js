@@ -6,10 +6,8 @@ import * as serviceHelper from '../helpers/service-helper'
 describe('Service Tests', () => {
     describe('Create a service', () => {
         let res
-        let vendorId
         before(async () => {
-            vendorId = (await vendorHelper.createVendor()).body.payload
-            res = await serviceHelper.createService(vendorId)
+            res = await serviceHelper.createService()
         })
 
         it('check the status code', () => {
@@ -66,15 +64,12 @@ describe('Service Tests', () => {
     })
 
     describe('Get service by name', () => {
-        let vendorId
         let res
         let serviceId
         let serviceName
         before(async () => {
-            vendorId = (await vendorHelper.createVendor()).body.payload
-            serviceId = (await serviceHelper.createService(vendorId)).body.payload
-            serviceName = (await serviceHelper.getSingleById(serviceId)).body.payload
-                .name
+            serviceId = (await serviceHelper.createService()).body.payload
+            serviceName = (await serviceHelper.getSingleById(serviceId)).body.payload.name
             res = await serviceHelper.getSingleByName(serviceName)
         })
 
@@ -85,14 +80,10 @@ describe('Service Tests', () => {
         it('check the response message', () => {
             expect(res.body.message).to.eq(`Service Search ok`)
         })
-
-        it('check the name is correct', () => {
+        it('check the response service name', () => {
             expect(res.body.payload.items[0].name).to.eq(serviceName)
         })
 
-        it('check the vendorId is correct', () => {
-            expect(res.body.payload.items[0].vendor._id).to.eq(vendorId)
-        })
     })
 
     describe('Update a service', () => {
