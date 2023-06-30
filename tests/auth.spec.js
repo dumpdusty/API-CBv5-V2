@@ -1,6 +1,5 @@
 import { expect } from 'chai'
-import { login } from '../helpers/general-helper.js'
-let report = require('automation.report').default
+import { login } from '../helpers/general-helper'
 
 describe('Authentication Positive', () => {
   describe('login with valid credentials', () => {
@@ -10,8 +9,6 @@ describe('Authentication Positive', () => {
     })
 
     it('check response status code', () => {
-      report.startTest('Login with valid creds', 'First Test')
-      report.endTest()
       expect(res.statusCode).to.eq(200)
     })
 
