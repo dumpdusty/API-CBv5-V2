@@ -1,10 +1,8 @@
 import request from 'supertest'
 const chance = require('chance').Chance()
-import * as vendorHelper from '../helpers/vendor-helper'
 
 
-async function createService() {
-    let vendorId = (await vendorHelper.createVendor()).body.payload
+async function createService(vendorId) {
     return request(process.env.BASE_URL)
         .post('/v5/service')
         .set('Authorization', process.env.TOKEN)
@@ -36,11 +34,11 @@ function getSingleByName(serviceName) {
         .send({name: serviceName})
 }
 
-function updateService(serviceId, vendorId) {
+function updateService(serviceId, vendorId, clientPrice, vendorPrice) {
     return request(process.env.BASE_URL)
         .patch(`/v5/service/` + serviceId)
         .set('Authorization', process.env.TOKEN)
-        .send({service: serviceId, vendor: vendorId, clientPrice: 121, vendorPrice: 232})
+        .send({service: serviceId, vendor: vendorId, clientPrice, vendorPrice})
 }
 
 function deleteService(serviceId) {

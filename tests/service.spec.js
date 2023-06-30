@@ -1,13 +1,16 @@
 // Automated tests for services
 import {expect} from 'chai'
+const chance = require('chance').Chance()
 import * as vendorHelper from '../helpers/vendor-helper'
 import * as serviceHelper from '../helpers/service-helper'
 
 describe('Service Tests', () => {
     describe('Create a service', () => {
-        let res
+        let res, vendorId
+
         before(async () => {
-            res = await serviceHelper.createService()
+            vendorId = (await vendorHelper.createVendor()).body.payload
+            res = await serviceHelper.createService(vendorId)
         })
 
         it('check the status code', () => {
@@ -22,8 +25,11 @@ describe('Service Tests', () => {
     })
 
     describe('Get all services', () => {
-        let res
+        let res, vendorId
+
         before(async () => {
+            vendorId = (await vendorHelper.createVendor()).body.payload
+            await serviceHelper.createService(vendorId)
             res = await serviceHelper.getAll()
         })
 
@@ -41,9 +47,8 @@ describe('Service Tests', () => {
     })
 
     describe('Get service by ID', () => {
-        let vendorId
-        let res
-        let serviceId
+        let vendorId, res, serviceId
+
         before(async () => {
             vendorId = (await vendorHelper.createVendor()).body.payload
             serviceId = (await serviceHelper.createService(vendorId)).body.payload
@@ -64,11 +69,10 @@ describe('Service Tests', () => {
     })
 
     describe('Get service by name', () => {
-        let res
-        let serviceId
-        let serviceName
+        let res, vendorId, serviceId, serviceName
         before(async () => {
-            serviceId = (await serviceHelper.createService()).body.payload
+            vendorId = (await vendorHelper.createVendor()).body.payload
+            serviceId = (await serviceHelper.createService(vendorId)).body.payload
             serviceName = (await serviceHelper.getSingleById(serviceId)).body.payload.name
             res = await serviceHelper.getSingleByName(serviceName)
         })
@@ -88,10 +92,13 @@ describe('Service Tests', () => {
 
     describe('Update a service', () => {
         let res, vendorId, serviceId, updService
+        const clientPrice = chance.integer({min: 100, max: 999})
+        const vendorPrice = chance.integer({min: 100, max: 999})
+
         before(async () => {
             vendorId = (await vendorHelper.createVendor()).body.payload
             serviceId = (await serviceHelper.createService(vendorId)).body.payload
-            res = await serviceHelper.updateService(serviceId, vendorId)
+            res = await serviceHelper.updateService(serviceId, vendorId, clientPrice, vendorPrice)
             updService = await serviceHelper.getSingleById(serviceId)
         })
 
@@ -104,8 +111,8 @@ describe('Service Tests', () => {
         })
 
         it('check the client price and vendor price is updated', () => {
-            expect(updService.body.payload.clientPrice).to.eq(121)
-            expect(updService.body.payload.vendorPrice).to.eq(232)
+            expect(updService.body.payload.clientPrice).to.eq(clientPrice)
+            expect(updService.body.payload.vendorPrice).to.eq(vendorPrice)
 
         })
     })
