@@ -22,14 +22,14 @@
         4.1.    Create a new branch
         4.2.    Install necessary packages:
                     - run in terminal: `npm i @babel/core @babel/preset-env @babel/register`
-        4.3.    Create `.babelrc` file and put following in it:
+        4.3.    Create `.babelrc` file on root dir and put following in it:
                     `{"presets": ["@babel/preset-env"]}`
 
 5.  Installing and config Prettier:
         5.1.    In terminal: npm i prettier
         5.2.    Check if Prettier plugin installed to WS (goto Settings/Plugins/search for Prettier)
         5.3.    Goto Settings/Languages and Frameworks/JavaScript/Prettier, check the path and choose the options
-        5.4.    Create .prettierrc.js file and put into:
+        5.4.    Create .prettierrc.js file on root dir and put into:
                 module.exports = {
                     trailingComma: "es5",
                     tabWidth: 2,
@@ -99,8 +99,8 @@
                         describe('Authentication', () => {
                             let res                                                                   // create a variable to assign a response
                             it('Login with valid credentials', async () => {                          // using async function to catch the promise
-                                res = await supertest('https://clientbase-server.herokuapp.com')  // pass the base URL to request body
-                                    .post('/v5/user/login')                                               // method and endpoint
+                                res = await supertest('https://clientbase-server.herokuapp.com')      // pass the base URL to request body
+                                    .post('/v5/user/login')                                           // method and endpoint
                                     .set('HeaderName', HeaderValue)                                   // set the headers  (optional)
                                     .send({email: 'jacksparrow@pirate.com', password: 'Pirate666!'})  // pass the body in JSON object format
 
