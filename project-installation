@@ -108,7 +108,7 @@
                                                                                                       // for assertion syntax see https://www.chaijs.com/api/bdd/
                             });
                         })
-        9.5.    Exclude example.spec file from tests by adding following to .mocharrc:
+        9.5.    Exclude example.spec file from tests by adding following to .mocharc:
                     - exclude: 'tests/example.spec.js'                                                // 'ignore' also could be used
         9.6.    Create a test with invalid credentials
         9.7.    Add more tests for both describes:
