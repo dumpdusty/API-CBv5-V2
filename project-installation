@@ -53,7 +53,8 @@
                          timeout: '5000',
                      }
         6.5.    Modify `test` script:
-                -   "test": "mocha --config .mocharc.js"
+                -   "test": "mocha --config .mocharc.js"                    // 'npx mocha' to run local mocha version
+                                                                            // if mocharc.js locates in root directory '--config .file_name' could be skipped
 
 7.  Install supertest (HTTP client) & chai (assertion library) packages:
                 -   npm i supertest chai
@@ -82,9 +83,19 @@
                     -   run the test with CLI command / 'play' sign
                     -   change the assertion value to invalid output to check if test works properly
                     -   add some more tests for any other functions (optional)
-        8.6.    Commit, push & PR
-        8.7.    Update main branch / delete created (optional)
-        8.8.    HW: create more tests (math, string, array)
+
+        8.6.    Parametrize the test as:
+                        describe('The first parametrized test', () => {
+                            it('Check if sum working properly', (num) => {
+                                expect(num+num).to.eq(num*2)
+                            });
+                        });
+
+        8.7.    Add npm i colors -D                                                                                     // colorize console output
+
+        8.7.    Commit, push & PR
+        8.8.    Update main branch / delete created (optional)
+        8.9.    HW: create more tests (math, string, array)
 
  -----------------------------------------------------------------------------------------------------------------------
 
