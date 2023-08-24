@@ -19,6 +19,7 @@
     "automation.report": "^0.4.1",
     "chai": "^4.3.7",
     "chance": "^1.1.9",
+    "colors": "^1.4.0",
     "dotenv": "^16.0.3",
     "mocha": "^10.2.0",
     "mochawesome": "^7.1.3",
