@@ -10,10 +10,10 @@ function register(firstName, lastName, email, password) {
   return supertest(process.env.BASE_URL)
     .post('/v5/user')
     .send({
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: password,
+      firstName,
+      lastName,
+      email,
+      password,
     })
 }
 
