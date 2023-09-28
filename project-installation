@@ -214,7 +214,7 @@
                     branches: [ "main" ]                                // before the pull request to main branch
 
                 jobs:
-                  test:                                                 // just a name of workflow / virtual machine (VM)
+                  user_name:                                            // job name / status check name
 
                     runs-on: ubuntu-latest                              // define the OS of VM to use the tests runs
 
@@ -251,6 +251,11 @@
                     -   back to PR and click on create PR
                     -   merge PR
         14.10.  Update main branch / delete created (optional)
+        14.11.  To block merging before CI test runs:
+                    -   go to Settings / Branches
+                    -   click add rule
+                    -   check-in 'Require status checks to pass before merging'
+                    -   add the status checks (jobs) we want
 
 -----------------------------------------------------------------------------------------------------------------------
 
@@ -645,6 +650,7 @@
                             "test": "mocha --spec tests/*.js --config .mocharc.js",
                     -   Add another script 'auth-test':
                             "auth-test": "mocha --spec tests/auth.spec.js --config .mocharc.js"
+                    -   Update running script in GitAction yaml file
                     -   Commit, push & PR
                     -   Update main branch / delete created (optional)
         24.2.   Add schedule to pipeline:
