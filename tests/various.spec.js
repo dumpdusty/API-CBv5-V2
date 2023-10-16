@@ -4,16 +4,25 @@ import {expect} from "chai";
 const chance = require('chance').Chance()
 
 describe('Email confirmation', () => {
+
+    // create unique email
     const testEmail = 'user_' + Date.now() + '@pirate.com'
+
     let str, endPoint, res, check
     before(async () => {
+        // register user with unique email
         await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
+
+        // get email text
         str = await emailSearch(testEmail)
 
+        // extract end point
         endPoint = str.body.payload.items[0].message.split('\n')[4].split('https://clientbase.us')[1]
 
+        // send confirmation request
         res = await supertest(process.env.BASE_URL).get(endPoint).send()
 
+        // login with confirmed unique email
         check = await login(testEmail, process.env.PASSWORD)
     })
 
