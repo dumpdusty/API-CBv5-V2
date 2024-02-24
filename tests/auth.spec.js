@@ -62,5 +62,8 @@ describe('Authentication Negative', () => {
     it('check response message', () => {
       expect(res.body.message).to.eq('Auth failed')
     })
+    it('another test', () => {
+      console.log('hello')
+    });
   })
 })
