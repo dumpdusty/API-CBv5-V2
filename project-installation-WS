@@ -1,20 +1,22 @@
-1.  Create a new project in WS
+Create a new project in WS
 
-2.  Run `npm init -y` in terminal
+1.  Run `npm init -y` in terminal
 
-3.  Connecting to remote repo:
-        3.1.    Run `git init` in terminal
-        3.2.    Run commands in terminal:
-                    -   git add README.md               //this could be done during remote repo creation
-                    -   git branch -M main
-        3.3.    Create new branch named 'git-config'
-        3.4.    Create `.gitignore` file and add there `.idea` and `node_modules`
-        3.5.    Make a commit
-        3.6.    Push to origin
-        3.7.    Switch to main and delete local branch
+   2.  Connecting to remote repo:
+           2.1.    Run `git init` in terminal
+           2.2.    Run commands in terminal:
+                       -   git add README.md               //this could be done during remote repo creation
+                       -   git branch -M main
+                       -   git add .                       // only for VSC
+                       -
+           2.3.    Create new branch named 'git-config'
+           2.4.    Create `.gitignore` file and add there `.idea` and `node_modules`
+           2.5.    Make a commit
+           2.6.    Push to origin
+           2.7.    Switch to main and delete local branch
 
-4.  Create readme. Check markdown syntax. Check Readme templates
-        4.1.    https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes
+3.OPTIONAL: Create readme. Check markdown syntax. Check Readme templates
+        3.1.    https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes
 
  -----------------------------------------------------------------------------------------------------------------------
 
@@ -91,8 +93,12 @@
                             });
                         });
 
-        8.7.    Add npm i colors -D                                                                                     // colorize console output
+        8.7.    Add npm i colors -D                                                        // colorize console output
+                     -   add import colors from 'colors'
+                                    -   syntax for colors use:
 
+                                        console.log(colors.cyan(output_data))
+                                        console.log(colors.yellow(output_data))
         8.7.    Commit, push & PR
         8.8.    Update main branch / delete created (optional)
         8.9.    HW: create more tests (math, string, array)
@@ -150,6 +156,11 @@
         11.2.   Create 'before' hook and move there auth API request
                     -   NB: variable res should be moved above 'before' hook
         11.3.   Delete request from subsequent tests
+        11.4.   Split positive and negative tests by adding another describe
+        11.5.   Create separate it for each assertion
+
+------------------------------------------------------------------------------------------------------------------------
+
 12.  Add global hook:
         12.1.   Create new directory (config/general/global-hooks/setup, etc...) in root folder
         12.2.   Inside created folder add new .js file (config/general/global-hook/setup, etc...)

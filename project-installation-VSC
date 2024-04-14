@@ -1,0 +1,715 @@
+Create a new project in VSC
+
+1.  Run `npm init -y` in terminal
+
+2.  Connecting to remote repo:
+    2.1   Create a remote repo
+    2.2.  Run `git init` in terminal
+    2.3.  Run commands in terminal:
+            - git status                                                        // optional - shows status of files
+            - git add .  (or git add *)                                                       // adds all new files to git
+            - git status                                                        // optional - to see the changes
+            - git commit -m "initial commit"                                    // adds first commit
+            - git branch -M main                                                // changes the name from master to main
+            - git remote add origin https://github.com/user_name/project_name   // connect remote repo to local
+            - git status                                                        // optional - to see the changes
+            - git branch                                                        // shows all available branches
+            - git branch -d 'master'                                            // deletes master branch
+            - git push -u origin main                                           // push changes to remote main
+
+    2.4.  Create new branch named 'git-config'
+            - git checkout -b 'git-config'
+    2.5.  Create `.gitignore` file and add there `.idea` and `node_modules`
+    2.6.  Make a commit
+            - git add .
+            - git commit -m 'git-ignore'
+    2.7.  Push to origin
+            - git push -u origin main
+    2.8.  Switch to main and delete local branch
+    2.9.  Update local main from remote main
+    2.10. In case of this error `fatal: The current branch auth-test has no upstream branch.` :
+            - add following to git.config file:
+                [push]
+                	autoSetupRemote = true
+
+3. OPTIONAL: Create readme. Check markdown syntax. Check Readme templates
+    3.1.    https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes
+
+ -----------------------------------------------------------------------------------------------------------------------
+
+4.  Installing and configuring Babel:
+    4.1.  Create a new branch
+    4.2.  Install necessary packages:
+            - run in terminal: `npm i @babel/core @babel/preset-env @babel/register`
+    4.3.  Create `.babelrc` file on root dir and put following in it:
+
+              `{"presets": ["@babel/preset-env"]}`
+
+5.  Installing and config Prettier:
+    5.1.  In terminal: npm i prettier
+    5.2.  Check if Prettier plugin installed to WS (goto Settings/Plugins/search for Prettier)
+    5.3.  Goto Settings/Languages and Frameworks/JavaScript/Prettier, check the path and choose the options
+    5.4.  Create .prettierrc.js file on root dir and put into:
+
+                module.exports = {
+                    trailingComma: "es5",
+                    tabWidth: 2,
+                    semi: false,
+                    singleQuote: true,
+                    bracketSpacing: true,
+                    arrowParens: "avoid",
+                  }
+
+    5.5.  Commit, push & PR
+    5.6.  Update main branch / delete created (optional)
+
+ -----------------------------------------------------------------------------------------------------------------------
+
+6.  Install & config mocha test runner:
+    6.1.  Create new branch
+    6.2.  In terminal: npm i mocha
+    6.3.  Create `.mocharc.js` file
+    6.4.  Paste following into .mocharc:
+
+            module.exports = {
+              require: ['@babel/register'],               // !!!!!!check if this still required!!!!!!!!!!!!!!
+              timeout: '5000',
+           }
+    6.5.  Modify `test` script:
+             -   "test": "mocha --config .mocharc.js"                    // 'npx mocha' to run local mocha version
+                                                                         // if mocharc.js locates in root directory
+                                                                         // '--config .file_name' could be skipped
+
+7.  Install supertest (HTTP client) & chai (assertion library) packages:
+                -   npm i supertest chai@4                              // chai v^5 unstable (?) - check what is ESM
+    7.1.    Commit, push & PR
+    7.2.    Update main branch / delete created (optional)
+
+ -----------------------------------------------------------------------------------------------------------------------
+
+8.  Creating first test example
+    8.1.    Create a new branch
+    8.2.    Create `tests` directory
+    8.3.    Add this directory to .mocharc:
+             - spec: 'tests/**/*.js'
+    8.4.    Create first spec file named example.spec.js inside of `tests` folder
+    8.5.    Create simple test for common function (for example function sum()):
+             -   import { expect } from chai
+             -   create `describe` and `it` with relevant names
+             -   write assertion:
+
+                  describe('The first test', () => {
+                     it('Check if sum working properly', () => {
+                         expect(5+5).to.eq(10)
+                     });
+                  });
+
+             -   run the test with CLI command / 'play' sign
+             -   change the assertion value to invalid output to check if test works properly
+             -   add some more tests for any other functions (optional)
+
+    8.7.    Add npm i -D colors                                    // colorize console output(https://www.npmjs.com/package/colors)
+                -   add import colors from 'colors'
+                -   syntax for colors use:
+
+                    console.log(colors.cyan(output_data))
+                    console.log(colors.yellow(output_data))
+
+    8.7.    Commit, push & PR
+    8.8.    Update main branch / delete created (optional)
+    8.9.    HW: create more tests (math, string, array)
+
+ -----------------------------------------------------------------------------------------------------------------------
+
+9.  Authentication tests:
+    9.1.    Create a new branch
+    9.2.    Create a spec file: 'auth.spec.js'
+    9.3.    Import necessary packages:
+                -   import supertest from 'supertest'
+                -   import { expect } from ' chai'
+    9.4.    Create a test with valid credentials:
+                - request syntax:
+
+        describe('Authentication', () => {
+          let res                                                                  // create a variable to assign a response
+            it('Login with valid credentials', async () => {                        // using async function to catch the promise
+               res = await supertest('https://clientbase-server.herokuapp.com')     // pass the base URL to request body
+                  .post('/v5/user/login')                                           // method and endpoint
+                  .set('HeaderName', HeaderValue)                                   // set the headers  (optional)
+                  .send({email: 'jacksparrow@pirate.com', password: 'Pirate666!'})  // pass the body in JSON object format
+
+              expect(res.statusCode).to.eq(200)                                     // assertion for response statusCode
+                                                                                    // for assertion syntax see https://www.chaijs.com/api/bdd/
+            });
+        })
+
+    9.5.    Exclude example.spec file from tests by adding following to .mocharc:
+                - exclude: 'tests/example.spec.js'                                   // 'ignore' also could be used
+    9.6.    Create a test with invalid credentials
+    9.7.    Add more tests for both describes:
+                -   test for response message
+                -   test for token
+                -   test for any property inside of response
+    9.8.    Commit, push & PR
+    9.9.    Update main branch / delete created (optional)
+
+ -----------------------------------------------------------------------------------------------------------------------
+
+10.  Add environment variables:
+    10.1.   Create a new branch
+    10.2.   Install dotenv package (based on dotenv documentation - https://www.npmjs.com/package/dotenv)
+            -   npm i -D dotenv
+    10.3.   Create .env file with variables inside (DO NOT ADD IT TO GITHUB!!!)
+            -   BASE_URL="server_url"
+                EMAIL="valid_email"
+                PASSWORD="valid_password"
+    10.4.   Add .env file to .gitignore
+    10.5.   Create .env.example file with common credentials and push it to GitHub.
+    10.6.   Add following to the tests file:
+               -   import 'dotenv/config'
+    10.7.   Replace all open data to env variables
+    10.8.   Optionally - Install '.env files support' (tooltips and highlights for env syntax)
+    10.9.   Commit, push & PR
+    10.10.   Update main branch
+
+ -----------------------------------------------------------------------------------------------------------------------
+
+11.  Add local hooks:
+    11.1.   Create a new branch
+    11.2.   Create 'before' hook and move there auth API request
+                -   NB: variable res should be moved above 'before' hook
+    11.3.   Delete request from subsequent tests
+    11.4.   Split positive and negative tests by adding another describe
+    11.5.   Create separate it for each assertion
+
+------------------------------------------------------------------------------------------------------------------------
+
+12.  Add global hook:
+    12.1.   Create new directory (config/general/global-hooks/setup, etc...) in root folder
+    12.2.   Inside created folder add new .js file (config/general/global-hook/setup, etc...)
+    12.3.   Inside the created file:
+            -   import 'dotenv/config'
+            -   import supertest from 'supertest'
+            -   copy 'before' hook from auth.spec
+            -   declare new env variable named 'token':
+                process.env.TOKEN = path to response property (res.body.payload.token)
+            -   add option to .mocharc configuration file:
+                file: `path to global hook` ('config/setup.js')
+    12.4.   Commit, push & PR
+    12.5.   Update main branch / delete created (optional)
+
+ -----------------------------------------------------------------------------------------------------------------------
+
+ 13.  Create first helper:
+         13.1.   Create a new branch
+         13.2.   Create a new directory 'Helpers' in root folder
+         13.3.   Create general-helper.js file
+         13.4.   Inside the file:
+                 -   import supertest from 'supertest'
+                 -   create a function with relevant name and following syntax:
+                     function login(email, password){                                // function name and params
+                         return supertest(process.env.BASE_URL)                      // function return
+                         .post('user/login')
+                         .send({email: email, password: password})
+                         }
+                 -   export created function:
+                     export { login }                                                // function should be exported
+                 -   function could be exported with following syntax as well:
+                            export default function name(param1, param2){}
+                 -   import helper to spec file:
+                     import { login } from '../helpers/general-helper.js'            // import created function to spec file
+                         /*
+                           Short brief to syntax of relative paths:
+                             ..  -   two dots moves up to a parent directory (which is a root directory of a project in this case)
+                             .   -   one dots represent the current directory (which is a tests directory in this case)
+                         */
+                 -   replace requests in auth.spec.js to login function
+                 -   replace request in auth-global-hook to login function
+                 -   remove unnecessary imports
+         13.5.   Commit, push & PR
+         13.6.   Update main branch / delete created (optional)
+
+ -----------------------------------------------------------------------------------------------------------------------
+
+14.  Create a CI/CD pipeline:
+        14.1.   Create a new branch
+        14.2.   Goto Actions Tab
+        14.3.   Search for 'Node.js' workflow and click to 'Config button'
+        14.4.   Change the name of .yaml file
+        14.5.   Change the name of the workflow
+        14.6.   Update .yml file as:
+
+                name: API-CBv5-v2 CI
+
+                on:                                                     // when the pipeline will run
+                  push:
+                    branches: [ "main" ]                                // on the push branches
+                  pull_request:
+                    branches: [ "main" ]                                // before the pull request to main branch
+
+                jobs:
+                  user_name:                                            // job name / status check name
+
+                    runs-on: ubuntu-latest                              // define the OS of VM to use the tests runs
+
+                    strategy:
+                      matrix:                                           // define the node version to be installed to VM
+                        node-version: [18.x]
+
+                    steps:                                              // describe all steps of the workflow
+                    - uses: actions/checkout@v3                         // checkout current branch to created VM
+                    - name: Use Node.js ${{ matrix.node-version }}      // install declared version of Node.js and dependencies from package-lock.json
+                      uses: actions/setup-node@v3                       // declare what will be using for tests
+                      with:
+                        node-version: ${{ matrix.node-version }}        // declare which version of node will be used
+                    - name: Install dependencies                        // step name
+                      run: npm i                                        // command to be executed
+                    - name: Run API tests                               // step name
+                      env:                                              // declare the env variables
+                        BASE_URL: ${{ secrets.BASE_URL }}
+                        EMAIL: ${{ secrets.EMAIL }}
+                        PASSWORD: ${{ secrets.PASSWORD }}
+                      run: npm test                                 // command to be executed (or 'npm run test')
+
+        14.7.   Create the new branch and PR for workflow .yaml file:
+                    -   click on 'Start commit' button
+                    -   click on radiobutton 'Create a new branch' and rename it to 'github-actions'
+                    -   add commit name 'create ci/cd pipeline'
+                    -   click to 'Propose new file'
+                    -   the new pull request automatically opened
+                    -   before create and close PR we have to declare env variables
+        14.8.   Create a secret env variables:
+                    -   goto settings/secrets/actions
+                    -   click on 'New repository secret' / add name / add value  (repeat for all variables)
+        14.9.  Merge PR:
+                    -   back to PR and click on create PR
+                    -   merge PR
+        14.10.  Update main branch / delete created (optional)
+        14.11.  To block merging before CI test runs:
+                    -   go to Settings / Branches
+                    -   click add rule
+                    -   check-in 'Require status checks to pass before merging'
+                    -   add the status checks (jobs) we want
+
+-----------------------------------------------------------------------------------------------------------------------
+
+15.  Creating tests for User Register:
+        15.1.   Create a new branch
+        15.2.   Create a new spec
+        15.3.   Import expect, supertest
+        15.4.   Create a User Creation request:
+                describe('Create a user with valid credentials', () => {
+                    let res
+                    it('check the response status code', async () => {
+                        res = await supertest(process.env.BASE_URL).post('user').send({
+                            firstName: 'Jake',
+                            lastName: 'Sully',
+                            email: 'jakesully12@pirate.com',
+                            password: process.env.PASSWORD,
+                        })
+                        expect(res.statusCode).to.eq(201)
+                        expect(res.body.message).contain('User created')
+                    })
+                });
+        15.5.   Add randomizer to project:
+        15.6.   Install the randomizer (https://chancejs.com/):
+                -   npm install chance
+        15.7.   Import randomizer
+                -   const chance = require('chance').Chance()
+        15.8.   Replace request body properties with random data using chance
+        15.9.   for email use:
+                    const newEmail = 'user' + Date.now() + '@test.com'
+        15.9.   Commit, push & PR
+        15.10.  Update main branch / delete created (optional)
+        15.11.  HW: add more test suits for user registration
+
+------------------------------------------------------------------------------------------------------------------------
+
+16.  Creating Register helper:
+        16.1.   Create new branch
+        16.2.   Inside the general-helper.js file:
+                -   import supertest from 'supertest'
+                -   create a function with relevant name and following syntax:
+                    function register(firsName, lastName, email, password){        // function name and params
+                       return supertest(process.env.BASE_URL)                      // function return
+                              .post('user')
+                              .send({firstName: firstName, lastName: lastName, email: email, password: password})
+                              }
+                -   export created function by adding to export:
+                    export { login, register }                                            // function should be exported
+        16.4.   import helper to spec file:
+                -   import { register } from '../helpers/general-helper.js'          // import created function to spec file
+        16.5.   Replace requests in register.spec.js to register function
+        16.6.   Remove unnecessary imports
+        16.4.   Create a before hook and move register request to it
+        16.5.   Repeat steps 16.5. and 16.6. for Register negative tests
+        16.6.   Commit, push & PR
+        16.7.   Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
+17.  Creating various tests:
+        17.1.   Create a new branch
+        17.2.   Create 'email confirmation test':
+        17.3.   Create a new spec file named 'various.spec.js'
+        17.4.   Create a new test in various.spec.js:
+                -   create a describe
+                -   create an it
+                -   define which requests should be sent
+                -   create a variables (str, endPoint, res, check)
+                -   create before hook and put requests inside:
+                    -   register request                                // to create new user
+                    -   email search request                            // to find the email
+                -   create a function to take apart the endPoint
+                -   create a request to verify the email                // to confirm email
+                -   create a authentication request                     // to check the role of verified user
+                -   write the assertions:
+                    -   statusCode
+                    -   message
+                    -   role
+
+                describe('Email confirmation', () => {
+                    const testEmail = 'user_' + Date.now() + '@pirate.com'
+                    let str, endPoint, res, check
+                    before(async () => {
+                        await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
+                        str = await emailSearch(testEmail)
+
+                        endPoint = str.body.payload.items[0].message.split('\n')[4].split('https://clientbase.us')[1]
+
+                        res = await supertest(process.env.BASE_URL).get(endPoint).send()
+
+                        check = await login(testEmail, process.env.PASSWORD)
+                    })
+
+                    it('check the response status', () => {
+                        expect(res.statusCode).to.eq(200)
+                    })
+
+                    it('check the response message', () => {
+                        expect(res.body.message).to.include('confirmed')
+                    })
+
+                    it('check the role', () => {
+                        expect(check.body.payload.user.roles).to.include('verified')
+                    })
+                })
+
+        17.5.   Commit, push & PR
+        17.6.   Update main branch / delete created (optional)
+
+        17.6  Creating test for space trimming:
+        17.7.   Create a new branch
+        17.8.   Create a new test in register.spec.js:
+                -   create a describe
+                -   create an it
+                -   define which requests should be sent              // create user / login
+                -   create a variables (testEmail, res)
+                -   create before hook with registration request
+                -   add auth request and assertion to it              // mention import 'login' added to file
+                -   move auth request to before hook
+                -   split assertions to separate its:
+
+                         describe.only('Space trimming test', () => {
+                              let testEmail = ' james' + Date.now() + '@pirate.com   '
+                              let res
+
+                              before(async()=>{
+                                  await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
+                                  res = await login((testEmail.trim()), process.env.PASSWORD)
+
+                                   console.log(testEmail)                                               // optional
+                                   console.log(testEmail.trim())                                        // optional
+                                   console.log(res.body.payload.user.email)                             // optional
+                              })
+
+                              it('check if spaces trimmed during registration by logging in ', () => {
+                                  expect(res.statusCode).to.eq(200)
+                              });
+
+                              it('check if spaces trimmed during registration by logging in ', async() => {
+                                  expect(res.body.message).to.eq('Auth success')
+                              });
+
+                               it('check the email in response is equal to trimmed email', () => {         // optional / just an example
+                                      expect(res.body.payload.user.email).to.eq(testEmail.trim())
+                                  });
+                          });
+
+        17.9.   Commit, push & PR
+        17.10.  Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
+
+18.  Setup the reporter:
+     18.1.  Install the mochawesome reporter:
+                -   npm install mochawesome
+     18.2.  Add the option to .mocharc file or to the script:
+                    reporter: 'mochawesome'                                     // in .mocharc.js
+                    --reporter mochawesome                                      // in script
+     18.3.  Change the configuration if needed:
+                -   using 'reporter-options' flag in mocha config or script
+                -   reportDir=MyReports                                         // changing the reports directory
+                -   reportFilename=updatedReport                                // changing the file name
+                    some options for report name: [status]_[datetime]:          // add status and timestamp to file name
+                    reportFilename=[status]_[datetime]_ReportName
+                -   json=false                                                  // turn off creating json report
+                -   quiet=true                                                  // turn off mochawesome console messages
+     18.4.  Explain design of report
+     18.5.  Commit, push & PR
+     18.6.  Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+19.  Creating Clients tests
+     19.1.  Create new branch clients-1
+     19.2.  Create client.spec.js file
+     19.3.  Make necessary imports                          // note that request command could be named as you wish
+     19.4.  Create test for new client creation:
+            -   describe('Clients tests', () => {
+                    let res
+                    it('Create a client', async() => {
+                        res = await request(process.env.BASE_URL)
+                            .post('client')
+                            .set('Authorization', process.env.TOKEN)
+                            .send({
+                                name: chance.name(),
+                                phone: chance.phone(),
+                                email: chance.email()
+                            })
+                        expect(res.statusCode).to.eq(200)
+                        expect(res.body.message).to.eq('Client created')
+                        expect(res.body.payload).not.to.be.empty
+                        expect(res.body.payload).to.be.a('string')
+                    });
+                });
+     19.5.  Create before hook and split assertions to separate tests
+     19.6.  Create a client-helper and add there 'create' function
+            -   function createClient(){
+                    return request(process.env.BASE_URL)
+                        .post('client')
+                        .set('Authorization', process.env.TOKEN)
+                        .send({
+                            name: 'Client_' + Date.now(),
+                            phone: chance.phone()
+                        })
+                }
+     19.7.  Import client-helper into client.spec.js:
+            -   import * as clientHelper from '../helpers/client-helper'
+            -   explain syntax
+     19.7.  Change clients.spec file and remove unnecessary imports
+     19.8.  Commit, push & PR
+     19.9.  Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
+
+20.  Create more clients tests:
+     20.1. Create 'Get all clients':
+           -    Create a test for getting all clients inside of clients spec:
+                describe('Get all clients', () => {
+                  let res
+                  it('check the response status', async() => {
+                    res = await request(process.env.BASE_URL)
+                        .post('client/search')
+                        .set('Authorization', process.env.TOKEN)
+                        .send({limit: 30})
+                    expect(res.statusCode).to.eq(200)
+                    expect(res.body.payload.items).to.be.a('array')
+                    expect(res.body.payload.items[0]).has.property('_id')
+                  });
+                });
+           -    create before hook
+           -    split assertions
+           -    create a function inside client-helper.js
+           -    to make this test autonomous add clientHelper.createClient() to before hook
+           -    add for loop to last assertion for checking all clients:               // as an example of using loops in tests
+                    it('check the array elements has id', () => {
+                          let clientsList = res.body.payload.items
+                          for (let i = 0; i < clientsList.length; i++) {
+                            expect(clientsList[i]).has.property('_id')
+                          }
+                        })
+
+     20.2.  Create 'Get client by ID':
+            -   create a test for getting client by ID:
+                describe('Get client by ID', () => {
+                  let res
+                  let clientId
+                  before(async()=>{                                                     // in case DB does not contains any clients
+                    clientId = (await clientHelper.create()).body.payload               // get clientID from created client
+                  })
+                  it('check the response status',async() => {
+                    res = await request(process.env.BASE_URL)
+                        .get('client/' + clientId)
+                        .set('Authorization', process.env.TOKEN)
+                    expect(res.statusCode).to.eq(200)
+                  });
+                });
+            -   create before hook
+            -   create a function inside client-helper.js
+     20.3.  Create 'Get client by name':
+            -   create a test for getting client by name:
+                 before(async()=>{
+                    clientId = (await clientHelper.create()).body.payload
+                    clientName = (await clientHelper.getSingle(clientId)).body.payload.name
+                    res = await request(process.env.BASE_URL)
+                        .post('client/search')
+                        .set('Authorization', process.env.TOKEN)
+                        .send({name: clientName})
+                  })
+            -   create before hook
+            -   create a function inside client-helper.js
+     20.4.  Commit, push & PR
+     20.5.  Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
+
+21.  Create update client test:
+     21.1.  Open new branch
+     21.2.  Create a describe:
+            describe('Update client', () => {
+              let res
+              let clientId
+              it('update client', async() => {
+                clientId = (await clientHelper.create()).body.payload
+                res = await request(process.env.BASE_URL)
+                    .patch('client/' + clientId)
+                    .set('Authorization', process.env.TOKEN)
+                    .send({name: 'updatedClient', phone: 'updatedPhone'})
+                expect(res.statusCode).to.eq(200)
+                expect(res.body.message).to.eq('Client updated')
+              });
+            });
+     21.3.  Create before hook
+     21.4.  Create a function inside client-helper.js
+     21.5.  Check if the name actually changed:             // in case of API return correct message and status
+                -   create a client                         // but actually does not update the name
+                -   get clientId
+                -   send getClientById request
+                -   get nameBefore
+                -   update client
+                -   send getClientById request
+                -   get nameAfter
+                -   compare the nameBefore and nameAfter:
+                    describe('check if the name actually updated', () => {
+                        let clientId
+                        let nameBefore
+                        let nameAfter
+
+                        before(async () => {
+                          clientId = (await clientHelper.createClient()).body.payload
+                          nameBefore = (await clientHelper.getSingle(clientId)).body.payload.name
+                          await clientHelper.updateClient(clientId)
+                          nameAfter = (await clientHelper.getSingle(clientId)).body.payload.name
+                        })
+
+                        it('check if updated name does not equal original name', () => {
+                          expect(nameAfter).to.not.eq(nameBefore)
+                        })
+                      })
+     21.6.  Add 'timeout' param to .mocharc.js to increase the timeout time:       // in case of timeout errors
+                -   timeout: '20000'                                                // by default it is 2000 mc / 2 sec
+     21.6.  Commit, push & PR
+     21.7.  Update main branch / delete created (optional)
+
+22.  Create delete client test:
+     22.1.  Open new branch
+     22.2.  Create a describe:
+            describe.only('Delete the client', () => {
+                let res
+                let clientId
+                it('check the response status', async() => {
+                  clientId = (await clientHelper.createClient()).body.payload
+                  res = await request(process.env.BASE_URL)
+                      .delete('client/' + clientId)
+                      .set('Authorization', process.env.TOKEN)
+                  expect(res.statusCode).to.eq(200)
+                  expect(res.body.message).to.eq('Client deleted')
+                });
+              });
+     22.3.  Create before hook
+     22.4.  Create a function inside client-helper.js
+     22.5.  Check if the deleted client does not exist in the database:
+            -   create a client
+            -   get clientId
+            -   delete client
+            -   send getClientById request:
+                describe('Check if client actually deleted', () => {
+                    let res
+                    let clientId
+
+                    before(async () => {
+                      clientId = (await clientHelper.createClient()).body.payload
+                      await clientHelper.deleteClient(clientId)
+                      res = await clientHelper.getSingle(clientId)
+                    })
+
+                    it('check the response status',  () => {
+                      expect(res.statusCode).to.eq(404)
+                    })
+                    it('check the response message',  () => {
+                      expect(res.body.message).to.eq('No client for provided id')
+                    })
+                  })
+     22.6.  Commit, push & PR
+     22.7.  Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
+
+23. Create after hook for clients:
+    23.1.   Define the steps:
+            -   get clientList
+            -   create a loop with deleteClient function inside:
+                after('delete all clients', async () => {
+                  let clientsList
+                  clientsList = (await clientHelper.getAll()).body.payload.items
+                  console.log(clientsList)                                          // optional (to check format of clientsList)
+                  for (let i = 0; i < clientsList.length; i++) {
+                    await clientHelper.deleteClient(clientsList[i]._id)
+                  }
+                })
+            -   add to body of getAllClients helper:
+                {limit:30}
+            -   get clientsList                                                      // optional
+            -   check the clientsList length                                         // optional (to check the q-ty of clients)
+    23.2.   Commit, push & PR
+    23.3.   Update main branch / delete created (optional)
+
+------------------------------------------------------------------------------------------------------------------------
+
+24.  Minor updates on CI/CD pipeline:
+        24.1.   Make pipeline run on specified tests only:
+                    -   Comment spec option in .mocharc.js                           // this will be defined in scripts
+                    -   Update 'test' script to:
+                            "test": "mocha --spec tests/*.js --config .mocharc.js",
+                    -   Add another script 'auth-test':
+                            "auth-test": "mocha --spec tests/auth.spec.js --config .mocharc.js"
+                    -   Update running script in GitAction yaml file
+                    -   Commit, push & PR
+                    -   Update main branch / delete created (optional)
+        24.2.   Add schedule to pipeline:
+                    -   on:
+                            schedule:                           // https://crontab.guru/
+                                - cron: '0 5 * * *'             // minute hour day month day of week
+
+------------------------------------------------------------------------------------------------------------------------
+
+25.  Create tests for Vendors:  Home Work
+26.  Create test for Orders:    Home Work
+27.  Create tests for Services: Home Work
+
+------------------------------------------------------------------------------------------------------------------------
+
+28.  Create a Postman - Newman pipeline:
+     28.1.  Create a new branch
+     28.2.  Install newman              -   npm i newman
+     28.3.  Install htmlextra reporter   -   npm i newman-reporter-htmlextra
+     28.4.  Create a folder for postman collections
+     28.5.  Export PM collection and PM environment to created folder
+     28.6.  Add additional scripts:
+            -   "pmrun": "newman run postman/collection_name.json -e postman/evironment_name.json"
+            -   "pmreport": "newman run postman/collection_name.json -e postman/evironment_name.json -r htmlextra --reporter-htmlextra-export MyReports/pmReport.html"
+     28.7.  Runt scripts
+
+29.  Update after hooks in clients, vendors, services specs
+    29.1.   Add if/else statement to check if the client has an order / vendor has a service ???
