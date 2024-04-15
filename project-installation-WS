@@ -48,7 +48,7 @@ Create a new project in WS
 6.  Install & config mocha test runner:
         6.1.    Create new branch
         6.2.    In terminal: npm i mocha
-        6.3.    Create `.mocharc.js` file
+        6.3.    Create `.mocharc.js` file (https://github.com/mochajs/mocha/blob/master/example/config/.mocharc.js)
         6.4.    Paste following into .mocharc:
                      module.exports = {
                          require: ['@babel/register'],
@@ -76,7 +76,7 @@ Create a new project in WS
                     -   create `describe` and `it` with relevant names
                     -   write assertion:
 
-                        describe('The first test', () => {
+                        describe('The example test', () => {
                             it('Check if sum working properly', () => {
                                 expect(5+5).to.eq(10)
                             });
@@ -184,10 +184,10 @@ Create a new project in WS
          13.4.   Inside the file:
                  -   import supertest from 'supertest'
                  -   create a function with relevant name and following syntax:
-                     function login(email, password){                                // function name and params
-                         return supertest(process.env.BASE_URL)                      // function return
-                         .post('user/login')
-                         .send({email: email, password: password})
+                     function login(){                                               // function name and params
+                         return request(process.env.BASE_URL)                        // function return
+                           .post('user/login')
+                           .send({email: process.env.EMAIL, password: process.env.PASSWORD})
                          }
                  -   export created function:
                      export { login }                                                // function should be exported
@@ -201,6 +201,12 @@ Create a new project in WS
                              .   -   one dots represent the current directory (which is a tests directory in this case)
                          */
                  -   replace requests in auth.spec.js to login function
+                 -   parametrize the function
+                         function login(email, password){
+                             return request(process.env.BASE_URL)
+                             .post('/v6/user/login')
+                             .send({email: email, password: password})
+                         }
                  -   replace request in auth-global-hook to login function
                  -   remove unnecessary imports
          13.5.   Commit, push & PR
@@ -209,6 +215,8 @@ Create a new project in WS
  -----------------------------------------------------------------------------------------------------------------------
 
 14.  Create a CI/CD pipeline:
+        - IMPORTANT: merge blocking could be implemented only in GitHub Team or Enterprise organization account
+
         14.1.   Create a new branch
         14.2.   Goto Actions Tab
         14.3.   Search for 'Node.js' workflow and click to 'Config button'
@@ -231,7 +239,7 @@ Create a new project in WS
 
                     strategy:
                       matrix:                                           // define the node version to be installed to VM
-                        node-version: [18.x]
+                        node-version: [20.x]                            // define runs in node versions
 
                     steps:                                              // describe all steps of the workflow
                     - uses: actions/checkout@v3                         // checkout current branch to created VM

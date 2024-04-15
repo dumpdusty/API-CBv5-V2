@@ -68,7 +68,7 @@ Create a new project in VSC
 6.  Install & config mocha test runner:
     6.1.  Create new branch
     6.2.  In terminal: npm i mocha
-    6.3.  Create `.mocharc.js` file
+    6.3.  Create `.mocharc.js` file (https://github.com/mochajs/mocha/blob/master/example/config/.mocharc.js)
     6.4.  Paste following into .mocharc:
 
             module.exports = {
@@ -98,7 +98,7 @@ Create a new project in VSC
              -   create `describe` and `it` with relevant names
              -   write assertion:
 
-                  describe('The first test', () => {
+                  describe('The example test', () => {
                      it('Check if sum working properly', () => {
                          expect(5+5).to.eq(10)
                      });
@@ -125,7 +125,7 @@ Create a new project in VSC
     9.1.    Create a new branch
     9.2.    Create a spec file: 'auth.spec.js'
     9.3.    Import necessary packages:
-                -   import supertest from 'supertest'
+                -   import request from 'supertest'
                 -   import { expect } from ' chai'
     9.4.    Create a test with valid credentials:
                 - request syntax:
@@ -133,7 +133,7 @@ Create a new project in VSC
         describe('Authentication', () => {
           let res                                                                  // create a variable to assign a response
             it('Login with valid credentials', async () => {                        // using async function to catch the promise
-               res = await supertest('https://clientbase-server.herokuapp.com')     // pass the base URL to request body
+               res = await request('https://clientbase-server.herokuapp.com')     // pass the base URL to request body
                   .post('/v5/user/login')                                           // method and endpoint
                   .set('HeaderName', HeaderValue)                                   // set the headers  (optional)
                   .send({email: 'jacksparrow@pirate.com', password: 'Pirate666!'})  // pass the body in JSON object format
@@ -155,7 +155,7 @@ Create a new project in VSC
 
  -----------------------------------------------------------------------------------------------------------------------
 
-10.  Add environment variables:
+10. Add environment variables:
     10.1.   Create a new branch
     10.2.   Install dotenv package (based on dotenv documentation - https://www.npmjs.com/package/dotenv)
             -   npm i -D dotenv
@@ -174,7 +174,7 @@ Create a new project in VSC
 
  -----------------------------------------------------------------------------------------------------------------------
 
-11.  Add local hooks:
+11. Add local hooks:
     11.1.   Create a new branch
     11.2.   Create 'before' hook and move there auth API request
                 -   NB: variable res should be moved above 'before' hook
@@ -184,167 +184,180 @@ Create a new project in VSC
 
 ------------------------------------------------------------------------------------------------------------------------
 
-12.  Add global hook:
+12. Add global hook:
     12.1.   Create new directory (config/general/global-hooks/setup, etc...) in root folder
     12.2.   Inside created folder add new .js file (config/general/global-hook/setup, etc...)
     12.3.   Inside the created file:
             -   import 'dotenv/config'
-            -   import supertest from 'supertest'
+            -   import request from 'supertest'
             -   copy 'before' hook from auth.spec
             -   declare new env variable named 'token':
                 process.env.TOKEN = path to response property (res.body.payload.token)
             -   add option to .mocharc configuration file:
                 file: `path to global hook` ('config/setup.js')
+            -   now dotenv will be imported in only one file (remove it from auth.spec.js)
     12.4.   Commit, push & PR
     12.5.   Update main branch / delete created (optional)
 
  -----------------------------------------------------------------------------------------------------------------------
 
- 13.  Create first helper:
-         13.1.   Create a new branch
-         13.2.   Create a new directory 'Helpers' in root folder
-         13.3.   Create general-helper.js file
-         13.4.   Inside the file:
-                 -   import supertest from 'supertest'
-                 -   create a function with relevant name and following syntax:
-                     function login(email, password){                                // function name and params
-                         return supertest(process.env.BASE_URL)                      // function return
-                         .post('user/login')
-                         .send({email: email, password: password})
-                         }
-                 -   export created function:
-                     export { login }                                                // function should be exported
-                 -   function could be exported with following syntax as well:
-                            export default function name(param1, param2){}
-                 -   import helper to spec file:
-                     import { login } from '../helpers/general-helper.js'            // import created function to spec file
-                         /*
-                           Short brief to syntax of relative paths:
-                             ..  -   two dots moves up to a parent directory (which is a root directory of a project in this case)
-                             .   -   one dots represent the current directory (which is a tests directory in this case)
-                         */
-                 -   replace requests in auth.spec.js to login function
-                 -   replace request in auth-global-hook to login function
-                 -   remove unnecessary imports
-         13.5.   Commit, push & PR
-         13.6.   Update main branch / delete created (optional)
+13. Create first helper:
+    13.1.   Create a new branch
+    13.2.   Create a new directory 'Helpers' in root folder
+    13.3.   Create general-helper.js file
+    13.4.   Inside the file:
+            -   import request from 'supertest'
+            -   create a function with relevant name and following syntax:
+                function login(){                                                     // function name and params
+                    return request(process.env.BASE_URL)                              // function return
+                    .post('user/login')
+                    .send({email: process.env.EMAIL, password: process.env.PASSWORD})
+                    }
+            -   export created function:
+                export { login }                                                      // function should be exported
+            -   function could be exported with following syntax as well:
+                       export default function name(param1, param2){}
+            -   import helper to spec file:
+                import { login } from '../helpers/general-helper.js'                  // import created function to spec file
+                    /*
+                      Short brief to syntax of relative paths:
+                        ..  -   two dots moves up to a parent directory (which is a root directory of a project in this case)
+                        .   -   one dots represent the current directory (which is a tests directory in this case)
+                    */
+            -   replace requests in auth.spec.js to login function
+            -   parametrize the function
+                    function login(email, password){
+                        return request(process.env.BASE_URL)
+                        .post('/v6/user/login')
+                        .send({email: email, password: password})
+                    }
+            -   as per JS rules change sending object to `.send{email, password}
+            -   replace request in auth-global-hook to login function
+            -   remove unnecessary imports
+    13.5.   Commit, push & PR
+    13.6.   Update main branch / delete created (optional)
 
  -----------------------------------------------------------------------------------------------------------------------
 
-14.  Create a CI/CD pipeline:
-        14.1.   Create a new branch
-        14.2.   Goto Actions Tab
-        14.3.   Search for 'Node.js' workflow and click to 'Config button'
-        14.4.   Change the name of .yaml file
-        14.5.   Change the name of the workflow
-        14.6.   Update .yml file as:
+14. Create a CI/CD pipeline:
+        - IMPORTANT: merge blocking could be implemented only in GitHub Team or Enterprise organization account
 
-                name: API-CBv5-v2 CI
+    14.1.   Create a new branch
+    14.2.   Goto Actions Tab
+    14.3.   Search for 'Node.js' workflow and click to 'Config button'
+    14.4.   Change the name of .yaml file
+    14.5.   Change the name of the workflow
+    14.6.   Update .yml file as:
 
-                on:                                                     // when the pipeline will run
-                  push:
-                    branches: [ "main" ]                                // on the push branches
-                  pull_request:
-                    branches: [ "main" ]                                // before the pull request to main branch
+            name: API-CBv5-v2 CI
 
-                jobs:
-                  user_name:                                            // job name / status check name
+            on:                                                     // when the pipeline will run
+              push:
+                branches: [ "main" ]                                // on the push branches
+              pull_request:
+                branches: [ "main" ]                                // before the pull request to main branch
 
-                    runs-on: ubuntu-latest                              // define the OS of VM to use the tests runs
+            jobs:
+              user_name:                                            // job name / status check name
 
-                    strategy:
-                      matrix:                                           // define the node version to be installed to VM
-                        node-version: [18.x]
+                runs-on: ubuntu-latest                              // define the OS of VM to use the tests runs
 
-                    steps:                                              // describe all steps of the workflow
-                    - uses: actions/checkout@v3                         // checkout current branch to created VM
-                    - name: Use Node.js ${{ matrix.node-version }}      // install declared version of Node.js and dependencies from package-lock.json
-                      uses: actions/setup-node@v3                       // declare what will be using for tests
-                      with:
-                        node-version: ${{ matrix.node-version }}        // declare which version of node will be used
-                    - name: Install dependencies                        // step name
-                      run: npm i                                        // command to be executed
-                    - name: Run API tests                               // step name
-                      env:                                              // declare the env variables
-                        BASE_URL: ${{ secrets.BASE_URL }}
-                        EMAIL: ${{ secrets.EMAIL }}
-                        PASSWORD: ${{ secrets.PASSWORD }}
-                      run: npm test                                 // command to be executed (or 'npm run test')
+                strategy:
+                  matrix:                                           // define the node version to be installed to VM
+                    node-version: [18.x, 20.x]                      // define runs in node versions
 
-        14.7.   Create the new branch and PR for workflow .yaml file:
-                    -   click on 'Start commit' button
-                    -   click on radiobutton 'Create a new branch' and rename it to 'github-actions'
-                    -   add commit name 'create ci/cd pipeline'
-                    -   click to 'Propose new file'
-                    -   the new pull request automatically opened
-                    -   before create and close PR we have to declare env variables
-        14.8.   Create a secret env variables:
-                    -   goto settings/secrets/actions
-                    -   click on 'New repository secret' / add name / add value  (repeat for all variables)
-        14.9.  Merge PR:
-                    -   back to PR and click on create PR
-                    -   merge PR
-        14.10.  Update main branch / delete created (optional)
-        14.11.  To block merging before CI test runs:
-                    -   go to Settings / Branches
-                    -   click add rule
-                    -   check-in 'Require status checks to pass before merging'
-                    -   add the status checks (jobs) we want
+                steps:                                              // describe all steps of the workflow
+                - uses: actions/checkout@v3                         // checkout current branch to created VM
+                - name: Use Node.js ${{ matrix.node-version }}      // install declared version of Node.js and dependencies from package-lock.json
+                  uses: actions/setup-node@v3                       // declare what will be using for tests
+                  with:
+                    node-version: ${{ matrix.node-version }}        // declare which version of node will be used
+                - name: Install dependencies                        // step name
+                  run: npm i                                        // command to be executed
+                - name: Run API tests                               // step name
+                  env:                                              // declare the env variables
+                    BASE_URL: ${{ secrets.BASE_URL }}
+                    EMAIL: ${{ secrets.EMAIL }}
+                    PASSWORD: ${{ secrets.PASSWORD }}
+                  run: npm test                                     // command to be executed (or 'npm run test')
+
+    14.7.   Create the new branch and PR for workflow .yaml file:
+                -   click on 'Start commit' button
+                -   click on radiobutton 'Create a new branch' and rename it to 'github-actions'
+                -   add commit name 'create ci/cd pipeline'
+                -   click to 'Propose new file'
+                -   the new pull request automatically opened
+                -   before create and close PR we have to declare env variables
+    14.8.   Create a secret env variables (open setting in a new window):
+                -   goto settings/secrets/actions
+                -   click on 'New repository secret' / add name / add value  (repeat for all variables)
+    14.9.  Merge PR:
+                -   back to PR and click on create PR
+                -   merge PR
+    14.10.  Update main branch / delete created (optional)
+    14.11.  To block merging before CI test runs:
+                -   go to Settings / Branches
+                -   click add rule
+                -   check-in 'Require status checks to pass before merging'
+                -   add the status checks (jobs) we want
 
 -----------------------------------------------------------------------------------------------------------------------
 
-15.  Creating tests for User Register:
-        15.1.   Create a new branch
-        15.2.   Create a new spec
-        15.3.   Import expect, supertest
-        15.4.   Create a User Creation request:
-                describe('Create a user with valid credentials', () => {
-                    let res
-                    it('check the response status code', async () => {
-                        res = await supertest(process.env.BASE_URL).post('user').send({
-                            firstName: 'Jake',
-                            lastName: 'Sully',
-                            email: 'jakesully12@pirate.com',
-                            password: process.env.PASSWORD,
-                        })
-                        expect(res.statusCode).to.eq(201)
-                        expect(res.body.message).contain('User created')
+15. Creating tests for User Register:
+    15.1.   Create a new branch
+    15.2.   Create a new spec
+    15.3.   Import expect, supertest
+    15.4.   Create a User Creation request:
+
+            describe('Create a user with valid credentials', () => {
+                let res
+                it('check the response status code', async () => {
+                    res = await request(process.env.BASE_URL).post('user').send({
+                        firstName: 'Jake',
+                        lastName: 'Sully',
+                        email: 'jakesully12@pirate.com',
+                        password: process.env.PASSWORD,
                     })
-                });
-        15.5.   Add randomizer to project:
-        15.6.   Install the randomizer (https://chancejs.com/):
-                -   npm install chance
-        15.7.   Import randomizer
-                -   const chance = require('chance').Chance()
-        15.8.   Replace request body properties with random data using chance
-        15.9.   for email use:
-                    const newEmail = 'user' + Date.now() + '@test.com'
-        15.9.   Commit, push & PR
-        15.10.  Update main branch / delete created (optional)
-        15.11.  HW: add more test suits for user registration
+                    expect(res.statusCode).to.eq(201)
+                    expect(res.body.message).contain('User created')
+                })
+            });
+
+    15.5.   Add randomizer to project:
+    15.6.   Install the randomizer (https://chancejs.com/):
+            -   npm install chance
+    15.7.   Import randomizer
+            -   const chance = require('chance').Chance()
+    15.8.   Replace request body properties with random data using chance
+    15.9.   for email use:
+                const newEmail = 'user' + Date.now() + '@test.com'
+    15.9.   Commit, push & PR
+    15.10.  Update main branch / delete created (optional)
+    15.11.  HW: add more test suits for user registration
 
 ------------------------------------------------------------------------------------------------------------------------
 
-16.  Creating Register helper:
-        16.1.   Create new branch
-        16.2.   Inside the general-helper.js file:
-                -   import supertest from 'supertest'
-                -   create a function with relevant name and following syntax:
-                    function register(firsName, lastName, email, password){        // function name and params
-                       return supertest(process.env.BASE_URL)                      // function return
-                              .post('user')
-                              .send({firstName: firstName, lastName: lastName, email: email, password: password})
-                              }
-                -   export created function by adding to export:
-                    export { login, register }                                            // function should be exported
-        16.4.   import helper to spec file:
-                -   import { register } from '../helpers/general-helper.js'          // import created function to spec file
-        16.5.   Replace requests in register.spec.js to register function
-        16.6.   Remove unnecessary imports
-        16.4.   Create a before hook and move register request to it
-        16.5.   Repeat steps 16.5. and 16.6. for Register negative tests
-        16.6.   Commit, push & PR
-        16.7.   Update main branch / delete created (optional)
+16. Creating Register helper:
+    16.1.   Create new branch
+    16.2.   Inside the general-helper.js file:
+            -   import request from 'supertest'
+            -   create a function with relevant name and following syntax:
+
+            function register(firsName, lastName, email, password){        // function name and params
+               return request(process.env.BASE_URL)                        // function return
+                      .post('user')
+                      .send({firstName: firstName, lastName: lastName, email: email, password: password})
+            }
+            -   export created function by adding to export:
+                export { login, register }                                  // function should be exported
+    16.4.   import helper to spec file:
+            -   import { register } from '../helpers/general-helper.js'     // import created function to spec file
+    16.5.   Replace requests in register.spec.js to register function
+    16.6.   Remove unnecessary imports
+    16.4.   Create a before hook and move register request to it
+    16.5.   Repeat steps 16.5. and 16.6. for Register negative tests
+    16.6.   Commit, push & PR
+    16.7.   Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 17.  Creating various tests:
@@ -376,7 +389,7 @@ Create a new project in VSC
 
                         endPoint = str.body.payload.items[0].message.split('\n')[4].split('https://clientbase.us')[1]
 
-                        res = await supertest(process.env.BASE_URL).get(endPoint).send()
+                        res = await request(process.env.BASE_URL).get(endPoint).send()
 
                         check = await login(testEmail, process.env.PASSWORD)
                     })
