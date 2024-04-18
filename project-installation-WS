@@ -327,9 +327,10 @@ Create a new project in WS
         16.5.   Replace requests in register.spec.js to register function
         16.6.   Remove unnecessary imports
         16.4.   Create a before hook and move register request to it
-        16.5.   Repeat steps 16.5. and 16.6. for Register negative tests
-        16.6.   Commit, push & PR
-        16.7.   Update main branch / delete created (optional)
+        16.5.   OPTIONAL: pass default values to registration function
+        16.6.   Repeat steps 16.5. and 16.6. for Register negative tests
+        16.7.   Commit, push & PR
+        16.8.   Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 17.  Creating various tests:

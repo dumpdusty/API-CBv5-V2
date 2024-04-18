@@ -63,8 +63,6 @@ Create a new project in VSC
     5.5.  Commit, push & PR
     5.6.  Update main branch / delete created (optional)
 
- -----------------------------------------------------------------------------------------------------------------------
-
 6.  Install & config mocha test runner:
     6.1.  Create new branch
     6.2.  In terminal: npm i mocha
@@ -119,8 +117,6 @@ Create a new project in VSC
     8.8.    Update main branch / delete created (optional)
     8.9.    HW: create more tests (math, string, array)
 
- -----------------------------------------------------------------------------------------------------------------------
-
 9.  Authentication tests:
     9.1.    Create a new branch
     9.2.    Create a spec file: 'auth.spec.js'
@@ -168,11 +164,10 @@ Create a new project in VSC
     10.6.   Add following to the tests file:
                -   import 'dotenv/config'
     10.7.   Replace all open data to env variables
-    10.8.   Optionally - Install '.env files support' (tooltips and highlights for env syntax)
+    10.8.   Optionally - Install extension 'Dotenv Official' (tooltips and highlights for env syntax)
     10.9.   Commit, push & PR
     10.10.   Update main branch
 
- -----------------------------------------------------------------------------------------------------------------------
 
 11. Add local hooks:
     11.1.   Create a new branch
@@ -182,7 +177,7 @@ Create a new project in VSC
     11.4.   Split positive and negative tests by adding another describe
     11.5.   Create separate it for each assertion
 
-------------------------------------------------------------------------------------------------------------------------
+
 
 12. Add global hook:
     12.1.   Create new directory (config/general/global-hooks/setup, etc...) in root folder
@@ -237,7 +232,6 @@ Create a new project in VSC
     13.5.   Commit, push & PR
     13.6.   Update main branch / delete created (optional)
 
- -----------------------------------------------------------------------------------------------------------------------
 
 14. Create a CI/CD pipeline:
         - IMPORTANT: merge blocking could be implemented only in GitHub Team or Enterprise organization account
@@ -295,7 +289,7 @@ Create a new project in VSC
                 -   back to PR and click on create PR
                 -   merge PR
     14.10.  Update main branch / delete created (optional)
-    14.11.  To block merging before CI test runs:
+    14.11.  To block merging before CI test runs (could be implemented only in GitHub Team or Enterprise organization account):
                 -   go to Settings / Branches
                 -   click add rule
                 -   check-in 'Require status checks to pass before merging'
@@ -325,17 +319,16 @@ Create a new project in VSC
 
     15.5.   Add randomizer to project:
     15.6.   Install the randomizer (https://chancejs.com/):
-            -   npm install chance
+            -   npm install -D chance
     15.7.   Import randomizer
             -   const chance = require('chance').Chance()
     15.8.   Replace request body properties with random data using chance
     15.9.   for email use:
-                const newEmail = 'user' + Date.now() + '@test.com'
+                const newEmail = 'user' + Date.now() + '@pirate.com'
     15.9.   Commit, push & PR
     15.10.  Update main branch / delete created (optional)
     15.11.  HW: add more test suits for user registration
 
-------------------------------------------------------------------------------------------------------------------------
 
 16. Creating Register helper:
     16.1.   Create new branch
@@ -343,133 +336,134 @@ Create a new project in VSC
             -   import request from 'supertest'
             -   create a function with relevant name and following syntax:
 
-            function register(firsName, lastName, email, password){        // function name and params
+            function registration(firsName, lastName, email, password){        // function name and params
                return request(process.env.BASE_URL)                        // function return
                       .post('user')
                       .send({firstName: firstName, lastName: lastName, email: email, password: password})
             }
             -   export created function by adding to export:
-                export { login, register }                                  // function should be exported
+                export { login, registration }                                  // function should be exported
     16.4.   import helper to spec file:
-            -   import { register } from '../helpers/general-helper.js'     // import created function to spec file
+            -   import { registration } from '../helpers/general-helper.js'     // import created function to spec file
     16.5.   Replace requests in register.spec.js to register function
     16.6.   Remove unnecessary imports
     16.4.   Create a before hook and move register request to it
-    16.5.   Repeat steps 16.5. and 16.6. for Register negative tests
-    16.6.   Commit, push & PR
-    16.7.   Update main branch / delete created (optional)
+    16.5.   OPTIONAL: pass default values to registration function
+    16.6.   Repeat steps 16.5. and 16.6. for Register negative tests
+    16.7.   Commit, push & PR
+    16.8.   Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 17.  Creating various tests:
-        17.1.   Create a new branch
-        17.2.   Create 'email confirmation test':
-        17.3.   Create a new spec file named 'various.spec.js'
-        17.4.   Create a new test in various.spec.js:
-                -   create a describe
-                -   create an it
-                -   define which requests should be sent
-                -   create a variables (str, endPoint, res, check)
-                -   create before hook and put requests inside:
-                    -   register request                                // to create new user
-                    -   email search request                            // to find the email
-                -   create a function to take apart the endPoint
-                -   create a request to verify the email                // to confirm email
-                -   create a authentication request                     // to check the role of verified user
-                -   write the assertions:
-                    -   statusCode
-                    -   message
-                    -   role
+    17.1.   Create a new branch
+    17.2.   Create 'email confirmation test':
+    17.3.   Create a new spec file named 'various.spec.js'
+    17.4.   Create a new test in various.spec.js:
+            -   create a describe
+            -   create an it
+            -   define which requests should be sent
+            -   create a variables (str, endPoint, res, check)
+            -   create before hook and put requests inside:
+                -   register request                                // to create new user
+                -   email search request                            // to find the email
+            -   create a function to take apart the endPoint
+            -   create a request to verify the email                // to confirm email
+            -   create a authentication request                     // to check the role of verified user
+            -   write the assertions:
+                -   statusCode
+                -   message
+                -   role
 
-                describe('Email confirmation', () => {
-                    const testEmail = 'user_' + Date.now() + '@pirate.com'
-                    let str, endPoint, res, check
-                    before(async () => {
-                        await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
-                        str = await emailSearch(testEmail)
+            describe('Email confirmation', () => {
+                const testEmail = 'user_' + Date.now() + '@pirate.com'
+                let str, endPoint, res, check
+                before(async () => {
+                    await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
+                    str = await emailSearch(testEmail)
 
-                        endPoint = str.body.payload.items[0].message.split('\n')[4].split('https://clientbase.us')[1]
+                    endPoint = str.body.payload.items[0].message.split('\n')[4].split('https://clientbase.us')[1]
 
-                        res = await request(process.env.BASE_URL).get(endPoint).send()
+                    res = await request(process.env.BASE_URL).get(endPoint).send()
 
-                        check = await login(testEmail, process.env.PASSWORD)
-                    })
-
-                    it('check the response status', () => {
-                        expect(res.statusCode).to.eq(200)
-                    })
-
-                    it('check the response message', () => {
-                        expect(res.body.message).to.include('confirmed')
-                    })
-
-                    it('check the role', () => {
-                        expect(check.body.payload.user.roles).to.include('verified')
-                    })
+                    check = await login(testEmail, process.env.PASSWORD)
                 })
 
-        17.5.   Commit, push & PR
-        17.6.   Update main branch / delete created (optional)
+                it('check the response status', () => {
+                    expect(res.statusCode).to.eq(200)
+                })
 
-        17.6  Creating test for space trimming:
-        17.7.   Create a new branch
-        17.8.   Create a new test in register.spec.js:
-                -   create a describe
-                -   create an it
-                -   define which requests should be sent              // create user / login
-                -   create a variables (testEmail, res)
-                -   create before hook with registration request
-                -   add auth request and assertion to it              // mention import 'login' added to file
-                -   move auth request to before hook
-                -   split assertions to separate its:
+                it('check the response message', () => {
+                    expect(res.body.message).to.include('confirmed')
+                })
 
-                         describe.only('Space trimming test', () => {
-                              let testEmail = ' james' + Date.now() + '@pirate.com   '
-                              let res
+                it('check the role', () => {
+                    expect(check.body.payload.user.roles).to.include('verified')
+                })
+            })
 
-                              before(async()=>{
-                                  await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
-                                  res = await login((testEmail.trim()), process.env.PASSWORD)
+    17.5.   Commit, push & PR
+    17.6.   Update main branch / delete created (optional)
 
-                                   console.log(testEmail)                                               // optional
-                                   console.log(testEmail.trim())                                        // optional
-                                   console.log(res.body.payload.user.email)                             // optional
-                              })
+    17.6  Creating test for space trimming:
+    17.7.   Create a new branch
+    17.8.   Create a new test in register.spec.js:
+            -   create a describe
+            -   create an it
+            -   define which requests should be sent              // create user / login
+            -   create a variables (testEmail, res)
+            -   create before hook with registration request
+            -   add auth request and assertion to it              // mention import 'login' added to file
+            -   move auth request to before hook
+            -   split assertions to separate its:
 
-                              it('check if spaces trimmed during registration by logging in ', () => {
-                                  expect(res.statusCode).to.eq(200)
-                              });
+                     describe.only('Space trimming test', () => {
+                          let testEmail = ' james' + Date.now() + '@pirate.com   '
+                          let res
 
-                              it('check if spaces trimmed during registration by logging in ', async() => {
-                                  expect(res.body.message).to.eq('Auth success')
-                              });
+                          before(async()=>{
+                              await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
+                              res = await login((testEmail.trim()), process.env.PASSWORD)
 
-                               it('check the email in response is equal to trimmed email', () => {         // optional / just an example
-                                      expect(res.body.payload.user.email).to.eq(testEmail.trim())
-                                  });
+                               console.log(testEmail)                                               // optional
+                               console.log(testEmail.trim())                                        // optional
+                               console.log(res.body.payload.user.email)                             // optional
+                          })
+
+                          it('check if spaces trimmed during registration by logging in ', () => {
+                              expect(res.statusCode).to.eq(200)
                           });
 
-        17.9.   Commit, push & PR
-        17.10.  Update main branch / delete created (optional)
+                          it('check if spaces trimmed during registration by logging in ', async() => {
+                              expect(res.body.message).to.eq('Auth success')
+                          });
+
+                          it('check the email in response is equal to trimmed email', () => {      // optional / just an example
+                               expect(res.body.payload.user.email).to.eq(testEmail.trim())
+                          });
+                     });
+
+    17.9.   Commit, push & PR
+    17.10.  Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 
 18.  Setup the reporter:
-     18.1.  Install the mochawesome reporter:
-                -   npm install mochawesome
-     18.2.  Add the option to .mocharc file or to the script:
-                    reporter: 'mochawesome'                                     // in .mocharc.js
-                    --reporter mochawesome                                      // in script
-     18.3.  Change the configuration if needed:
-                -   using 'reporter-options' flag in mocha config or script
-                -   reportDir=MyReports                                         // changing the reports directory
-                -   reportFilename=updatedReport                                // changing the file name
-                    some options for report name: [status]_[datetime]:          // add status and timestamp to file name
-                    reportFilename=[status]_[datetime]_ReportName
-                -   json=false                                                  // turn off creating json report
-                -   quiet=true                                                  // turn off mochawesome console messages
-     18.4.  Explain design of report
-     18.5.  Commit, push & PR
-     18.6.  Update main branch / delete created (optional)
+    18.1.  Install the mochawesome reporter:
+            -   npm install mochawesome
+    18.2.  Add the option to .mocharc file or to the script:
+                 reporter: 'mochawesome'                                     // in .mocharc.js
+                 --reporter mochawesome                                      // in script
+    18.3.  Change the configuration if needed:
+            -   using 'reporter-options' flag in mocha config or script
+            -   reportDir=MyReports                                         // changing the reports directory
+            -   reportFilename=updatedReport                                // changing the file name
+                some options for report name: [status]_[datetime]:          // add status and timestamp to file name
+                reportFilename=[status]_[datetime]_ReportName
+            -   json=false                                                  // turn off creating json report
+            -   quiet=true                                                  // turn off mochawesome console messages
+    18.4.  Explain design of report
+    18.5.  Commit, push & PR
+    18.6.  Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 
