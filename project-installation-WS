@@ -568,7 +568,20 @@ Create a new project in WS
             });
      21.3.  Create before hook
      21.4.  Create a function inside client-helper.js
-     21.5.  Check if the name actually changed:             // in case of API return correct message and status
+     21.5.  To make updateClient function to be usable for all params:
+
+                  - function updateClient(clientId, param, data) {
+                          return request(process.env.BASE_URL)
+                              .patch(`client/${clientId}`)
+                              .set('Authorization', process.env.TOKEN)
+                              .send({[param]: data})
+                  }
+
+          // EXPLANATION: In JavaScript, if you want to use a variable as a key in an object literal,
+          you can use square brackets around the variable name to compute the property name at runtime.
+          This allows you to dynamically set the key of the property based on the value of a variable.
+
+     21.6.  Check if the name actually changed:             // in case of API return correct message and status
                 -   create a client                         // but actually does not update the name
                 -   get clientId
                 -   send getClientById request
@@ -593,10 +606,10 @@ Create a new project in WS
                           expect(nameAfter).to.not.eq(nameBefore)
                         })
                       })
-     21.6.  Add 'timeout' param to .mocharc.js to increase the timeout time:       // in case of timeout errors
+     21.7.  Add 'timeout' param to .mocharc.js to increase the timeout time:       // in case of timeout errors
                 -   timeout: '20000'                                                // by default it is 2000 mc / 2 sec
-     21.6.  Commit, push & PR
-     21.7.  Update main branch / delete created (optional)
+     21.8.  Commit, push & PR
+     21.9.  Update main branch / delete created (optional)
 
 22.  Create delete client test:
      22.1.  Open new branch

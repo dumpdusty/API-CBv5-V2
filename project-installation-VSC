@@ -70,16 +70,16 @@ Create a new project in VSC
     6.4.  Paste following into .mocharc:
 
             module.exports = {
-              require: ['@babel/register'],               // !!!!!!check if this still required!!!!!!!!!!!!!!
+              require: ['@babel/register'],
               timeout: '5000',
            }
     6.5.  Modify `test` script:
-             -   "test": "mocha --config .mocharc.js"                    // 'npx mocha' to run local mocha version
+             -   "test": "npx mocha --config .mocharc.js"                // 'npx mocha' to run local mocha version
                                                                          // if mocharc.js locates in root directory
                                                                          // '--config .file_name' could be skipped
 
 7.  Install supertest (HTTP client) & chai (assertion library) packages:
-                -   npm i supertest chai@4                              // chai v^5 unstable (?) - check what is ESM
+                -   npm i supertest chai@4                               // chai v^5 unstable (?) - check what is ESM
     7.1.    Commit, push & PR
     7.2.    Update main branch / delete created (optional)
 
@@ -89,7 +89,8 @@ Create a new project in VSC
     8.1.    Create a new branch
     8.2.    Create `tests` directory
     8.3.    Add this directory to .mocharc:
-             - spec: 'tests/**/*.js'
+             - spec: 'tests/**/*.js'              // WARNING: this option will block running single tests by name in CLI
+
     8.4.    Create first spec file named example.spec.js inside of `tests` folder
     8.5.    Create simple test for common function (for example function sum()):
              -   import { expect } from chai
@@ -379,24 +380,28 @@ Create a new project in VSC
                 let str, endPoint, res, check
                 before(async () => {
                     await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
-                    str = await emailSearch(testEmail)
+                    str = await request('https://clientbase-server.herokuapp.com')                 // create a helper
+                                            .post('/email/search')
+                                            .send({ email: newEmail })
 
                     endPoint = str.body.payload.items[0].message.split('\n')[4].split('https://clientbase.us')[1]
 
-                    res = await request(process.env.BASE_URL).get(endPoint).send()
+                    // jsbin could be used for explanation of getting endPoint value
 
-                    check = await login(testEmail, process.env.PASSWORD)
+                    res = await request('https://clientbase-server.herokuapp.com').get(endPoint).send()
+
+                    check = await login(newEmail, process.env.PASSWORD)
                 })
 
-                it('check the response status', () => {
+                it('verify confirm email response status', () => {
                     expect(res.statusCode).to.eq(200)
                 })
 
-                it('check the response message', () => {
+                it('verify confirm email response message', () => {
                     expect(res.body.message).to.include('confirmed')
                 })
 
-                it('check the role', () => {
+                it('verify user role', () => {
                     expect(check.body.payload.user.roles).to.include('verified')
                 })
             })
@@ -417,7 +422,7 @@ Create a new project in VSC
             -   split assertions to separate its:
 
                      describe.only('Space trimming test', () => {
-                          let testEmail = ' james' + Date.now() + '@pirate.com   '
+                          let newEmail = ' james' + Date.now() + '@pirate.com   '
                           let res
 
                           before(async()=>{
@@ -429,16 +434,16 @@ Create a new project in VSC
                                console.log(res.body.payload.user.email)                             // optional
                           })
 
-                          it('check if spaces trimmed during registration by logging in ', () => {
+                          it('verify login response status', () => {
                               expect(res.statusCode).to.eq(200)
                           });
 
-                          it('check if spaces trimmed during registration by logging in ', async() => {
+                          it('verify login response message', async() => {
                               expect(res.body.message).to.eq('Auth success')
                           });
 
-                          it('check the email in response is equal to trimmed email', () => {      // optional / just an example
-                               expect(res.body.payload.user.email).to.eq(testEmail.trim())
+                          it('verify the email in response is equal to trimmed email', () => {      // optional / just an example
+                               expect(res.body.payload.user.email).to.eq(newEmail.trim())
                           });
                      });
 
@@ -447,33 +452,41 @@ Create a new project in VSC
 
 ------------------------------------------------------------------------------------------------------------------------
 
-18.  Setup the reporter:
+18. Setup the reporter:
+    https://www.npmjs.com/package/mochawesome
+
     18.1.  Install the mochawesome reporter:
             -   npm install mochawesome
     18.2.  Add the option to .mocharc file or to the script:
                  reporter: 'mochawesome'                                     // in .mocharc.js
                  --reporter mochawesome                                      // in script
     18.3.  Change the configuration if needed:
+
             -   using 'reporter-options' flag in mocha config or script
             -   reportDir=MyReports                                         // changing the reports directory
             -   reportFilename=updatedReport                                // changing the file name
                 some options for report name: [status]_[datetime]:          // add status and timestamp to file name
-                reportFilename=[status]_[datetime]_ReportName
+                    reportFilename=[status]_[datetime]_ReportName           // good for keeping all reports
             -   json=false                                                  // turn off creating json report
             -   quiet=true                                                  // turn off mochawesome console messages
-    18.4.  Explain design of report
-    18.5.  Commit, push & PR
-    18.6.  Update main branch / delete created (optional)
+
+            in .mocharc.js add:
+            reporterOptions: ['reportDir=MyReports', 'reportFilename=updatedReport','json=false', 'quiet=true']
+
+    18.4. OPTIONAL: add report directory to .gitignore
+    18.5.  Explain design of report
+    18.6.  Commit, push & PR
+    18.7.  Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 
 
 19.  Creating Clients tests
      19.1.  Create new branch clients-1
-     19.2.  Create client.spec.js file
-     19.3.  Make necessary imports                          // note that request command could be named as you wish
+     19.2.  Create clients directory and clientCreate.spec.js file
+     19.3.  Make necessary imports                                  // note that request command could be named as you wish
      19.4.  Create test for new client creation:
-            -   describe('Clients tests', () => {
+                -   describe('Clients create positive', () => {
                     let res
                     it('Create a client', async() => {
                         res = await request(process.env.BASE_URL)
@@ -492,7 +505,7 @@ Create a new project in VSC
                 });
      19.5.  Create before hook and split assertions to separate tests
      19.6.  Create a client-helper and add there 'create' function
-            -   function createClient(){
+                -   function createClient(){
                     return request(process.env.BASE_URL)
                         .post('client')
                         .set('Authorization', process.env.TOKEN)
@@ -502,11 +515,15 @@ Create a new project in VSC
                         })
                 }
      19.7.  Import client-helper into client.spec.js:
-            -   import * as clientHelper from '../helpers/client-helper'
-            -   explain syntax
-     19.7.  Change clients.spec file and remove unnecessary imports
-     19.8.  Commit, push & PR
-     19.9.  Update main branch / delete created (optional)
+                -   import * as clientHelper from '../helpers/client-helper'
+                -   explain syntax
+     19.8.  Parametrize createClient:
+                function createClient(email = '', description = '', name = chance.name(), phone = chance.phone())
+     19.9.  Change clients.spec file and remove unnecessary imports
+     19.10. Commit, push & PR
+     19.11. Update main branch / delete created (optional)
+     19.12. Create a client without phone produce a bug so those tests should be skipped
+            This will help keep CI runs passing
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -537,13 +554,13 @@ Create a new project in VSC
                           }
                         })
 
-     20.2.  Create 'Get client by ID':
+     20.2.  Create 'Get single client':
             -   create a test for getting client by ID:
-                describe('Get client by ID', () => {
+                describe('Get single client', () => {
                   let res
                   let clientId
                   before(async()=>{                                                     // in case DB does not contains any clients
-                    clientId = (await clientHelper.create()).body.payload               // get clientID from created client
+                    clientId = (await clientHelper.createClient()).body.payload               // get clientID from created client
                   })
                   it('check the response status',async() => {
                     res = await request(process.env.BASE_URL)
@@ -571,57 +588,9 @@ Create a new project in VSC
 
 ------------------------------------------------------------------------------------------------------------------------
 
-21.  Create update client test:
+21.  Create delete client test:
      21.1.  Open new branch
      21.2.  Create a describe:
-            describe('Update client', () => {
-              let res
-              let clientId
-              it('update client', async() => {
-                clientId = (await clientHelper.create()).body.payload
-                res = await request(process.env.BASE_URL)
-                    .patch('client/' + clientId)
-                    .set('Authorization', process.env.TOKEN)
-                    .send({name: 'updatedClient', phone: 'updatedPhone'})
-                expect(res.statusCode).to.eq(200)
-                expect(res.body.message).to.eq('Client updated')
-              });
-            });
-     21.3.  Create before hook
-     21.4.  Create a function inside client-helper.js
-     21.5.  Check if the name actually changed:             // in case of API return correct message and status
-                -   create a client                         // but actually does not update the name
-                -   get clientId
-                -   send getClientById request
-                -   get nameBefore
-                -   update client
-                -   send getClientById request
-                -   get nameAfter
-                -   compare the nameBefore and nameAfter:
-                    describe('check if the name actually updated', () => {
-                        let clientId
-                        let nameBefore
-                        let nameAfter
-
-                        before(async () => {
-                          clientId = (await clientHelper.createClient()).body.payload
-                          nameBefore = (await clientHelper.getSingle(clientId)).body.payload.name
-                          await clientHelper.updateClient(clientId)
-                          nameAfter = (await clientHelper.getSingle(clientId)).body.payload.name
-                        })
-
-                        it('check if updated name does not equal original name', () => {
-                          expect(nameAfter).to.not.eq(nameBefore)
-                        })
-                      })
-     21.6.  Add 'timeout' param to .mocharc.js to increase the timeout time:       // in case of timeout errors
-                -   timeout: '20000'                                                // by default it is 2000 mc / 2 sec
-     21.6.  Commit, push & PR
-     21.7.  Update main branch / delete created (optional)
-
-22.  Create delete client test:
-     22.1.  Open new branch
-     22.2.  Create a describe:
             describe.only('Delete the client', () => {
                 let res
                 let clientId
@@ -634,9 +603,9 @@ Create a new project in VSC
                   expect(res.body.message).to.eq('Client deleted')
                 });
               });
-     22.3.  Create before hook
-     22.4.  Create a function inside client-helper.js
-     22.5.  Check if the deleted client does not exist in the database:
+     21.3.  Create before hook
+     21.4.  Create a function inside client-helper.js
+     21.5.  Check if the deleted client does not exist in the database:
             -   create a client
             -   get clientId
             -   delete client
@@ -658,10 +627,70 @@ Create a new project in VSC
                       expect(res.body.message).to.eq('No client for provided id')
                     })
                   })
-     22.6.  Commit, push & PR
-     22.7.  Update main branch / delete created (optional)
+     21.6.  Commit, push & PR
+     21.7.  Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
+22.  Create update client test:
+     22.1.  Open new branch
+     22.2.  Create a describe:
+            describe('Update client', () => {
+              let res
+              let clientId
+              it('update client', async() => {
+                clientId = (await clientHelper.create()).body.payload
+                res = await request(process.env.BASE_URL)
+                    .patch(`client/${clientId}``)
+                    .set('Authorization', process.env.TOKEN)
+                    .send({name: 'updatedClient', phone: 'updatedPhone'})
+                expect(res.statusCode).to.eq(200)
+                expect(res.body.message).to.eq('Client updated')
+              });
+            });
+     22.3.  Create before hook
+     22.4.  Create a function inside client-helper.js
+     22.5.  To make updateClient function to be usable for all params:
+
+             - function updateClient(clientId, param, data) {
+                     return request(process.env.BASE_URL)
+                         .patch(`client/${clientId}`)
+                         .set('Authorization', process.env.TOKEN)
+                         .send({[param]: data})
+             }
+
+     // EXPLANATION: In JavaScript, if you want to use a variable as a key in an object literal,
+     you can use square brackets around the variable name to compute the property name at runtime.
+     This allows you to dynamically set the key of the property based on the value of a variable.
+
+     22.6.  Check if the name actually changed:             // in case of API return correct message and status
+                -   create a client                         // but actually does not update the name
+                -   get clientId
+                -   send getClientById request
+                -   get nameBefore
+                -   update client
+                -   send getClientById request
+                -   get nameAfter
+                -   compare the nameBefore and nameAfter:
+                    describe('check if the name actually updated', () => {
+                        let clientId
+                        let paramBefore
+                        let paramAfter
+
+                        before(async () => {
+                          clientId = (await clientHelper.createClient()).body.payload
+                          paramBefore = (await clientHelper.getSingle(clientId)).body.payload.name
+                          await clientHelper.updateClient(clientId)
+                          paramAfter = (await clientHelper.getSingle(clientId)).body.payload.name
+                        })
+
+                        it('check if updated name does not equal original name', () => {
+                          expect(paramAfter).to.not.eq(paramBefore)
+                        })
+                      })
+     22.7.  Add 'timeout' param to .mocharc.js to increase the timeout time:       // in case of timeout errors
+                -   timeout: '20000'                                                // by default it is 2000 mc / 2 sec
+     22.8.  Commit, push & PR
+     22.9.  Update main branch / delete created (optional)
 
 23. Create after hook for clients:
     23.1.   Define the steps:
@@ -691,13 +720,31 @@ Create a new project in VSC
                             "test": "mocha --spec tests/*.js --config .mocharc.js",
                     -   Add another script 'auth-test':
                             "auth-test": "mocha --spec tests/auth.spec.js --config .mocharc.js"
-                    -   Update running script in GitAction yaml file
+                    -   Update running script in GitAction yaml file:
+
                     -   Commit, push & PR
                     -   Update main branch / delete created (optional)
         24.2.   Add schedule to pipeline:
                     -   on:
                             schedule:                           // https://crontab.guru/
                                 - cron: '0 5 * * *'             // minute hour day month day of week
+        24.3.   Add artifact upload to pipeline:
+                    -    - name: Upload test results
+                           uses: actions/upload-artifact@v2
+                           with:
+                            name: test-report
+                            path: path_to_file                  // in my case: MyReports/updatedReport.html
+        24.4.   WARNING: mochawesome files could not be downloaded and opened - to bypass:
+                    -   install mocha-simple-html-reporter (https://www.npmjs.com/package/mocha-simple-html-repo)
+                    -   add script to package.json:
+                        "simpleHTML": "npx mocha --spec tests/auth.spec.js --reporter mocha-simple-html-reporter
+                        --reporter-options output=MyReports/simpleReport.html"
+                    -   update ci yaml file accordingly:
+                            -   change run to simpleHTML script:
+                                run: npm run simpleHTML
+                            -   change path in Upload test result step:
+                                path: MyReports/simpleReport.html
+                WARNING: using mocha-simple-html-reporter makes test results invisible in CLI and GitActions
 
 ------------------------------------------------------------------------------------------------------------------------
 
