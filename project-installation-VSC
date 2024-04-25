@@ -41,13 +41,23 @@ Preconditions:
             - git push -u origin main
     2.9.  Switch to main
     2.10.  Goto GitHub and create PR
-    2.11. Select Squash and merge option and confirm it
-    2.12. Update local main from remote main by git pull command
-    2.13. Delete local 'git-config' branch:
-          - git branch -d git-config
+    2.11.  Select Squash and merge option and confirm it
+    2.12.  Update local main from remote main by git pull command
+    2.13.  Delete local 'git-config' branch:
+            - git branch -d git-config
 
-3. OPTIONAL: Create readme. Check markdown syntax. Check Readme templates
-    3.1.    https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes
+3.  Explain and install extensions
+    3.1. Useful extensions for VSC:
+        Functional:
+         - Tabnine              -   coding assistant and AI
+         - Code Spell Checker   -   Spelling checker for source code
+         - ES6 Mocha snippets   -   add snippets to code
+         - GitHub Actions       -   to see and manage GitHub Actions runs & options
+        Design:
+         - Material Icon Theme  -   files and folders icons
+
+    3.2.  OPTIONAL: Create readme. Check markdown syntax. Check Readme templates
+    3.3.  https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes
 
  -----------------------------------------------------------------------------------------------------------------------
 
@@ -58,6 +68,11 @@ Preconditions:
     4.3.  Create `.babelrc` file on root dir and put following in it:
 
               {"presets": ["@babel/preset-env"]}
+
+    4.4.  OPTIONAL: Add Babel JavaScript Extension
+
+------------------------------------------------------------------------------------------------------------------------
+WARNING: DOESN'T WORK IN MY ENVIRONMENT
 
 5.  Installing and config Prettier:
     5.1.  In terminal: npm i prettier
@@ -73,6 +88,7 @@ Preconditions:
                     bracketSpacing: true,
                     arrowParens: "avoid",
                   }
+------------------------------------------------------------------------------------------------------------------------
 
 6.  Install & config mocha test runner:
     6.1.  Create new branch
@@ -85,9 +101,9 @@ Preconditions:
               timeout: '5000',
            }
     6.5.  Modify `test` script:
-             -   "test": "npx mocha --config .mocharc.js"                // 'npx mocha' to run local mocha version
-                                                                         // if mocharc.js locates in root directory
-                                                                         // '--config .file_name' could be skipped
+             -   "test": "mocha --config .mocharc.js"                    // 'mocha' to run local mocha version
+                 // if mocharc.js locates in root directory
+                 // '--config .file_name' could be skipped
 
 7.  Install supertest (HTTP client) & chai (assertion library) packages:
                 -   npm i supertest chai@4                               // chai v^5 unstable (?) - check what is ESM
@@ -98,7 +114,7 @@ Preconditions:
 
 8.  Creating first test example
     8.1.    Create a new branch
-    8.2.    Create `tests` directory
+    8.2.    Create `tests` directory              // mocha by default search for 'test' folder and run tests inside
     8.3.    Add this directory to .mocharc:
              - spec: 'tests/**/*.js'              // WARNING: this option will block running single tests by name in CLI
 
@@ -161,18 +177,18 @@ Preconditions:
         describe('Authentication', () => {
           let res                                                                   // create a variable to assign a response
             it('Login with valid credentials', async () => {                        // using async function to catch the promise
-               res = await request('https://clientbase-server.herokuapp.com/v6/')       // pass the base URL to request body
-                  .post('user/login')                                           // method and endpoint
+               res = await request('https://clientbase-server.herokuapp.com/v6/')   // pass the base URL to request body
+                  .post('user/login')                                               // method and endpoint
                   .set('HeaderName', HeaderValue)                                   // set the headers  (optional)
                   .send({email: 'jacksparrow@pirate.com', password: 'Pirate666!'})  // pass the body in JSON object format
 
-              expect(res.status).to.eq(200)                                     // assertion for response statusCode
+              expect(res.status).to.eq(200)                                         // assertion for response statusCode
                                                                                     // for assertion syntax see https://www.chaijs.com/api/bdd/
             });
         })
 
     9.5.    Exclude example.spec file from tests by adding following to .mocharc:
-                - exclude: 'tests/example.spec.js'                                   // 'ignore' also could be used
+                - exclude: 'tests/example.spec.js'                                  // 'ignore' also could be used
     9.6.    Run test
     9.6.    Create a test with invalid credentials
     9.7.    Add more tests for both describes:
@@ -197,7 +213,7 @@ Preconditions:
     10.6.   Add following to the tests file:
                -   import 'dotenv/config'
     10.7.   Replace all open data to env variables
-    10.8.   Optionally - Install extension 'Dotenv Official' (tooltips and highlights for env syntax)
+    10.8.   OPTIONAL - Install extension 'Dotenv Official' (tooltips and highlights for env syntax)
     10.9.   Commit, push & PR
     10.10.   Update main branch
 
@@ -236,19 +252,20 @@ Preconditions:
     13.4.   Inside the file:
             -   import request from 'supertest'
             -   create a function with relevant name and following syntax:
-                function login(){                                                     // function name and params
-                    return request(process.env.BASE_URL)                              // function return
+                function login(){                                                   // function name and params
+                    return request(process.env.BASE_URL)                            // function return
                     .post('user/login')
                     .send({email: process.env.EMAIL, password: process.env.PASSWORD})
                     }
             -   export created function:
-                export { login }                                                      // function should be exported
+                export { login }                                                    // function should be exported
             -   function could be exported with following syntax as well:
-                       export default function name(param1, param2){}
+                       export function name(){}
+            -   export {function_name} could be deleted now
             -   import helper to spec file:
-                import { login } from '../helpers/generalHelper'                  // import created function to spec file
+                import { login } from '../helpers/generalHelper'                    // import particular function
                 or
-                import * as generalHelper from '../helpers/generalHelper'           // module export
+                import * as generalHelper from '../helpers/generalHelper'           // import module
                     /*
                       Short brief to syntax of relative paths:
                         ..  -   two dots moves up to a parent directory (which is a root directory of a project in this case)
@@ -513,10 +530,16 @@ Preconditions:
             in .mocharc.js add:
             reporterOptions: ['reportDir=MyReports', 'reportFilename=updatedReport','json=false', 'quiet=true']
 
-    18.4. OPTIONAL: add report directory to .gitignore
+    18.4.  OPTIONAL: add report directory to .gitignore
     18.5.  Explain design of report
-    18.6.  Commit, push & PR
-    18.7.  Update main branch / delete created (optional)
+    18.6.  Add artifact upload to pipeline:
+            -    - name: Upload test results
+                   uses: actions/upload-artifact@v3                         // GiHub internal tool for upload files
+                   with:
+                    name: test-report
+                    path: path_to_file                                      // in my case: MyReports
+    18.7.  Commit, push & PR
+    18.8.  Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -759,35 +782,17 @@ Preconditions:
                     -   Update 'test' script to:
                             "test": "mocha --spec tests/*.js --config .mocharc.js",
                     -   Add another script 'auth-test':
-                            "auth-test": "mocha --spec tests/auth.spec.js --config .mocharc.js"
-                    -   Update running script in GitAction yaml file:
+                            "auth-ci": "mocha --spec tests/auth.spec.js --config .mocharc.js"
+                    -   Update running script in GitAction yaml file
+                    -   OR Update test.yml file inside the project
 
-        24.2.   Add schedule to pipeline:
-                    -   on:
-                            schedule:                           // https://crontab.guru/
-                                - cron: '0 5 * * *'             // minute hour day month day of week
-        24.3.   Add artifact upload to pipeline:
-                    -    - name: Upload test results
-                           uses: actions/upload-artifact@v3     // GiHub internal tool for upload files
-                           with:
-                            name: test-report
-                            path: path_to_file                  // in my case: MyReports/updatedReport.html
-        24.4.   WARNING: mochawesome files could not be opened outside of project - to bypass:
-                    -   install mocha-simple-html-reporter (https://www.npmjs.com/package/mocha-simple-html-repo)
-                    -   add script to package.json:
-                        "simpleHTML": "npx mocha --spec tests/auth.spec.js --reporter mocha-simple-html-reporter
-                        --reporter-options output=MyReports/simpleReport.html"
-        24.5.   Commit, push & PR
-        24.6.   Update main branch / delete created (optional)
-        24.7.   Update ci yaml file accordingly:
-                    -   change run to simpleHTML script:
-                        run: npm run simpleHTML
-                    -   change path in Upload test result step:
-                        path: MyReports/simpleReport.html
-        24.8.  Commit, push & PR
-        24.9. Update main branch / delete created (optional)
+        24.2.   OPTIONAL: Add schedule to pipeline:
+                    on:
+                        schedule:                           // https://crontab.guru/
+                            - cron: '0 5 * * *'             // minute hour day month day of week
 
-        WARNING: using mocha-simple-html-reporter makes test results invisible in CLI and GitActions
+        24.3.   Commit, push & PR
+        24.4.   Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 
