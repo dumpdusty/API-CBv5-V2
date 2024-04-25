@@ -1,5 +1,12 @@
 Create a new project in VSC
 
+Preconditions:
+
+- install VSC, node, git
+- create a GitHub account
+- create an account in CBv6
+- create client/vendor/service/order (optional)
+
 1.  Run `npm init -y` in terminal
 
 2.  Connecting to remote repo:
@@ -7,7 +14,7 @@ Create a new project in VSC
     2.2.  Run `git init` in terminal
     2.3.  Run commands in terminal:
             - git status                                                        // optional - shows status of files
-            - git add .  (or git add *)                                                       // adds all new files to git
+            - git add .                                                         // adds all new files to git
             - git status                                                        // optional - to see the changes
             - git commit -m "initial commit"                                    // adds first commit
             - git branch -M main                                                // changes the name from master to main
@@ -16,21 +23,28 @@ Create a new project in VSC
             - git branch                                                        // shows all available branches
             - git branch -d 'master'                                            // deletes master branch
             - git push -u origin main                                           // push changes to remote main
+            - WARNING: in case of getting this error:
+                fatal: The current branch test has no upstream branch.
+                To push the current branch and set the remote as upstream
+            - add following to .git/config file:
+                [push]
+                	autoSetupRemote = true
 
     2.4.  Create new branch named 'git-config'
             - git checkout -b 'git-config'
     2.5.  Create `.gitignore` file and add there `.idea` and `node_modules`
-    2.6.  Make a commit
-            - git add .
+    2.6.  Add new files to git;
+            -   git add .
+    2.7.  Make a commit
             - git commit -m 'git-ignore'
-    2.7.  Push to origin
+    2.8.  Push to origin
             - git push -u origin main
-    2.8.  Switch to main and delete local branch
-    2.9.  Update local main from remote main
-    2.10. In case of this error `fatal: The current branch auth-test has no upstream branch.` :
-            - add following to git.config file:
-                [push]
-                	autoSetupRemote = true
+    2.9.  Switch to main
+    2.10.  Goto GitHub and create PR
+    2.11. Select Squash and merge option and confirm it
+    2.12. Update local main from remote main by git pull command
+    2.13. Delete local 'git-config' branch:
+          - git branch -d git-config
 
 3. OPTIONAL: Create readme. Check markdown syntax. Check Readme templates
     3.1.    https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes
@@ -43,11 +57,11 @@ Create a new project in VSC
             - run in terminal: `npm i @babel/core @babel/preset-env @babel/register`
     4.3.  Create `.babelrc` file on root dir and put following in it:
 
-              `{"presets": ["@babel/preset-env"]}`
+              {"presets": ["@babel/preset-env"]}
 
 5.  Installing and config Prettier:
     5.1.  In terminal: npm i prettier
-    5.2.  Check if Prettier plugin installed to WS (goto Settings/Plugins/search for Prettier)
+    5.2.  Check if Prettier plugin installed to VSC (goto Extensions/search for prettier)
     5.3.  Goto Settings/Languages and Frameworks/JavaScript/Prettier, check the path and choose the options
     5.4.  Create .prettierrc.js file on root dir and put into:
 
@@ -59,9 +73,6 @@ Create a new project in VSC
                     bracketSpacing: true,
                     arrowParens: "avoid",
                   }
-
-    5.5.  Commit, push & PR
-    5.6.  Update main branch / delete created (optional)
 
 6.  Install & config mocha test runner:
     6.1.  Create new branch
@@ -80,7 +91,7 @@ Create a new project in VSC
 
 7.  Install supertest (HTTP client) & chai (assertion library) packages:
                 -   npm i supertest chai@4                               // chai v^5 unstable (?) - check what is ESM
-    7.1.    Commit, push & PR
+    7.1.    Add, commit, push & PR
     7.2.    Update main branch / delete created (optional)
 
  -----------------------------------------------------------------------------------------------------------------------
@@ -97,13 +108,13 @@ Create a new project in VSC
              -   create `describe` and `it` with relevant names
              -   write assertion:
 
-                  describe('The example test', () => {
-                     it('Check if sum working properly', () => {
+                  describe('VERIFY SIMPLE MATH FUNCTIONS', () => {
+                     it('verify sum working properly', () => {
                          expect(5+5).to.eq(10)
                      });
                   });
 
-             -   run the test with CLI command / 'play' sign
+             -   run the test with CLI command / npm run test
              -   change the assertion value to invalid output to check if test works properly
              -   add some more tests for any other functions (optional)
 
@@ -111,10 +122,30 @@ Create a new project in VSC
                 -   add import colors from 'colors'
                 -   syntax for colors use:
 
-                    console.log(colors.cyan(output_data))
-                    console.log(colors.yellow(output_data))
+                    describe('VERIFY SIMPLE FUNCTIONS', () => {
+                        it('verify sum works properly', () => {
+                            expect(5+5).to.eq(10);
+                            console.log(colors.yellow('This test verify sum'));
+                        });
 
-    8.7.    Commit, push & PR
+                        it('verify deduction works properly', () => {
+                            expect(5-5).to.eq(0);
+                            console.log(colors.red('This test verify deduction'));
+                        });
+
+                        it('verify multiply works properly', () => {
+                            expect(5*5).to.eq(25);
+                            console.log(colors.blue('This test verify multiply'));
+                        });
+
+                        it('verify division works properly', () => {
+                            expect(5/5).to.eq(1);
+                            console.log(colors.green('This test verify division'));
+                        });
+
+                    });
+
+    8.7.    Add, commit, push & PR
     8.8.    Update main branch / delete created (optional)
     8.9.    HW: create more tests (math, string, array)
 
@@ -128,20 +159,21 @@ Create a new project in VSC
                 - request syntax:
 
         describe('Authentication', () => {
-          let res                                                                  // create a variable to assign a response
+          let res                                                                   // create a variable to assign a response
             it('Login with valid credentials', async () => {                        // using async function to catch the promise
-               res = await request('https://clientbase-server.herokuapp.com')     // pass the base URL to request body
-                  .post('/v5/user/login')                                           // method and endpoint
+               res = await request('https://clientbase-server.herokuapp.com/v6/')       // pass the base URL to request body
+                  .post('user/login')                                           // method and endpoint
                   .set('HeaderName', HeaderValue)                                   // set the headers  (optional)
                   .send({email: 'jacksparrow@pirate.com', password: 'Pirate666!'})  // pass the body in JSON object format
 
-              expect(res.statusCode).to.eq(200)                                     // assertion for response statusCode
+              expect(res.status).to.eq(200)                                     // assertion for response statusCode
                                                                                     // for assertion syntax see https://www.chaijs.com/api/bdd/
             });
         })
 
     9.5.    Exclude example.spec file from tests by adding following to .mocharc:
                 - exclude: 'tests/example.spec.js'                                   // 'ignore' also could be used
+    9.6.    Run test
     9.6.    Create a test with invalid credentials
     9.7.    Add more tests for both describes:
                 -   test for response message
@@ -155,13 +187,13 @@ Create a new project in VSC
 10. Add environment variables:
     10.1.   Create a new branch
     10.2.   Install dotenv package (based on dotenv documentation - https://www.npmjs.com/package/dotenv)
-            -   npm i -D dotenv
+            -   npm i dotenv
     10.3.   Create .env file with variables inside (DO NOT ADD IT TO GITHUB!!!)
             -   BASE_URL="server_url"
                 EMAIL="valid_email"
                 PASSWORD="valid_password"
     10.4.   Add .env file to .gitignore
-    10.5.   Create .env.example file with common credentials and push it to GitHub.
+    10.5.   Create .env.example file with common credentials.
     10.6.   Add following to the tests file:
                -   import 'dotenv/config'
     10.7.   Replace all open data to env variables
@@ -200,7 +232,7 @@ Create a new project in VSC
 13. Create first helper:
     13.1.   Create a new branch
     13.2.   Create a new directory 'Helpers' in root folder
-    13.3.   Create general-helper.js file
+    13.3.   Create generalHelper.js file
     13.4.   Inside the file:
             -   import request from 'supertest'
             -   create a function with relevant name and following syntax:
@@ -214,7 +246,9 @@ Create a new project in VSC
             -   function could be exported with following syntax as well:
                        export default function name(param1, param2){}
             -   import helper to spec file:
-                import { login } from '../helpers/general-helper.js'                  // import created function to spec file
+                import { login } from '../helpers/generalHelper'                  // import created function to spec file
+                or
+                import * as generalHelper from '../helpers/generalHelper'           // module export
                     /*
                       Short brief to syntax of relative paths:
                         ..  -   two dots moves up to a parent directory (which is a root directory of a project in this case)
@@ -224,7 +258,7 @@ Create a new project in VSC
             -   parametrize the function
                     function login(email, password){
                         return request(process.env.BASE_URL)
-                        .post('/v6/user/login')
+                        .post('user/login')
                         .send({email: email, password: password})
                     }
             -   as per JS rules change sending object to `.send{email, password}
@@ -244,7 +278,7 @@ Create a new project in VSC
     14.5.   Change the name of the workflow
     14.6.   Update .yml file as:
 
-            name: API-CBv5-v2 CI
+            name: API-CBv6-v2-CI
 
             on:                                                     // when the pipeline will run
               push:
@@ -262,9 +296,9 @@ Create a new project in VSC
                     node-version: [18.x, 20.x]                      // define runs in node versions
 
                 steps:                                              // describe all steps of the workflow
-                - uses: actions/checkout@v3                         // checkout current branch to created VM
+                - uses: actions/checkout@v3                         // GiHub internal tool for checkout current branch code
                 - name: Use Node.js ${{ matrix.node-version }}      // install declared version of Node.js and dependencies from package-lock.json
-                  uses: actions/setup-node@v3                       // declare what will be using for tests
+                  uses: actions/setup-node@v3                       // GiHub internal tool for setup node
                   with:
                     node-version: ${{ matrix.node-version }}        // declare which version of node will be used
                 - name: Install dependencies                        // step name
@@ -274,7 +308,7 @@ Create a new project in VSC
                     BASE_URL: ${{ secrets.BASE_URL }}
                     EMAIL: ${{ secrets.EMAIL }}
                     PASSWORD: ${{ secrets.PASSWORD }}
-                  run: npm test                                     // command to be executed (or 'npm run test')
+                  run: npm run test                                     // command to be executed
 
     14.7.   Create the new branch and PR for workflow .yaml file:
                 -   click on 'Start commit' button
@@ -290,7 +324,8 @@ Create a new project in VSC
                 -   back to PR and click on create PR
                 -   merge PR
     14.10.  Update main branch / delete created (optional)
-    14.11.  To block merging before CI test runs (could be implemented only in GitHub Team or Enterprise organization account):
+    14.11.  Verify .github/workflows/test.yml exist in the tree
+    14.12.  To block merging before CI test runs (could be implemented only in GitHub Team or Enterprise organization account):
                 -   go to Settings / Branches
                 -   click add rule
                 -   check-in 'Require status checks to pass before merging'
@@ -313,10 +348,13 @@ Create a new project in VSC
                         email: 'jakesully12@pirate.com',
                         password: process.env.PASSWORD,
                     })
-                    expect(res.statusCode).to.eq(201)
+                    expect(res.status).to.eq(201)
                     expect(res.body.message).contain('User created')
                 })
             });
+
+    15.5.   Add script for single test in package.json:
+            -
 
     15.5.   Add randomizer to project:
     15.6.   Install the randomizer (https://chancejs.com/):
@@ -356,10 +394,52 @@ Create a new project in VSC
 
 ------------------------------------------------------------------------------------------------------------------------
 17.  Creating various tests:
-    17.1.   Create a new branch
-    17.2.   Create 'email confirmation test':
+    17.1.  Creating test for space trimming:
+    17.2.   Create a new branch
     17.3.   Create a new spec file named 'various.spec.js'
     17.4.   Create a new test in various.spec.js:
+            -   create a describe
+            -   create an it
+            -   define which requests should be sent              // create user / login
+            -   create a variables (testEmail, res)
+            -   create before hook with registration request
+            -   add auth request and assertion to it              // mention import 'login' added to file
+            -   move auth request to before hook
+            -   split assertions to separate its:
+
+                     describe.only('Space trimming test', () => {
+                          let newEmail = ' james' + Date.now() + '@pirate.com   '
+                          let res
+
+                          before(async()=>{
+                              await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
+                              res = await login((testEmail.trim()), process.env.PASSWORD)
+
+                               console.log(testEmail)                                               // optional
+                               console.log(testEmail.trim())                                        // optional
+                               console.log(res.body.payload.user.email)                             // optional
+                          })
+
+                          it('verify login response status', () => {
+                              expect(res.statusCode).to.eq(200)
+                          });
+
+                          it('verify login response message', async() => {
+                              expect(res.body.message).to.eq('Auth success')
+                          });
+
+                          it('verify the email in response is equal to trimmed email', () => {      // optional / just an example
+                               expect(res.body.payload.user.email).to.eq(newEmail.trim())
+                          });
+                     });
+
+    17.5.   Commit, push & PR
+    17.6.  Update main branch / delete created (optional)
+
+    17.7.   Create a new branch
+    17.8.   Create 'email confirmation test':
+
+    17.9.   Create a new test in various.spec.js:
             -   create a describe
             -   create an it
             -   define which requests should be sent
@@ -406,49 +486,9 @@ Create a new project in VSC
                 })
             })
 
-    17.5.   Commit, push & PR
-    17.6.   Update main branch / delete created (optional)
+    17.10.   Commit, push & PR
+    17.11.   Update main branch / delete created (optional)
 
-    17.6  Creating test for space trimming:
-    17.7.   Create a new branch
-    17.8.   Create a new test in register.spec.js:
-            -   create a describe
-            -   create an it
-            -   define which requests should be sent              // create user / login
-            -   create a variables (testEmail, res)
-            -   create before hook with registration request
-            -   add auth request and assertion to it              // mention import 'login' added to file
-            -   move auth request to before hook
-            -   split assertions to separate its:
-
-                     describe.only('Space trimming test', () => {
-                          let newEmail = ' james' + Date.now() + '@pirate.com   '
-                          let res
-
-                          before(async()=>{
-                              await register(chance.first(), chance.last(), testEmail, process.env.PASSWORD)
-                              res = await login((testEmail.trim()), process.env.PASSWORD)
-
-                               console.log(testEmail)                                               // optional
-                               console.log(testEmail.trim())                                        // optional
-                               console.log(res.body.payload.user.email)                             // optional
-                          })
-
-                          it('verify login response status', () => {
-                              expect(res.statusCode).to.eq(200)
-                          });
-
-                          it('verify login response message', async() => {
-                              expect(res.body.message).to.eq('Auth success')
-                          });
-
-                          it('verify the email in response is equal to trimmed email', () => {      // optional / just an example
-                               expect(res.body.payload.user.email).to.eq(newEmail.trim())
-                          });
-                     });
-
-    17.9.   Commit, push & PR
-    17.10.  Update main branch / delete created (optional)
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -482,7 +522,7 @@ Create a new project in VSC
 
 
 19.  Creating Clients tests
-     19.1.  Create new branch clients-1
+     19.1.  Create new branch clients
      19.2.  Create clients directory and clientCreate.spec.js file
      19.3.  Make necessary imports                                  // note that request command could be named as you wish
      19.4.  Create test for new client creation:
@@ -722,29 +762,32 @@ Create a new project in VSC
                             "auth-test": "mocha --spec tests/auth.spec.js --config .mocharc.js"
                     -   Update running script in GitAction yaml file:
 
-                    -   Commit, push & PR
-                    -   Update main branch / delete created (optional)
         24.2.   Add schedule to pipeline:
                     -   on:
                             schedule:                           // https://crontab.guru/
                                 - cron: '0 5 * * *'             // minute hour day month day of week
         24.3.   Add artifact upload to pipeline:
                     -    - name: Upload test results
-                           uses: actions/upload-artifact@v2
+                           uses: actions/upload-artifact@v3     // GiHub internal tool for upload files
                            with:
                             name: test-report
                             path: path_to_file                  // in my case: MyReports/updatedReport.html
-        24.4.   WARNING: mochawesome files could not be downloaded and opened - to bypass:
+        24.4.   WARNING: mochawesome files could not be opened outside of project - to bypass:
                     -   install mocha-simple-html-reporter (https://www.npmjs.com/package/mocha-simple-html-repo)
                     -   add script to package.json:
                         "simpleHTML": "npx mocha --spec tests/auth.spec.js --reporter mocha-simple-html-reporter
                         --reporter-options output=MyReports/simpleReport.html"
-                    -   update ci yaml file accordingly:
-                            -   change run to simpleHTML script:
-                                run: npm run simpleHTML
-                            -   change path in Upload test result step:
-                                path: MyReports/simpleReport.html
-                WARNING: using mocha-simple-html-reporter makes test results invisible in CLI and GitActions
+        24.5.   Commit, push & PR
+        24.6.   Update main branch / delete created (optional)
+        24.7.   Update ci yaml file accordingly:
+                    -   change run to simpleHTML script:
+                        run: npm run simpleHTML
+                    -   change path in Upload test result step:
+                        path: MyReports/simpleReport.html
+        24.8.  Commit, push & PR
+        24.9. Update main branch / delete created (optional)
+
+        WARNING: using mocha-simple-html-reporter makes test results invisible in CLI and GitActions
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -762,8 +805,11 @@ Create a new project in VSC
      28.5.  Export PM collection and PM environment to created folder
      28.6.  Add additional scripts:
             -   "pmrun": "newman run postman/collection_name.json -e postman/evironment_name.json"
-            -   "pmreport": "newman run postman/collection_name.json -e postman/evironment_name.json -r htmlextra --reporter-htmlextra-export MyReports/pmReport.html"
+            -   "pmreport": "newman run postman/collection_name.json -e postman/evironment_name.json -r htmlextra --reporter-htmlextra-export PostmanReports/pmReport.html"
      28.7.  Runt scripts
+     28.8.  Add necessary report to .gitignore
+     28.9.  Commit, push & PR
+     28.10. Update main branch / delete created (optional)
 
 29.  Update after hooks in clients, vendors, services specs
     29.1.   Add if/else statement to check if the client has an order / vendor has a service ???

@@ -1,7 +1,7 @@
 module.exports = {
     require: '@babel/register',
-    //spec: 'tests/**/*.js',
-    exclude: 'tests/example.spec.js',
+    //spec: 'test/**/*.js',
+    exclude: 'test/example.spec.js',
     file: `project-config/auth-global-hook.js`,
     timeout: '20000',
     reporter: 'mochawesome',

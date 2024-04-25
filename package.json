@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --spec tests/*.js --config .mocharc.js",
-    "auth-test": "mocha --spec tests/auth.spec.js --config .mocharc.js",
+    "test": "mocha --spec test/*.js --config .mocharc.js",
+    "auth-test": "mocha --spec test/auth.spec.js --config .mocharc.js",
     "pm-run": "newman run postman/CBv5_Base.postman_collection.json -e postman/CBv5_test.postman_environment.json",
     "pm-report": "newman run postman/CBv5_Base.postman_collection.json -e postman/CBv5_test.postman_environment.json -r htmlextra --reporter-htmlextra-export MyReports/pmReport.html"
   },

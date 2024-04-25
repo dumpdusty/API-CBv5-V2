@@ -1,4 +1,4 @@
-// Automated tests for services
+// Automated test for services
 import {expect} from 'chai'
 const chance = require('chance').Chance()
 import * as vendorHelper from '../helpers/vendor-helper'
