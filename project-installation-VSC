@@ -796,25 +796,39 @@ WARNING: DOESN'T WORK IN MY ENVIRONMENT
 
 ------------------------------------------------------------------------------------------------------------------------
 
-25.  Create tests for Vendors:  Home Work
-26.  Create test for Orders:    Home Work
-27.  Create tests for Services: Home Work
+25.  Create a Postman - Newman pipeline:
+     25.1.  Create a new branch
+     25.2.  Install newman              -   npm i newman
+     25.3.  Install htmlextra reporter   -   npm i newman-reporter-htmlextra
+     25.4.  Create a folder for postman collections
+     25.5.  Export PM collection and PM environment to created folder
+     25.6.  Add additional scripts:
+            -   "pmrun": "newman run postman/collection_name.json -e postman/evironment_name.json"
+            -   "pmreport": "newman run postman/collection_name.json -e postman/evironment_name.json -r htmlextra --reporter-htmlextra-export PostmanReports/pmReport.html"
+     25.7.  Runt scripts
+     25.8.  Add necessary report to .gitignore
+     25.9.  Commit, push & PR
+     25.10. Update main branch / delete created (optional)
+
+26.  Update after hooks in clients, vendors, services specs // UNDER ANALISYS
+     26.1.
 
 ------------------------------------------------------------------------------------------------------------------------
 
-28.  Create a Postman - Newman pipeline:
-     28.1.  Create a new branch
-     28.2.  Install newman              -   npm i newman
-     28.3.  Install htmlextra reporter   -   npm i newman-reporter-htmlextra
-     28.4.  Create a folder for postman collections
-     28.5.  Export PM collection and PM environment to created folder
-     28.6.  Add additional scripts:
-            -   "pmrun": "newman run postman/collection_name.json -e postman/evironment_name.json"
-            -   "pmreport": "newman run postman/collection_name.json -e postman/evironment_name.json -r htmlextra --reporter-htmlextra-export PostmanReports/pmReport.html"
-     28.7.  Runt scripts
-     28.8.  Add necessary report to .gitignore
-     28.9.  Commit, push & PR
-     28.10. Update main branch / delete created (optional)
+30.  Collaborative work
+     Precondition:
+            -   add collaborators by email
+            -   create a ruleset with explanations - ?????????
 
-29.  Update after hooks in clients, vendors, services specs
-    29.1.   Add if/else statement to check if the client has an order / vendor has a service ???
+     30.1.  Collect the emails and send the invites to CBv6-test repo
+     30.2.  Clone the project
+     30.3.  npm i - to install all dependencies
+     30.2.  Create and name personal branch
+     30.3.  Declare the HW based on following structure:
+            -   Entity:
+                - create
+                - get all
+                - get single
+                - update
+                - delete
+     30.4.  Skip failed tests (if exist in github actions run)
