@@ -18,17 +18,24 @@ Preconditions:
             - git status                                                        // optional - to see the changes
             - git commit -m "initial commit"                                    // adds first commit
             - git branch -M main                                                // changes the name from master to main
+            - git remote                                                        // optional - verify no remote exists
             - git remote add origin https://github.com/user_name/project_name   // connect remote repo to local
             - git status                                                        // optional - to see the changes
+            - git remote                                                        // optional - verify remote added
             - git branch                                                        // shows all available branches
             - git branch -d 'master'                                            // deletes master branch
             - git push -u origin main                                           // push changes to remote main
+
             - WARNING: in case of getting this error:
                 fatal: The current branch test has no upstream branch.
                 To push the current branch and set the remote as upstream
             - add following to .git/config file:
                 [push]
                 	autoSetupRemote = true
+
+            - WARNING: in case git will ask about a password - generate PAT (personal access token) in
+              User/Settings/Developer Settings/Personal Access Token,
+              then copy it and paste when git requires password
 
     2.4.  Create new branch named 'git-config'
             - git checkout -b 'git-config'
