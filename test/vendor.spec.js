@@ -77,7 +77,7 @@ describe('Vendors Test', () => {
             res = await vendorHelper.deleteVendor(vendorId)
             deletedVendor = await vendorHelper.getSingle(vendorId)
         })
-        it('check the respons eststus', () => {
+        it('check the response eststus', () => {
             expect(res.statusCode).to.eq(200)
         });
         it('check the response message', () => {

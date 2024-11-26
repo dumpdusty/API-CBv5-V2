@@ -17,7 +17,7 @@ describe('Email confirmation', () => {
         str = await emailSearch(testEmail)
 
         // extract end point
-        endPoint = str.body.payload.items[0].message.split('\n')[4].split('https://clientbase.us')[1]
+        endPoint = str.body.payload.items[0].message.split('\n')[4].split('https://clientbase.pasv.us')[1]
 
         // send confirmation request
         res = await supertest(process.env.BASE_URL).get(endPoint).send()
